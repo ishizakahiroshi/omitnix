@@ -29,9 +29,9 @@ fresh public clone でも有効な内容に保つこと。 -->
 | 種別 | 内容 |
 |---|---|
 | 言語 | Python 3.11+ |
-| 依存 | sqlglot（SQL のテーブル名正規化） |
+| 依存 | sqlglot（SQL のテーブル名正規化）/ tree-sitter（各言語の構文解析） |
 | 連携（外部ツール） | tbls（スキーマ snapshot）/ semgrep（契約検査）/ PHPStan（PHP の意味解析） |
-| 対応言語アダプタ | PHP（第一段階）。TypeScript / Go / Python は後続 |
+| 対応言語アダプタ | PHP（第一段階）→ Python / Go / TS・JS / SQL / HTML / CSS / Rust / Shell / PowerShell / Vue。能力で 3 段（完全・逆引き・最小）。1 言語 = アダプタ + クエリ + fixture の 3 点で core は編集しない |
 
 ## ディレクトリ構成
 
