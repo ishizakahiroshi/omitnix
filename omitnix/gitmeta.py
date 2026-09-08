@@ -19,6 +19,7 @@ __all__ = [
     "working_tree_is_dirty",
     "repository_root",
     "newly_added_files",
+    "added_files_since",
     "tracked_files",
 ]
 
@@ -153,3 +154,63 @@ def newly_added_files(root: Path) -> frozenset[str] | None:
             continue  # inside the repository but outside the scanned root
         added.add(relative.as_posix())
     return frozenset(added)
+
+
+def _relative_to_root(top: Path, root: Path, paths: list[str]) -> set[str]:
+    """Repository-relative paths, re-expressed relative to the scanned root.
+
+    Paths outside the root are dropped: they are inside the repository but not inside
+    what this run is scanning, so they are not this run's to judge.
+    """
+    resolved_root = root.resolve()
+    out: set[str] = set()
+    for path in paths:
+        try:
+            out.add((top / path).relative_to(resolved_root).as_posix())
+        except ValueError:
+            continue
+    return out
+
+
+def added_files_since(root: Path, ref: str) -> frozenset[str] | None:
+    """Paths under ``root`` that ``ref`` did not have and HEAD does.
+
+    This is the form of "new" that a server can ask about. :func:`newly_added_files`
+    reads the working tree, so it only ever answers for the person at the keyboard: a
+    file committed by someone whose machine had no hook installed is tracked and clean by
+    the time anyone else sees it, and asking the working tree about it returns nothing.
+    A gate that can only be asked that question is a gate whose coverage is the union of
+    everyone's local configuration, which is not a coverage anybody can state.
+
+    The comparison is against the merge base (``ref...HEAD``), so on a branch it means
+    "added by this branch" rather than "added by anyone since that ref moved".
+
+    Rename detection is on and additions only are kept, which matches
+    :func:`newly_added_files`: content that existed before under another name is not new.
+    A rewritten file is not new either, in both functions and for the same reason -- git
+    has no notion of "rewritten", and inventing a threshold here would put the gate's
+    verdict at the mercy of a similarity percentage.
+
+    Returns ``None`` when git could not answer -- ``root`` is not a working tree, ``ref``
+    does not resolve, or the two histories are unrelated. Callers must treat that as
+    "cannot tell" and refuse, never as "nothing was added".
+    """
+    top = repository_root(root)
+    if top is None:
+        return None
+
+    raw = _git_output(
+        root,
+        "diff",
+        "--name-only",
+        "--diff-filter=A",
+        "--find-renames",
+        "-z",
+        f"{ref}...HEAD",
+        "--",
+        ".",
+    )
+    if raw is None:
+        return None
+
+    return frozenset(_relative_to_root(top, root, [entry for entry in raw.split("\0") if entry]))

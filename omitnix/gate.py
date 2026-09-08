@@ -39,7 +39,7 @@ from dataclasses import dataclass
 
 from .config import Config
 from .errors import GateError
-from .gitmeta import newly_added_files
+from .gitmeta import added_files_since, newly_added_files
 from .globs import matches_any
 from .model import (
     GATE_REQUIRED_CAPABILITIES,
@@ -170,15 +170,32 @@ class NewFileSelection:
     missing: tuple[str, ...] = ()
 
 
-def new_files(config: Config, requested: list[str] | None = None) -> NewFileSelection:
+def new_files(
+    config: Config, requested: list[str] | None = None, since: str | None = None
+) -> NewFileSelection:
     """Narrow a candidate list down to the files git reports as newly added.
 
     With ``requested`` (what ``--files`` passes), the gate looks at the intersection: a
     changed-but-existing file in the same commit is not this gate's business. Without it,
     every newly added file under the root is a candidate.
+
+    ``since`` changes what "new" is asked of. Without it the question goes to the working
+    tree, which only has an answer while the file is still uncommitted -- so the gate can
+    only ever run in a pre-commit hook, and a hook is enabled one machine at a time. With
+    it the question is "what did this branch add since ``since``", which a server can ask
+    about work anyone committed, hook or no hook. That is the difference between a gate
+    whose coverage is everyone's local configuration and a gate whose coverage is stated.
     """
-    added = newly_added_files(config.root)
+    added = added_files_since(config.root, since) if since else newly_added_files(config.root)
     if added is None:
+        if since:
+            raise GateError(
+                f"the gate was asked which files were added since '{since}', and git "
+                f"could not answer in {config.root}. The ref may not exist here (a "
+                "shallow clone has no history to compare against; fetch it first), or "
+                "the two histories may be unrelated. Refusing rather than reporting "
+                "that nothing was added."
+            )
         raise GateError(
             f"the gate needs git to tell which files are new, but {config.root} is not "
             "inside a git working tree"

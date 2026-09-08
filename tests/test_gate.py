@@ -203,7 +203,7 @@ def test_a_complete_new_file_passes(tmp_path: Path, with_test_adapters: None) ->
 
     code, out, _ = gate(root)
     assert code == EXIT_OK
-    assert "gate passed. 1 newly added file checked" in out
+    assert "gate passed. checked 1 file newly added in the working tree" in out
 
 
 def test_a_capability_the_adapter_never_declared_is_not_required(
@@ -243,7 +243,7 @@ def test_existing_files_are_not_gated(tmp_path: Path, with_test_adapters: None) 
 
     code, out, err = gate(root)
     assert code == EXIT_OK, err
-    assert "0 newly added files checked" in out
+    assert "checked 0 files newly added in the working tree" in out
 
 
 def test_a_rewritten_tracked_file_is_not_new(
@@ -255,7 +255,7 @@ def test_a_rewritten_tracked_file_is_not_new(
 
     code, out, err = gate(root)
     assert code == EXIT_OK, err
-    assert "0 newly added files checked" in out
+    assert "checked 0 files newly added in the working tree" in out
 
 
 # --------------------------------------------------------------------------------------
@@ -283,7 +283,7 @@ def test_files_narrows_the_gate_to_the_listed_paths(
 
     code, out, err = gate(root, "--files", "orders_list.flow")
     assert code == EXIT_OK, err
-    assert "1 newly added file checked" in out
+    assert "checked 1 file newly added in the working tree" in out
 
 
 def test_files_still_gates_only_what_is_new(
@@ -315,6 +315,89 @@ def test_gate_cannot_be_combined_with_writing_or_checking(tmp_path: Path) -> Non
         code, _, err = run(["--root", str(tmp_path), "--gate", flag])
         assert code == EXIT_ERROR
         assert "cannot be combined" in err
+
+
+# --------------------------------------------------------------------------------------
+# Asking about a range instead of the working tree
+# --------------------------------------------------------------------------------------
+#
+# The working-tree question only has an answer while the file is still uncommitted, so a
+# gate that can only ask it runs in a pre-commit hook, and a hook is enabled one machine
+# at a time. A file committed by someone who never enabled it is tracked and clean by the
+# time anyone else sees it, and is never gated again by anybody. `--since` is what a
+# server asks instead.
+
+
+def test_a_file_committed_without_the_hook_is_still_gated_afterwards(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The whole point. The working tree has nothing to say about this file any more."""
+    root = baseline(tmp_path)
+    base = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, check=True
+    ).stdout.strip()
+
+    (root / "orders_purge.flow").write_text(fixture("orders_purge.flow"), encoding="utf-8")
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "committed with no hook installed")
+
+    # The working tree is clean, so the question a hook asks now finds nothing at all.
+    code, out, err = gate(root)
+    assert code == EXIT_OK, err
+    assert "checked 0 files newly added in the working tree" in out
+
+    # The same file, asked about as a range, is still refused.
+    code, _, err = gate(root, "--since", base)
+    assert code == EXIT_GATE
+    assert "orders_purge.flow: no authorization call" in err
+
+
+def test_the_range_gate_says_what_it_was_asked_about(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """"The gate passed" means nothing until you know which question it answered."""
+    root = baseline(tmp_path)
+    code, out, err = gate(root, "--since", "HEAD")
+    assert code == EXIT_OK, err
+    assert "checked 0 files added since HEAD" in out
+
+
+def test_a_range_the_repository_cannot_resolve_refuses_rather_than_passes(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """A shallow clone is the real case: the base ref is simply not there.
+
+    Reporting "nothing was added" would be a green run over an unexamined push, which is
+    the failure this flag exists to end rather than one to reintroduce.
+    """
+    root = baseline(tmp_path)
+    code, out, err = gate(root, "--since", "refs/heads/no-such-branch")
+    assert code == EXIT_ERROR
+    assert "could not answer" in err
+    assert "passed" not in out
+
+
+def test_a_rename_is_not_an_addition_in_a_range_either(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Consistent with the working-tree question: the content existed before."""
+    root = baseline(tmp_path, {"orders_purge.flow": fixture("orders_purge.flow")})
+    base = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, check=True
+    ).stdout.strip()
+    git(root, "mv", "orders_purge.flow", "purge_orders.flow")
+    git(root, "commit", "-q", "-m", "rename")
+
+    code, out, err = gate(root, "--since", base)
+    assert code == EXIT_OK, err
+    assert "checked 0 files added since" in out
+
+
+def test_since_without_the_gate_is_refused_rather_than_ignored(tmp_path: Path) -> None:
+    """A CI job with --gate left off would otherwise do a full run and go green."""
+    code, _, err = run(["--root", str(tmp_path), "--since", "HEAD"])
+    assert code == EXIT_ERROR
+    assert "--since only applies with --gate" in err
 
 
 # --------------------------------------------------------------------------------------

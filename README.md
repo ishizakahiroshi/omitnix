@@ -73,6 +73,7 @@ omitnix                       # full run; writes .omitnix/index.json and .omitni
 omitnix --check               # write nothing; fail if the generated documents are stale
 omitnix --files a.php b.php   # analyze an explicit list, as a pre-commit hook passes it
 omitnix --gate --files a.php  # check only the newly added files among them
+omitnix --gate --since main   # check what this branch added; the form CI can use
 omitnix --print api/x.php     # print one file's record as JSON
 omitnix --workspace ~/code    # every git repository under a directory (see below)
 ```
@@ -115,7 +116,7 @@ it enters the index as a hole on the day it is written.
 
 ```
 $ omitnix --gate
-omitnix: gate refused 3 newly added files
+omitnix: gate refused 3 files newly added in the working tree
   orders_purge.flow: no authorization call (adapter 'flow' observed no call to any authorization function listed in authorization_functions)
   theme.unmapped: unknown (no adapter claims '.unmapped')
   undocumented.flow: no summary (adapter 'flow' reports summaries and found none here)
@@ -125,6 +126,32 @@ omitnix: gate refused 3 newly added files
 before reaches a review. A tracked file is not new however heavily it was rewritten, and a
 rename is not new either. Outside a git working tree the gate reports an error rather than a
 pass, because "nothing is new" and "I could not tell" are different answers.
+
+### Ask about a range, not the working tree
+
+The question above only has an answer while the file is still uncommitted, so on its own the
+gate runs in a pre-commit hook — and a hook is enabled one machine at a time. A file
+committed by somebody who never enabled it is tracked and clean by the time anyone else sees
+it, and would never be gated again by anybody. **A gate whose coverage is the union of
+everyone's local configuration is not a coverage anyone can state.**
+
+`--since` asks the other question, the one a server can ask:
+
+```
+$ omitnix --gate --since origin/main
+omitnix: gate refused 1 file added since origin/main
+  reports/export.php: no authorization call (adapter 'php' observed no call to any authorization function listed in authorization_functions)
+```
+
+It compares against the merge base, so on a branch it means "added by this branch". Run it in
+CI against the base of the pull request and every added file is gated, whatever anyone's
+machine was configured to do. The hook then does what a hook is good at — telling you before
+you push, rather than being the only thing standing there.
+
+If the ref cannot be resolved — a shallow clone is the usual reason — the gate reports an
+error and exits non-zero. It never reports that nothing was added, because a green run over
+an unexamined push is the failure this exists to prevent, not one to reintroduce. In GitHub
+Actions that means `fetch-depth: 0` on the checkout.
 
 **What is required comes from the adapter's capability declaration, never from the file's
 language.** An adapter that cannot report an authorization call is never asked for one. This

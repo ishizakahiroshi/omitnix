@@ -107,6 +107,16 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--since",
+        metavar="REF",
+        default=None,
+        help=(
+            "with --gate, treat as new whatever this branch added since REF instead of "
+            "reading the working tree. This is the form CI can use: it holds for work "
+            "anyone committed, whether or not their machine had the hook installed."
+        ),
+    )
+    parser.add_argument(
         "--print",
         dest="print_path",
         metavar="PATH",
@@ -211,7 +221,11 @@ def _run_print(args: argparse.Namespace, out, err) -> int:
 
 
 def _run_gate(args: argparse.Namespace, config: Config, out, err) -> int:
-    selection = new_files(config, args.files)
+    selection = new_files(config, args.files, since=args.since)
+    # Said on every run, pass or fail. "The gate passed" means nothing until you know
+    # what it was asked about, and the two questions have very different coverage: the
+    # working tree answers only for uncommitted work on this machine.
+    basis = f"added since {args.since}" if args.since else "newly added in the working tree"
 
     for path in selection.missing:
         print(f"omitnix: no such file under {config.root}: {path}", file=err)
@@ -243,12 +257,12 @@ def _run_gate(args: argparse.Namespace, config: Config, out, err) -> int:
     if result.passed:
         count = len(result.checked)
         subject = "file" if count == 1 else "files"
-        print(f"omitnix: gate passed. {count} newly added {subject} checked", file=out)
+        print(f"omitnix: gate passed. checked {count} {subject} {basis}", file=out)
         return EXIT_OK
 
     failed = len(result.failed_paths)
     subject = "file" if failed == 1 else "files"
-    print(f"omitnix: gate refused {failed} newly added {subject}", file=err)
+    print(f"omitnix: gate refused {failed} {subject} {basis}", file=err)
     for finding in result.findings:
         print(f"  {finding.line()}", file=err)
     return EXIT_GATE
@@ -282,6 +296,7 @@ def _run_workspace(args: argparse.Namespace, out, err) -> int:
     for flag, present in (
         ("--check", args.check),
         ("--gate", args.gate),
+        ("--since", args.since is not None),
         ("--files", bool(args.files)),
         ("--print", bool(args.print_path)),
         ("--write", args.write),
@@ -496,6 +511,13 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
         # The gate reports on new files only. Letting it write or compare the documents
         # would put a slice of the repository where the full index belongs.
         print("omitnix: --gate cannot be combined with --check or --write", file=err)
+        return EXIT_ERROR
+
+    if args.since is not None and not args.gate:
+        # Refused rather than ignored. A CI job written as `omitnix --since <base>`, with
+        # --gate left off by mistake, would otherwise do a full run and go green while
+        # gating nothing -- which is the exact failure this flag exists to end.
+        print("omitnix: --since only applies with --gate", file=err)
         return EXIT_ERROR
 
     try:
