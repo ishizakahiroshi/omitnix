@@ -1,0 +1,2 @@
+# Present so that pytest puts the repository root on sys.path and `import omitnix` works
+# without an editable install.

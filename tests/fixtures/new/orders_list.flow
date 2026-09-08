@@ -1,0 +1,4 @@
+summary: List orders for the signed-in customer
+authn: require_session
+authz: apply_visibility_filter
+reads: orders, customers

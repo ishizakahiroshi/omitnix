@@ -1,0 +1,82 @@
+# Example contract rules for omitnix.
+#
+# These rules do NOT build an index. omitnix builds the index; semgrep is used here for
+# the one thing an index cannot express -- a rule about what code is required to do:
+#
+#   * a required call is missing
+#   * a forbidden direct access is present
+#   * a known authorization bypass is called
+#
+# Scope, honestly stated: semgrep CE has no cross-file analysis, so for PHP these rules
+# see one function at a time. "Does this handler call the authorization function?" is
+# expressible. "Does that function actually constrain the query it guards?" is not, and
+# no amount of rule writing here will make it so -- that question belongs to PHPStan
+# (see README.md, "Where this stops").
+#
+# Every name below is fictional: orders / customers / search_index / audit_log,
+# require_session / apply_visibility_filter. Replace them with your own in a copy;
+# nothing here is meant to match a real codebase as shipped.
+
+rules:
+  - id: omitnix-query-without-session
+    languages: [php]
+    severity: ERROR
+    message: >-
+      This function runs a query without calling require_session() in the same function
+      body. If the session check genuinely belongs to a caller, say so in the calling
+      convention rather than leaving it implicit -- semgrep cannot see across files, so
+      an unstated convention is unverifiable here.
+    patterns:
+      - pattern-inside: |
+          function $HANDLER(...) {
+            ...
+          }
+      - pattern-not-inside: |
+          function $HANDLER(...) {
+            ...
+            require_session(...);
+            ...
+          }
+      - pattern: run_query(...)
+
+  - id: omitnix-unfiltered-listing
+    languages: [php]
+    severity: ERROR
+    message: >-
+      This function lists rows without calling apply_visibility_filter() in the same
+      function body. A listing endpoint that skips the visibility filter returns other
+      customers' rows.
+    patterns:
+      - pattern-inside: |
+          function $HANDLER(...) {
+            ...
+          }
+      - pattern-not-inside: |
+          function $HANDLER(...) {
+            ...
+            apply_visibility_filter(...);
+            ...
+          }
+      - pattern: list_rows(...)
+
+  - id: omitnix-direct-customer-table-access
+    languages: [php]
+    severity: WARNING
+    message: >-
+      Raw SQL against the customers table. Go through the accessor that applies the
+      visibility filter; a raw statement here is invisible to every check that reads
+      only the accessor.
+    patterns:
+      - pattern: $CONN->rawQuery($SQL, ...)
+      - metavariable-regex:
+          metavariable: $SQL
+          regex: (?i).*\b(from|join|into|update)\s+customers\b.*
+
+  - id: omitnix-authorization-bypass-call
+    languages: [php]
+    severity: ERROR
+    message: >-
+      fetch_orders_unfiltered() deliberately skips the visibility filter. It exists for
+      the nightly reindex job and nothing else. If a request path needs it, the filter
+      requirement has changed and belongs in review, not in a call site.
+    pattern: fetch_orders_unfiltered(...)

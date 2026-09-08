@@ -35,15 +35,22 @@ fresh public clone でも有効な内容に保つこと。 -->
 
 ## ディレクトリ構成
 
+- `omitnix/` — 実装。core（`config` / `scan` / `analyze` / `render` / `cli` / `registry`）
+- `omitnix/adapters/` — 言語アダプタ。**置くだけで発見される**（登録表は core に無い）。契約は `adapters/base.py`。先頭 `_` は共有部品で発見対象外
+- `omitnix/queries/` — tree-sitter のクエリ（`<lang>.scm`）
+- `.semgrep/` — 契約検査のルール例（索引生成には使わない）
+- `tests/` — pytest。合成アダプタと架空スキーマの fixture は `tests/fixtures/`
 - `scripts/` — secrets-scan と CLAUDE.md 検査（house 標準の配線）
 - `docs/local/` — 作業 plan（gitignored・Drive 同期領域へのジャンクション）
-- 実装コードは未着手
 
 ## 主要コマンド
 
 - secrets-scan（手動）: `node scripts/secrets-scan.mjs --staged --block`
 - CLAUDE.md 検査: `node scripts/check-claude-md.mjs`
-- テスト: 未整備（実装着手時に追記する）
+- テスト: `python -m pytest`（リポジトリ直下で実行する）
+- lint: `python -m ruff check .`
+- 新規ファイルの gate: `python -m omitnix --gate`（終了コード 4 で拒否）
+- PHP アダプタの依存: `python -m pip install "omitnix[php]"`（tree-sitter / tree-sitter-php / sqlglot）
 
 ## 設計原則の索引（本文は正本にある）
 
@@ -52,8 +59,13 @@ fresh public clone でも有効な内容に保つこと。 -->
 
 | ルール | 正本（本文はここ） | 機械検査 |
 |---|---|---|
-| 発見した対象を全部解析できたかを検査し、できなければ非ゼロで終了する | `docs/local/plan_progmap-oss_c2_core.md` | 実装後に完全性テスト |
-| 追えなかったものを空欄にせず理由付きで `unresolved` に残す | `docs/local/plan_progmap-oss_c3_php-adapter.md` | 実装後に単体テスト |
+| 発見した対象を全部解析できたかを検査し、できなければ非ゼロで終了する | `omitnix/analyze.py`（`build_report` の不変条件） | `tests/test_analyze.py` / `tests/test_cli.py` |
+| 追えなかったものを空欄にせず理由付きで `unresolved` に残す | `omitnix/adapters/base.py`（`AnalysisResult.add_unresolved`） | `tests/test_analyze.py` |
+| 能力の外の項目を「欠落」「0 件」と同じ表現にしない | `omitnix/render.py`（`n/a` / `none observed` / `not analyzed`） | `tests/test_render.py` |
+| 新規ファイルの必須項目は能力宣言から決める（能力の外の欠落で落とさない） | `omitnix/gate.py` | `tests/test_gate.py` |
+| SQL パーサを自作しない（sqlglot に任せる） | `omitnix/adapters/_sql.py` | `tests/test_php_adapter.py` |
+| 同じソースからは同じ生成物（捕捉は文書順・set を経由しない） | `omitnix/adapters/_treesitter.py` | `tests/test_determinism.py` |
+| 生成物に OS を出さない（改行は LF 固定・プラットフォーム分岐を書かない） | `omitnix/cli.py` | `tests/test_cli.py` |
 | 参照 0 件を「未使用」と書かない | `README.md` の Why it exists 節 | なし（レビューで見る） |
 | README・設定サンプル・fixture に実在するテーブル名や関数名を書かない | `docs/local/plan_progmap-oss_c1_naming-init.md` | `scripts/secrets-scan.mjs`（layer 2/3） |
 

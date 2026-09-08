@@ -1,0 +1,43 @@
+# Pre-commit wiring for omitnix.
+#
+# One job only: hand the files being committed to the new-file gate. Everything else the
+# gate needs -- which files are new, what each adapter can report, which checks the
+# repository has actually configured -- it works out for itself.
+#
+# Why lefthook rather than pre-commit: this configuration is meant to be shared by many
+# repositories, and lefthook can pull a shared file in with `remotes:` so the rule lives
+# in one place instead of being copied into each repository and drifting:
+#
+#   remotes:
+#     - git: https://github.com/<owner>/<repo>.git
+#       configs: [lefthook.yml]
+#
+# This repository's own hook entry point stays `.githooks/pre-commit`, which calls
+# `lefthook run pre-commit`. lefthook is deliberately NOT installed with `lefthook
+# install`: that writes its own hook files, and it would overwrite the secrets scan and
+# the CLAUDE.md check that already run there.
+
+pre-commit:
+  parallel: false
+  commands:
+    omitnix-gate:
+      # Only files being added or changed in this commit are passed. The gate narrows
+      # that further to the ones git reports as newly added.
+      run: python -m omitnix --gate --files {staged_files}
+      # Nothing to gate is not a failure; lefthook skips a command whose file list is
+      # empty rather than running it with no arguments (verified 2026-09-08).
+      skip:
+        - merge
+        - rebase
+
+    omitnix-fresh:
+      # The generated inventory is committed, and CI checks it with the same command.
+      # Running it here too means a stale document is caught while it is still one
+      # `omitnix` away from fixed, instead of after a push.
+      #
+      # It deliberately does not regenerate and stage for you: a hook that quietly edits
+      # what you are committing is a hook that puts unreviewed content into your commit.
+      run: python -m omitnix --check
+      skip:
+        - merge
+        - rebase

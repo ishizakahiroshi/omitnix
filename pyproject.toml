@@ -1,0 +1,91 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "omitnix"
+version = "0.1.0"
+description = "Static code inventory that fails when anything discovered is left unanalyzed"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "ishizakahiroshi", email = "ishizakahiroshi.dev@gmail.com" }]
+keywords = ["static-analysis", "inventory", "completeness", "code-map"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = ["pyyaml>=6.0"]
+
+[project.optional-dependencies]
+# Parsing extras. They are optional so that the core runs without a compiler toolchain,
+# and an adapter whose grammar is absent reports its files as unknown -- counted and
+# failing the run -- rather than skipping them.
+# Floors are the versions actually tested, not the oldest that might work.
+php = ["tree-sitter>=0.26.0", "tree-sitter-php>=0.24.1", "sqlglot>=30.18.0"]
+python = ["tree-sitter>=0.26.0", "tree-sitter-python>=0.25.0", "sqlglot>=30.18.0"]
+go = ["tree-sitter>=0.26.0", "tree-sitter-go>=0.25.0", "sqlglot>=30.18.0"]
+# One extra for the whole TypeScript/JavaScript family: .ts and .tsx need the TypeScript
+# package (it carries both entry points) and .js/.mjs/.cjs need the JavaScript one.
+tsjs = [
+  "tree-sitter>=0.26.0",
+  "tree-sitter-typescript>=0.23.2",
+  "tree-sitter-javascript>=0.25.0",
+  "sqlglot>=30.18.0",
+]
+# The HTML adapter reads inline <script> blocks with the JavaScript grammar, so that
+# grammar is part of this extra rather than an optional improvement to it.
+html = ["tree-sitter>=0.26.0", "tree-sitter-html>=0.23.2", "tree-sitter-javascript>=0.25.0"]
+# No grammar: a .sql file is the statement, and sqlglot reads it directly.
+sql = ["sqlglot>=30.18.0"]
+# The minimal-tier adapters (css, rust, shell, powershell, vue) need nothing at all and
+# so have no extra. They read a header comment as text; adding a grammar would put a
+# dependency between a file and being counted.
+all = [
+  "tree-sitter>=0.26.0",
+  "tree-sitter-php>=0.24.1",
+  "tree-sitter-python>=0.25.0",
+  "tree-sitter-go>=0.25.0",
+  "tree-sitter-typescript>=0.23.2",
+  "tree-sitter-javascript>=0.25.0",
+  "tree-sitter-html>=0.23.2",
+  "sqlglot>=30.18.0",
+]
+dev = [
+  "pytest>=8.0",
+  "tree-sitter>=0.26.0",
+  "tree-sitter-php>=0.24.1",
+  "tree-sitter-python>=0.25.0",
+  "tree-sitter-go>=0.25.0",
+  "tree-sitter-typescript>=0.23.2",
+  "tree-sitter-javascript>=0.25.0",
+  "tree-sitter-html>=0.23.2",
+  "sqlglot>=30.18.0",
+]
+
+[project.scripts]
+omitnix = "omitnix.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ishizakahiroshi/omitnix"
+Source = "https://github.com/ishizakahiroshi/omitnix"
+
+[tool.hatch.build.targets.wheel]
+packages = ["omitnix"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# Python fixtures are input to the analyzer, not source code. One of them does not parse
+# on purpose, and two build SQL the unsafe way on purpose -- that is the behaviour under
+# test. Linting them would mean either deleting the cases or annotating away the point.
+extend-exclude = ["tests/fixtures/python"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

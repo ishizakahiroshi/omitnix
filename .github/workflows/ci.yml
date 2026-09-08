@@ -1,0 +1,118 @@
+name: ci
+
+# Lint, tests, and the tool run against its own repository.
+#
+# The OS matrix is the point of this file, not a formality. The tool is developed on
+# Windows only, so ubuntu-latest and macos-latest here are the first and only place its
+# behaviour on those platforms is observed at all. `-latest` is deliberate: the question
+# is whether the current runners work, not whether some pinned production image does --
+# nothing here depends on a system library version.
+#
+# No secrets are used, and none should be added. The tool never connects to a database:
+# schema information, where it is used at all, comes from a JSON snapshot committed by
+# the repository being scanned.
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      # Pinned to the version used locally on 2026-09-08. ruff is not a declared
+      # dependency of the project, so without a pin a new release could fail the build
+      # on a rule nobody chose to adopt.
+      - name: Install ruff
+        run: python -m pip install ruff==0.16.2
+
+      - name: ruff check
+        run: python -m ruff check .
+
+  test:
+    name: test ${{ matrix.os }} py${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        # The declared floor and the version actually developed against.
+        python-version: ['3.11', '3.14']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # --only-binary names the two compiled dependencies, so a missing wheel fails here
+      # instead of being papered over by a source build on whichever runners happen to
+      # have a compiler. That is the thing being tested: `pip install omitnix[php]` has
+      # to work on a machine with no toolchain. The local project itself is not in the
+      # list and still builds normally.
+      - name: Install with the php extra, wheels only for the parsers
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --only-binary tree-sitter,tree-sitter-php -e ".[php,dev]"
+
+      # Recorded so the log says which parser versions a green run actually covered.
+      - name: Report resolved versions
+        run: python -m pip list
+
+      - name: pytest
+        run: python -m pytest -q
+
+  dogfood:
+    name: dogfood ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install with the php extra
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[php]"
+
+      # --check writes nothing and compares the committed documents in .omitnix/ against
+      # a fresh run, so this one step covers both questions: was everything discovered
+      # analyzed (exit 1 if not), and is the committed inventory still current (exit 3 if
+      # not). Run on all three platforms because discovery is where the path handling
+      # lives -- the walk, the glob translation, and the exclusions in .omitnix.yaml are
+      # the parts most likely to behave differently off Windows.
+      #
+      # A failure here means one of: a new file type nobody gave an adapter, or someone
+      # changed the code without regenerating. Both are fixed by running `omitnix` and
+      # committing the result.
+      - name: Check the committed inventory against a fresh run
+        run: python -m omitnix --check

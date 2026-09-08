@@ -1,0 +1,19 @@
+<!-- The order list screen. Every name here is invented. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Orders</title>
+    <script src="/static/orders.js"></script>
+  </head>
+  <body>
+    <form action="/api/orders" method="post">
+      <input name="q" />
+      <button type="submit">Search</button>
+    </form>
+    <a href="/help">Help</a>
+    <script>
+      fetch("/api/customers");
+      axios.get("/api/audit");
+    </script>
+  </body>
+</html>

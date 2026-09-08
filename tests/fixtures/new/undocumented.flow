@@ -1,0 +1,3 @@
+authn: require_session
+authz: apply_visibility_filter
+reads: customers

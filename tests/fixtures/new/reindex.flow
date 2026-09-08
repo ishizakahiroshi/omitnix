@@ -1,0 +1,6 @@
+summary: Rebuild the search index overnight
+authn: require_session
+authz: apply_visibility_filter
+reads: orders
+writes: search_index
+unresolved: dynamic_sql / the target table name is built at run time

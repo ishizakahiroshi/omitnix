@@ -1,0 +1,3 @@
+summary: Delete cancelled orders older than one year
+authn: require_session
+writes: orders, audit_log

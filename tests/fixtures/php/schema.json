@@ -1,0 +1,8 @@
+{
+  "name": "fictional_example",
+  "tables": [
+    { "name": "orders" },
+    { "name": "customers" },
+    { "name": "search_index" }
+  ]
+}

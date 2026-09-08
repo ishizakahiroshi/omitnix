@@ -1,0 +1,22 @@
+# Line endings.
+#
+# Without this file, a clone on a machine with core.autocrlf=true gets CRLF in the
+# working tree for every text file. Two things here break when that happens, and both
+# break quietly enough to waste an afternoon:
+#
+#   * .githooks/pre-commit is run by sh. A trailing CR turns the last argument of every
+#     line into something ending in \r, and the error names the wrong thing entirely
+#     ("$'\r': command not found").
+#   * .omitnix/ holds documents this tool writes with LF on every platform, on purpose,
+#     so that the machine which generated them does not show up as a diff. Letting the
+#     checkout put CRLF back means the working tree disagrees with what the tool emits.
+#
+# Fixtures are analyzer input rather than prose: their bytes are the test, so they are
+# pinned too.
+
+* text=auto
+
+*.sh text eol=lf
+.githooks/* text eol=lf
+.omitnix/* text eol=lf
+tests/fixtures/** text eol=lf

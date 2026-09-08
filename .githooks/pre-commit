@@ -7,3 +7,15 @@
 # 終了コードが「最後のコマンドの結果」になり、前段の BLOCKED が握り潰される。
 node scripts/secrets-scan.mjs --staged --block || exit 1
 node scripts/check-claude-md.mjs || exit 1
+
+# omitnix の新規ファイル gate。lefthook.yml の pre-commit を実行する。
+# lefthook install は使わない（このファイルを上書きして上の 2 本を消すため）。
+# lefthook が無いときは黙って飛ばさず、ここで止める。検査を静かに省略しないのが
+# このリポジトリの主題そのもの。
+if command -v lefthook >/dev/null 2>&1; then
+	lefthook run pre-commit || exit 1
+else
+	echo "BLOCKED: lefthook が見つかりません。scoop install lefthook（または winget install evilmartians.lefthook）で入れてください。" >&2
+	echo "  この 1 本を飛ばすと、新規ファイルの gate が動かないままコミットされます。" >&2
+	exit 1
+fi

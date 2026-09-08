@@ -1,0 +1,2 @@
+-- A file that holds only a note. It must not be reported as a statement nobody
+-- could read, and it must not be reported as a file that touches a table either.
