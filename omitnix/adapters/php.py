@@ -75,7 +75,19 @@ _TRANSPARENT_TYPES = frozenset(
 #: Heredoc delimiters. Not content, and not a run-time hole either.
 _DELIMITER_TYPES = frozenset({"heredoc_start", "heredoc_end"})
 #: Top-level nodes that do not end the file's leading comment block.
-_HEADER_TYPES = frozenset({"php_tag", "comment", "text", "declaration_list"})
+#:
+#: ``declare_statement`` is here because of a measurement, not a guess. Applied to a real
+#: repository on 2026-09-08, this adapter produced a summary for none of its 364 files:
+#: every one opens with ``declare(strict_types=1);`` before its docblock, and a node that
+#: is not on this list ends the header, so the docblock was never reached. A modern file
+#: is the common case, and a column that is empty everywhere teaches people to ignore it.
+#:
+#: ``namespace_definition`` and ``use_declaration`` are deliberately absent: a docblock
+#: after those usually documents the class below it, and taking it would put a class's
+#: description in a column that says "what this file is for".
+_HEADER_TYPES = frozenset(
+    {"php_tag", "comment", "text", "declaration_list", "declare_statement"}
+)
 
 _COMMENT_OPENERS = re.compile(r"^\s*(/\*+|\*+|//+|#+)")
 _COMMENT_CLOSER = re.compile(r"\*+/\s*$")

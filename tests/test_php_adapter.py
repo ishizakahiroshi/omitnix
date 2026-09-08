@@ -348,3 +348,15 @@ def test_the_screen_to_api_column_is_out_of_scope_not_empty(php_repo: Path) -> N
     record = report.file("src/reindex.php")
     assert record.fields[Capability.SCREEN_TO_API].state is FieldState.OUT_OF_SCOPE
     assert record.fields[Capability.AUTHORIZATION].state is FieldState.NONE_OBSERVED
+
+
+def test_a_declare_statement_does_not_hide_the_docblock_after_it() -> None:
+    """Found by applying the tool to a real repository, not by reading the code.
+
+    `declare(strict_types=1);` sits between the opening tag and the docblock in modern
+    PHP. Until 2026-09-08 that ended the leading comment block, so the summary was never
+    reached: across 364 files of one real repository the summary column was empty in
+    every single one. A column that is empty everywhere is a column people learn to skip.
+    """
+    result = analyze("declared.php")
+    assert result.values[Capability.SUMMARY] == "List orders for the signed-in customer."

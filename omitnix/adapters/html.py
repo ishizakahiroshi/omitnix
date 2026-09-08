@@ -19,6 +19,7 @@ The syntax lives in ``omitnix/queries/html.scm``, not here.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from typing import Any
 
 from ..model import Capability
@@ -56,10 +57,53 @@ _HEADER_TYPES = frozenset({"comment", "doctype"})
 SCRIPT_UNREADABLE = "script_unreadable"
 
 
+#: Tags whose attributes are worth reading at all. Checked before walking a tag's
+#: attributes, so an ordinary page of divs costs one comparison per tag.
+_REQUEST_TAGS: frozenset[str] = frozenset(tag for tag, _ in _REQUEST_ATTRIBUTES)
+
+
+def _tag_name(start_tag: Any) -> str:
+    for child in start_tag.named_children:
+        if child.type == "tag_name":
+            return text_of(child).lower()
+    return ""
+
+
+def _attributes(start_tag: Any) -> Iterator[tuple[str, str]]:
+    """Each ``(name, value)`` on a start tag, quoted or bare.
+
+    The query used to express this shape itself. It cost quadratic time on large pages;
+    the measurement is in ``omitnix/queries/html.scm``. Walking the children here is more
+    code for the same answers, and it is linear.
+    """
+    for child in start_tag.named_children:
+        if child.type != "attribute":
+            continue
+        name = ""
+        value = ""
+        for part in child.named_children:
+            if part.type == "attribute_name":
+                name = text_of(part)
+            elif part.type == "attribute_value":
+                value = text_of(part)
+            elif part.type == "quoted_attribute_value":
+                for inner in part.named_children:
+                    if inner.type == "attribute_value":
+                        value = text_of(inner)
+        yield name.lower(), value
+
+
 def _title(parsed: Parsed) -> str:
-    for row in parsed.paired("element.tag", "element.text"):
-        if text_of(row["element.tag"]).lower() == "title":
-            line = first_description_line(text_of(row["element.text"]))
+    for start_tag in parsed.get("start_tag"):
+        if _tag_name(start_tag) != "title":
+            continue
+        element = start_tag.parent
+        if element is None:
+            continue
+        for child in element.named_children:
+            if child.type != "text":
+                continue
+            line = first_description_line(text_of(child))
             if line:
                 return line
     return ""
@@ -77,23 +121,24 @@ def _summary(parsed: Parsed) -> str:
 
 
 def _record_attribute_endpoints(parsed: Parsed, findings: Findings) -> None:
-    for row in parsed.paired("attribute.tag", "attribute.name", "attribute.value"):
-        pair = (
-            text_of(row["attribute.tag"]).lower(),
-            text_of(row["attribute.name"]).lower(),
-        )
-        if pair not in _REQUEST_ATTRIBUTES:
+    for start_tag in parsed.get("start_tag"):
+        tag = _tag_name(start_tag)
+        if tag not in _REQUEST_TAGS:
             continue
-        value = text_of(row["attribute.value"]).strip()
-        if looks_like_endpoint(value):
-            findings.endpoints.add(value)
-        elif value:
-            # A templated action such as "{{ url_for(...) }}" is a request whose address
-            # this tool cannot resolve. Counted, not dropped.
-            findings.note(
-                DYNAMIC_ENDPOINT,
-                f"the {pair[0]} {pair[1]} is not a literal address: {value[:70]}",
-            )
+        for name, raw in _attributes(start_tag):
+            pair = (tag, name)
+            if pair not in _REQUEST_ATTRIBUTES:
+                continue
+            value = raw.strip()
+            if looks_like_endpoint(value):
+                findings.endpoints.add(value)
+            elif value:
+                # A templated action such as "{{ url_for(...) }}" is a request whose
+                # address this tool cannot resolve. Counted, not dropped.
+                findings.note(
+                    DYNAMIC_ENDPOINT,
+                    f"the {tag} {name} is not a literal address: {value[:70]}",
+                )
 
 
 def _record_script_endpoints(parsed: Parsed, findings: Findings) -> None:

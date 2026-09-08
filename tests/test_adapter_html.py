@@ -6,6 +6,7 @@ Every fixture under ``tests/fixtures/html`` is invented.
 from __future__ import annotations
 
 import shutil
+import time
 from pathlib import Path
 
 import pytest
@@ -172,3 +173,42 @@ def test_the_columns_outside_this_tier_are_out_of_scope_not_empty(html_repo: Pat
     ):
         assert record.fields[capability].state is FieldState.OUT_OF_SCOPE
     assert record.fields[Capability.SCREEN_TO_API].state is FieldState.VALUE
+
+
+# --------------------------------------------------------------------------------------
+# Cost
+# --------------------------------------------------------------------------------------
+
+
+def _generated_page(rows: int) -> str:
+    """A page with nothing interesting in it, only a great many ordinary tags."""
+    body = "\n".join(
+        f'<div class="row r{i}" data-id="{i}"><span title="t{i}">text {i}</span></div>'
+        for i in range(rows)
+    )
+    return f"<!doctype html>\n<html><body>\n{body}\n</body></html>\n"
+
+
+def _seconds_to_analyze(text: str) -> float:
+    request = AnalysisRequest(path="generated.html", absolute_path=None, text=text)
+    start = time.perf_counter()
+    ADAPTER.analyze(request)
+    return time.perf_counter() - start
+
+
+def test_cost_grows_with_the_page_rather_than_with_its_square() -> None:
+    """A guard on the query's shape, phrased as a ratio so it does not depend on the machine.
+
+    Until 2026-09-08 the query asked for several nodes at different depths in one
+    pattern, and doubling a page quadrupled the time: one real 2.6 MB page took 27.3
+    seconds and was 44% of a whole 52-repository run. The query now captures whole nodes
+    and the adapter walks their children, which is linear. A wall-clock budget would say
+    more about the runner than about the code, so this compares one size against another.
+    """
+    small = _seconds_to_analyze(_generated_page(3000))
+    large = _seconds_to_analyze(_generated_page(6000))
+
+    assert large < small * 3, (
+        f"doubling the page took {large / small:.1f} times as long "
+        "(linear is about 2, quadratic about 4)"
+    )
