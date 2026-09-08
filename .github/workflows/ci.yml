@@ -71,10 +71,10 @@ jobs:
       # have a compiler. That is the thing being tested: `pip install omitnix[php]` has
       # to work on a machine with no toolchain. The local project itself is not in the
       # list and still builds normally.
-      - name: Install with the php extra, wheels only for the parsers
+      - name: Install with every parser, wheels only for the compiled ones
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --only-binary tree-sitter,tree-sitter-php -e ".[php,dev]"
+          python -m pip install --only-binary tree-sitter,tree-sitter-php,tree-sitter-python,tree-sitter-go,tree-sitter-typescript,tree-sitter-javascript,tree-sitter-html -e ".[dev]"
 
       # Recorded so the log says which parser versions a green run actually covered.
       - name: Report resolved versions
@@ -99,10 +99,13 @@ jobs:
         with:
           python-version: '3.14'
 
-      - name: Install with the php extra
+      # Every adapter, because this job asks whether the committed inventory matches a
+      # fresh run: with a grammar missing, the files it covers come back as `unknown`
+      # and the comparison fails for a reason that has nothing to do with the inventory.
+      - name: Install with every parser
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e ".[php]"
+          python -m pip install -e ".[all]"
 
       # --check writes nothing and compares the committed documents in .omitnix/ against
       # a fresh run, so this one step covers both questions: was everything discovered

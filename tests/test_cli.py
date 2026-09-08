@@ -109,6 +109,27 @@ def test_check_fails_when_the_source_moved_on(tmp_path: Path, with_test_adapters
     assert "api/orders_delete.flow" in err
 
 
+def test_check_fails_on_an_unknown_file_even_when_the_documents_are_current(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Current and complete are different claims, and CI may only ever run --check.
+
+    A document that records an unanalyzable file faithfully is still a document with a
+    hole in it. If --check passed here, a job wired to it would go green on exactly the
+    state this tool exists to refuse.
+    """
+    root = clean_repo(tmp_path)
+    (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
+    write_repo(root, {".omitnix.yaml": "include:\n  - '**/*.flow'\n  - '**/*.unheardof'\n"})
+
+    assert run(["--root", str(root)])[0] == EXIT_UNKNOWN  # generated, and it says so
+
+    code, out, err = run(["--root", str(root), "--check"])
+    assert code == EXIT_UNKNOWN
+    assert "up to date" in out
+    assert "api/helper.unheardof" in err
+
+
 def test_check_fails_when_nothing_was_generated_yet(
     tmp_path: Path, with_test_adapters: None
 ) -> None:

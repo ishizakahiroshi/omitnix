@@ -170,6 +170,20 @@ def _run_gate(args: argparse.Namespace, config: Config, out, err) -> int:
     return EXIT_GATE
 
 
+def _report_unknown(report, config: Config, err) -> None:
+    """Name the files nothing could analyze. Truncated, but never silently."""
+    print(
+        f"omitnix: {report.coverage.unknown} discovered file(s) could not be analyzed. "
+        "Give the extension an adapter, or exclude it explicitly in .omitnix.yaml.",
+        file=err,
+    )
+    unknown = [record for record in report.files if record.status is Status.UNKNOWN]
+    for record in unknown[:20]:
+        print(f"  {record.path}: {record.unknown_reason}", file=err)
+    if len(unknown) > 20:
+        print(f"  ... {len(unknown) - 20} more (see {config.markdown_path})", file=err)
+
+
 def _strip_commit_line(text: str) -> str:
     """Drop the provenance line before comparing.
 
@@ -214,6 +228,14 @@ def _run_check(report, config, out, err) -> int:
             print(f"  {line}", file=err)
         print("  regenerate with: omitnix", file=err)
         return EXIT_STALE
+
+    # Being current is not the same as being complete. A committed document can record
+    # unknown files faithfully and still be a document with holes in it, and a job that
+    # only ever runs --check must not go green on one.
+    if report.coverage.unknown:
+        print(f"omitnix: up to date, but {report.coverage.headline()}", file=out)
+        _report_unknown(report, config, err)
+        return EXIT_UNKNOWN
 
     print(f"omitnix: up to date. {report.coverage.headline()}", file=out)
     return EXIT_OK
@@ -300,16 +322,7 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
         print(f"wrote {path}", file=out)
 
     if report.coverage.unknown:
-        print(
-            f"omitnix: {report.coverage.unknown} discovered file(s) could not be analyzed. "
-            "Give the extension an adapter, or exclude it explicitly in .omitnix.yaml.",
-            file=err,
-        )
-        unknown = [record for record in report.files if record.status is Status.UNKNOWN]
-        for record in unknown[:20]:
-            print(f"  {record.path}: {record.unknown_reason}", file=err)
-        if len(unknown) > 20:
-            print(f"  ... {len(unknown) - 20} more (see {config.markdown_path})", file=err)
+        _report_unknown(report, config, err)
         return EXIT_UNKNOWN
 
     return EXIT_OK
