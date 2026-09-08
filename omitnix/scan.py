@@ -9,12 +9,20 @@ silently drop -- it becomes an ``unknown`` record later instead.
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass
 from pathlib import Path
 
 from .config import Config
 from .globs import directory_is_pruned, glob_match, matches_any, normalize
 
-__all__ = ["effective_exclude", "discover_files", "select_files", "SelectionResult"]
+__all__ = [
+    "effective_exclude",
+    "discover_files",
+    "discover_with_stats",
+    "Discovery",
+    "select_files",
+    "SelectionResult",
+]
 
 
 def effective_exclude(config: Config) -> tuple[str, ...]:
@@ -29,26 +37,62 @@ def _is_included(config: Config, exclude: tuple[str, ...], rel: str) -> bool:
     return matches_any(config.include, rel) and not matches_any(exclude, rel)
 
 
-def discover_files(config: Config) -> list[str]:
-    """Repository-relative POSIX paths, sorted, for a full run."""
+@dataclass(frozen=True, slots=True)
+class Discovery:
+    """What one walk of a repository found, and what it decided not to look at.
+
+    The two rejection counts exist so that a caller can say out loud how much of a tree
+    an exclusion list removed. A workspace run leans on broad defaults, and an exclusion
+    nobody can see the size of is how a survey quietly stops covering anything.
+
+    ``pruned_directories`` counts directory *trees* skipped whole, not the files inside
+    them: the walk never enters them, so their contents were never counted. Saying
+    "3 trees pruned" is the honest form of that; a file count would be invented.
+    """
+
+    files: list[str]
+    #: Files the walk saw and the include/exclude patterns rejected.
+    excluded_files: int = 0
+    #: Directory trees the walk skipped whole. Their contents are in no count here.
+    pruned_directories: int = 0
+
+
+def discover_with_stats(config: Config) -> Discovery:
+    """One walk of the repository, reporting what it kept and what it turned away."""
     exclude = effective_exclude(config)
     root = config.root
     found: list[str] = []
+    excluded_files = 0
+    pruned_directories = 0
 
     for dirpath, dirnames, filenames in os.walk(root):
         rel_dir = normalize(str(Path(dirpath).relative_to(root)))
         rel_dir = "" if rel_dir == "." else rel_dir
-        dirnames[:] = sorted(
-            name
-            for name in dirnames
-            if not directory_is_pruned(exclude, f"{rel_dir}/{name}" if rel_dir else name)
-        )
+        kept_dirs: list[str] = []
+        for name in sorted(dirnames):
+            child = f"{rel_dir}/{name}" if rel_dir else name
+            if directory_is_pruned(exclude, child):
+                pruned_directories += 1
+            else:
+                kept_dirs.append(name)
+        dirnames[:] = kept_dirs
         for filename in filenames:
             rel = f"{rel_dir}/{filename}" if rel_dir else filename
             if _is_included(config, exclude, rel):
                 found.append(rel)
+            else:
+                excluded_files += 1
 
-    return sorted(found)
+    return Discovery(
+        files=sorted(found),
+        excluded_files=excluded_files,
+        pruned_directories=pruned_directories,
+    )
+
+
+def discover_files(config: Config) -> list[str]:
+    """Repository-relative POSIX paths, sorted, for a full run."""
+    return discover_with_stats(config).files
 
 
 class SelectionResult(list[str]):

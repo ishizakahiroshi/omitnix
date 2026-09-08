@@ -40,7 +40,7 @@ from .schema import load_schema_tables
 
 TOOL = f"omitnix {__version__}"
 
-__all__ = ["build_report", "analyze_file"]
+__all__ = ["build_report", "assemble_report", "analyze_file"]
 
 
 def _read_text(path: Path) -> tuple[str | None, str | None]:
@@ -217,15 +217,41 @@ def build_report(
         selected = selection
         skipped = selection.skipped
 
-    records = tuple(
-        analyze_file(rel, adapter_set, config, schema_tables) for rel in sorted(selected)
+    records = [analyze_file(rel, adapter_set, config, schema_tables) for rel in sorted(selected)]
+
+    return assemble_report(
+        config,
+        records,
+        adapter_set,
+        schema_tables,
+        partial=partial,
+        skipped=skipped,
     )
 
+
+def assemble_report(
+    config: Config,
+    records: list[FileRecord],
+    adapter_set: AdapterSet,
+    schema_tables: frozenset[str] = frozenset(),
+    *,
+    partial: bool = False,
+    skipped: int = 0,
+) -> Report:
+    """Turn analyzed records into a report, counting them and checking the invariant.
+
+    Separate from :func:`build_report` because a caller may have produced the records
+    some other way -- a workspace run analyzes a repository's files across several
+    processes and hands the results back here. The counting and the invariant must not
+    have a second implementation, so there is only this one.
+    """
+    ordered = tuple(sorted(records, key=lambda record: record.path))
+
     counts = {status: 0 for status in Status}
-    for record in records:
+    for record in ordered:
         counts[record.status] += 1
     coverage = Coverage(
-        discovered=len(records),
+        discovered=len(ordered),
         analyzed=counts[Status.ANALYZED],
         unresolved=counts[Status.UNRESOLVED],
         unknown=counts[Status.UNKNOWN],
@@ -248,6 +274,6 @@ def build_report(
     return Report(
         generated=generated,
         coverage=coverage,
-        files=records,
-        tables=_table_index(records, schema_tables),
+        files=ordered,
+        tables=_table_index(ordered, schema_tables),
     )

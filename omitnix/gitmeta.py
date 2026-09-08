@@ -19,6 +19,7 @@ __all__ = [
     "working_tree_is_dirty",
     "repository_root",
     "newly_added_files",
+    "tracked_files",
 ]
 
 
@@ -61,6 +62,33 @@ def repository_root(root: Path) -> Path | None:
     if not top:
         return None
     return Path(top).resolve()
+
+
+def tracked_files(root: Path) -> tuple[str, ...] | None:
+    """Paths git tracks under ``root``, relative to it, in POSIX form.
+
+    ``None`` -- not an empty tuple -- when git could not answer, because "this repository
+    tracks nothing" and "I could not ask" must not look the same to the caller. An empty
+    tuple is a real answer and means the index is empty.
+
+    Read as bytes rather than through ``text=True``: git emits path bytes, and decoding
+    them with whatever the console's code page happens to be turns a file with a
+    non-ASCII name into a path that does not exist.
+    """
+    try:
+        completed = subprocess.run(
+            ["git", "ls-files", "-z"],
+            cwd=root,
+            capture_output=True,
+            check=False,
+            timeout=120,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if completed.returncode != 0:
+        return None
+    raw = completed.stdout.decode("utf-8", errors="surrogateescape")
+    return tuple(entry for entry in raw.split("\0") if entry)
 
 
 def _parse_status_z(raw: str) -> list[tuple[str, str]]:

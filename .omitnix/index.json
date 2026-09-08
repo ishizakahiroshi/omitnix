@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "5ed0a8504084a92fd826017beda35b2e1be9c073",
+    "commit": "1690af0547a68cb805efc22951eab154a3ddd8f6",
     "dirty": true,
     "tool": "omitnix 0.1.0",
     "partial": false,
@@ -132,8 +132,8 @@
     ]
   },
   "coverage": {
-    "discovered": 55,
-    "analyzed": 54,
+    "discovered": 57,
+    "analyzed": 56,
     "unresolved": 1,
     "unknown": 0,
     "skipped_by_config": 0
@@ -1199,6 +1199,37 @@
       "unresolved": []
     },
     {
+      "path": "omitnix/workspace.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Running across many repositories at once."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
       "path": "scripts/check-claude-md.mjs",
       "adapter": "tsjs",
       "status": "analyzed",
@@ -1831,6 +1862,37 @@
         "summary": {
           "state": "value",
           "value": "What the generated documents say, and what they must never say."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "tests/test_workspace.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Workspace mode: many repositories in one run."
         },
         "authentication": {
           "state": "none_observed",

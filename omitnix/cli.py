@@ -13,6 +13,11 @@ Exit codes are the interface a hook or CI job actually consumes:
 4 is separate from 1 on purpose: a hook that blocks a commit wants to distinguish "the
 file you are adding is not acceptable" from "the repository contains something this tool
 cannot read", because the second is usually somebody else's file and a different fix.
+
+``--workspace`` reuses the same codes across many repositories: 1 when any repository
+that ran holds an unknown file, and 2 when a repository could not be run at all. The
+second takes precedence, because a repository nothing could run is a hole of unknown
+size, and it must not be reported as the smaller, well-understood failure.
 """
 
 from __future__ import annotations
@@ -38,6 +43,13 @@ from .render import (
     to_payload,
 )
 from .schema import load_schema_tables
+from .workspace import (
+    WORKSPACE_OUTPUT_DIR,
+    default_jobs,
+    discover_repositories,
+    run_workspace,
+    write_workspace_documents,
+)
 
 EXIT_OK = 0
 EXIT_UNKNOWN = 1
@@ -99,6 +111,78 @@ def _build_parser() -> argparse.ArgumentParser:
         dest="print_path",
         metavar="PATH",
         help="print the record for one file as JSON and exit",
+    )
+
+    workspace = parser.add_argument_group(
+        "workspace mode",
+        "Run across every git repository under a directory. Records are keyed "
+        "<repository>/<path> and reverse indexes stay inside their repository.",
+    )
+    workspace.add_argument(
+        "--workspace",
+        type=Path,
+        metavar="DIR",
+        help="analyze every repository under DIR instead of a single repository",
+    )
+    workspace.add_argument(
+        "--out",
+        type=Path,
+        metavar="DIR",
+        default=None,
+        help=(
+            "where a workspace run writes "
+            f"(default: ./{WORKSPACE_OUTPUT_DIR}). Scanned repositories are not "
+            "written to unless --write-per-repo says so."
+        ),
+    )
+    workspace.add_argument(
+        "--exclude-repo",
+        action="append",
+        default=None,
+        metavar="GLOB",
+        help=(
+            "skip repositories whose workspace-relative path matches GLOB, or that sit "
+            "under a directory matching it. Repeatable. Skipped repositories are "
+            "reported, not dropped."
+        ),
+    )
+    workspace.add_argument(
+        "--write-per-repo",
+        action="store_true",
+        help="also write .omitnix/ inside each scanned repository (off by default)",
+    )
+    workspace.add_argument(
+        "--no-workspace-excludes",
+        action="store_true",
+        help=(
+            "do not add the workspace default exclusions to each repository. Everything "
+            "a repository contains is discovered, and most of it will be unknown."
+        ),
+    )
+    workspace.add_argument(
+        "--all-files",
+        action="store_true",
+        help=(
+            "walk each working directory instead of analyzing what git tracks. Includes "
+            "untracked files, and with them whatever local scratch a working directory "
+            "happens to hold."
+        ),
+    )
+    workspace.add_argument(
+        "--jobs",
+        type=int,
+        default=None,
+        metavar="N",
+        help=(
+            "worker processes for a workspace run (default: one per core, at most 8). "
+            "There is no cache: identical bytes in two places can analyze to different "
+            "results, so repeated work is answered with parallelism instead."
+        ),
+    )
+    workspace.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="with --workspace, list the repositories that would be analyzed and stop",
     )
     return parser
 
@@ -168,6 +252,131 @@ def _run_gate(args: argparse.Namespace, config: Config, out, err) -> int:
     for finding in result.findings:
         print(f"  {finding.line()}", file=err)
     return EXIT_GATE
+
+
+_WORKSPACE_ONLY = (
+    ("--out", "out"),
+    ("--exclude-repo", "exclude_repo"),
+    ("--write-per-repo", "write_per_repo"),
+    ("--no-workspace-excludes", "no_workspace_excludes"),
+    ("--all-files", "all_files"),
+    ("--jobs", "jobs"),
+    ("--dry-run", "dry_run"),
+)
+
+
+def _reject_workspace_only_options(args: argparse.Namespace, err) -> int | None:
+    # `is not None` rather than truthiness: `--jobs 0` is a value the user typed, and
+    # refusing it here is better than accepting it and doing nothing with it.
+    offered = [flag for flag, dest in _WORKSPACE_ONLY if getattr(args, dest) not in (None, False)]
+    if not offered:
+        return None
+    print(
+        f"omitnix: {', '.join(offered)} only applies with --workspace",
+        file=err,
+    )
+    return EXIT_ERROR
+
+
+def _run_workspace(args: argparse.Namespace, out, err) -> int:
+    for flag, present in (
+        ("--check", args.check),
+        ("--gate", args.gate),
+        ("--files", bool(args.files)),
+        ("--print", bool(args.print_path)),
+        ("--write", args.write),
+    ):
+        if present:
+            # Each of these answers a question about one repository: is this document
+            # current, is this file new, what does this path contain. Silently applying
+            # one to fifty repositories would give an answer to a question nobody asked.
+            print(f"omitnix: {flag} cannot be combined with --workspace", file=err)
+            return EXIT_ERROR
+
+    root = args.workspace
+    if not root.is_dir():
+        print(f"omitnix: no such directory: {root}", file=err)
+        return EXIT_ERROR
+
+    exclude_repos = tuple(args.exclude_repo or ())
+
+    if args.dry_run:
+        discovery = discover_repositories(root.resolve(), exclude_repos)
+        for repo in discovery.repositories:
+            print(repo, file=out)
+        print(
+            f"omitnix: {len(discovery.repositories) + len(discovery.excluded)} "
+            f"repositor(y/ies) found, {len(discovery.excluded)} excluded by request, "
+            f"{len(discovery.repositories)} would be analyzed. Nothing was written.",
+            file=out,
+        )
+        for repo in discovery.excluded:
+            print(f"omitnix: excluded by request: {repo}", file=err)
+        for entry in discovery.unreadable_directories:
+            print(f"omitnix: could not list: {entry}", file=err)
+        return EXIT_OK
+
+    out_dir = (args.out or Path.cwd() / WORKSPACE_OUTPUT_DIR).resolve()
+    jobs = args.jobs if args.jobs is not None else default_jobs()
+    if jobs < 1:
+        print("omitnix: --jobs must be at least 1", file=err)
+        return EXIT_ERROR
+
+    def progress(position: int, total: int, repo: str) -> None:
+        print(f"omitnix: [{position}/{total}] {repo}", file=err)
+
+    result = run_workspace(
+        root,
+        out_dir=out_dir,
+        exclude_repos=exclude_repos,
+        apply_workspace_excludes=not args.no_workspace_excludes,
+        jobs=jobs,
+        write_per_repo=args.write_per_repo,
+        tracked_only=not args.all_files,
+        progress=progress,
+    )
+    documents = write_workspace_documents(result, out_dir)
+
+    coverage = result.coverage
+    print(
+        f"omitnix: {len(result.succeeded)} repositor(y/ies) analyzed, "
+        f"{len(result.failed)} could not be run, "
+        f"{len(result.excluded_repositories)} excluded by request",
+        file=out,
+    )
+    print(coverage.headline(), file=out)
+    for path in documents:
+        print(f"wrote {path}", file=out)
+
+    unconfigured = result.unconfigured_authorization
+    if unconfigured:
+        # Said out loud on every run. A column that reads "not configured" in a document
+        # nobody opens is how "we did not check" turns into "there is nothing to check".
+        print(
+            f"omitnix: {len(unconfigured)} repositor(y/ies) name no authorization "
+            "function, so no authorization check was made in them. This is not a "
+            "finding that they have none.",
+            file=err,
+        )
+
+    for run in result.succeeded:
+        if run.discovery_note:
+            print(f"omitnix: {run.repo}: {run.discovery_note}", file=err)
+    for run in result.failed:
+        print(f"omitnix: could not run {run.repo}: {run.error}", file=err)
+    for entry in result.unreadable_directories:
+        print(f"omitnix: could not list: {entry}", file=err)
+
+    if result.failed:
+        return EXIT_ERROR
+    if coverage.unknown:
+        print(
+            f"omitnix: {coverage.unknown} discovered file(s) could not be analyzed. "
+            f"They are listed by extension in {documents[1]}.",
+            file=err,
+        )
+        return EXIT_UNKNOWN
+    return EXIT_OK
 
 
 def _report_unknown(report, config: Config, err) -> None:
@@ -271,6 +480,17 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
     out = out or sys.stdout
     err = err or sys.stderr
     args = _build_parser().parse_args(argv)
+
+    if args.workspace is not None:
+        try:
+            return _run_workspace(args, out, err)
+        except OmitnixError as exc:
+            print(f"omitnix: {exc}", file=err)
+            return EXIT_ERROR
+
+    rejected = _reject_workspace_only_options(args, err)
+    if rejected is not None:
+        return rejected
 
     if args.gate and (args.check or args.write):
         # The gate reports on new files only. Letting it write or compare the documents

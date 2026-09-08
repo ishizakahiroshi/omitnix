@@ -80,6 +80,11 @@ class Config:
     output_dir: str = DEFAULT_OUTPUT_DIR
     gate_exemptions: tuple[GateExemption, ...] = ()
     source_path: Path | None = None
+    #: False when the repository said ``exclude_defaults: false``, i.e. it wants to be
+    #: walked with exactly the exclusions it wrote. Recorded rather than inferred from
+    #: ``exclude`` because a caller that layers further defaults on top (a workspace run)
+    #: has to be able to tell "did not say" from "said no".
+    exclude_defaults_kept: bool = True
 
     @property
     def json_path(self) -> Path:
@@ -236,4 +241,5 @@ def load_config(root: Path, config_path: Path | None = None) -> Config:
         output_dir=output_dir,
         gate_exemptions=_parse_gate_exemptions(raw.get("gate_exemptions"), config_path),
         source_path=config_path,
+        exclude_defaults_kept=keep_defaults,
     )

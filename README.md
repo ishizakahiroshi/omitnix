@@ -74,11 +74,14 @@ omitnix --check               # write nothing; fail if the generated documents a
 omitnix --files a.php b.php   # analyze an explicit list, as a pre-commit hook passes it
 omitnix --gate --files a.php  # check only the newly added files among them
 omitnix --print api/x.php     # print one file's record as JSON
+omitnix --workspace ~/code    # every git repository under a directory (see below)
 ```
 
-There is no incremental mode and no cache. A full run over first-party code is fast enough
-(measured: 282 files in 0.18 s) that regenerating everything removes the entire question of
-whether the output is stale.
+There is no incremental mode and no cache, and regenerating everything removes the entire
+question of whether the output is stale. What that costs depends on the size of the files
+rather than on how many there are: parsing dominates, so a repository of ordinary source
+files regenerates in well under a second, while one holding a few very large generated
+files takes far longer. Measured on this project itself, 2026-09-08: 57 files in 0.5 s.
 
 `--files` reports on that subset and, by default, writes nothing: a partial run must not
 overwrite the full index with a slice of it. Pass `--write` if that is what you want.
@@ -95,6 +98,10 @@ because the commit moved on.
 | 2 | usage, configuration, or adapter-contract error |
 | 3 | `--check` found the generated documents out of date |
 | 4 | `--gate` refused a newly added file |
+
+`--workspace` reuses the same codes across many repositories: 1 when any repository that
+ran holds an unknown file, and 2 when a repository could not be run at all. The second
+wins when both happen, because a repository nothing could run is a hole of unknown size.
 
 ## The new-file gate
 
@@ -158,6 +165,87 @@ anything. Exemptions cannot silence `unknown`, and cannot switch off a check the
 not make.
 
 When an existing file trips the gate wrongly, the fix is the rule, not the exemption list.
+
+## Across many repositories
+
+`--workspace DIR` runs every git repository under `DIR` in one command. It is a layer on
+top of the single-repository run, not a wider one: each repository is analyzed exactly as
+it would be alone, and the workspace identifies and aggregates the results.
+
+```
+omitnix --workspace ~/code --dry-run                # list what would run; write nothing
+omitnix --workspace ~/code                          # run it; writes ./.omitnix-workspace/
+omitnix --workspace ~/code --exclude-repo vendored  # skip a group, and say that you did
+```
+
+**Nothing is written into the repositories being scanned.** Everything goes to one output
+directory (`--out`, default `./.omitnix-workspace/`): a rollup plus one document per
+repository. Most repositories in a workspace belong to somebody else's working day, and
+scattering generated files through them is not this tool's business. `--write-per-repo`
+asks for that explicitly.
+
+### Three things stop being unique
+
+| | inside one repository | across a workspace |
+|---|---|---|
+| a file's key | the path relative to the root | `<repository>/<path>` |
+| a table's name | the whole point of the reverse index | **never merged** |
+| a file's content | not a key | not a key |
+
+The first is not hypothetical. Across the 52 repositories measured here, 937 relative
+paths are held by more than one repository — one of them by 22 of them — so keying on the
+bare path would have merged 1,063 of 36,958 records into each other, silently. The second
+is worse than it looks. One
+system's `orders` and another system's `orders` silently sharing a row is a confident,
+quiet error, and in the same measurement 133 table names occurred in more than one
+repository. So the reverse index stays inside the repository it came from, and the rollup
+reports per-repository counts instead of one merged table.
+
+The third is why **there is no content-hash cache**. Two byte-identical files can analyze
+to different results: `require __DIR__ . '/queries.php'` resolves to a different file in a
+different directory. A cache keyed on content would hand one repository's answer to the
+other's file and nothing in the output would show it. Repeated work is answered with
+`--jobs`, which is stateless, instead.
+
+### What it looks at by default
+
+The files git tracks, minus build output, dependency trees, prose, declarative data,
+binary assets, and keys and certificates. A repository that disagrees writes its own
+`.omitnix.yaml`; one that says `exclude_defaults: false` is walked exactly as written and
+the workspace adds nothing to it.
+
+The defaults are measured rather than guessed. Across 52 repositories on one machine
+(2026-09-08):
+
+| what is targeted | discovered | of which no adapter claims |
+|---|---|---|
+| working directories, tool defaults only | 139,764 | 96,931 |
+| working directories, plus the workspace defaults | 67,838 | 26,408 |
+| **tracked files, plus the workspace defaults** (the default) | 36,958 | 1,129 |
+
+The largest single block the extension list could not describe was build output and
+vendored dependencies, which is why the defaults lead with directories. The largest block
+left after that was one repository's 24,436 ignored scratch files — database data
+directories and browser profiles — which is why the default target is what git tracks.
+`--all-files` walks the working directories instead.
+
+Every one of those decisions is counted and reported per repository. An exclusion nobody
+can see the size of is how a survey quietly stops covering anything.
+
+### Not configured is not a finding
+
+Authorization function names cannot have a default: they differ in every repository. A
+repository that names none is reported as **not configured**, listed as such, and said out
+loud on every run:
+
+```
+omitnix: 52 repositor(y/ies) name no authorization function, so no authorization check
+was made in them. This is not a finding that they have none.
+```
+
+A repository that could not be run is counted as its own number and never folded in as a
+zero. Its files are an unknown quantity, and calling that quantity zero is the
+repository-sized version of the mistake this tool exists to prevent.
 
 ## Contract checks, and where they stop
 
