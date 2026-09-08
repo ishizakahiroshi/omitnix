@@ -177,6 +177,20 @@ def test_a_second_hop_is_counted_rather_than_followed() -> None:
     assert "build_totals_sql" in detail
 
 
+def test_a_skipped_hop_names_the_file_it_was_found_in() -> None:
+    """The reader's next question is "where", and this tool builds no call graph.
+
+    Measured against a real repository on 2026-09-08: an endpoint holds no SQL, requires
+    a shared query file, and calls a function there that only forwards to another one.
+    Four of that file's seven findings point at the query file by name, which turns
+    "somewhere two hops away" into one jump. Following the hop instead would mean
+    chasing a chain three deep and losing the boundary this tool exists to keep visible.
+    """
+    result = analyze("summary.php")
+    detail = " ".join(item.detail for item in result.unresolved)
+    assert "common/reports.php" in detail
+
+
 def test_an_include_path_built_at_run_time_is_counted() -> None:
     result = analyze("router.php")
     assert INDIRECT_CALL_DEPTH in codes(result)

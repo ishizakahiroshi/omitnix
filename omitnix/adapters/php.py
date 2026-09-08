@@ -445,7 +445,7 @@ class PhpAdapter(Adapter):
             findings.calls.update(included_unit.called_names(accept))
             included.append(included_unit)
 
-        self._note_second_hops(unit, included, called_by_this_file, findings)
+        self._note_second_hops(unit, included, called_by_this_file, findings, root)
 
     @staticmethod
     def _note_second_hops(
@@ -453,6 +453,7 @@ class PhpAdapter(Adapter):
         included: list[_Unit],
         called_by_this_file: set[str],
         findings: _Findings,
+        root: Path,
     ) -> None:
         """Count the calls that a second hop would have followed.
 
@@ -460,6 +461,13 @@ class PhpAdapter(Adapter):
         built-in, or to something defined in a file nobody included, is not evidence of a
         hop that was skipped -- it is evidence of nothing, and reporting it would bury
         the real findings.
+
+        The file the call was found in is named, because that is what the reader needs
+        next. Measured against a real repository on 2026-09-08: an endpoint holds no SQL
+        of its own, requires a shared query file, and calls a function there that only
+        forwards to another one. Saying "two hops away" leaves the reader to search for
+        it; saying which file it was in makes it one jump. This tool does not build a
+        call graph, and a pointer costs nothing next to one.
         """
         known: set[str] = set(unit.definitions)
         for included_unit in included:
@@ -474,10 +482,11 @@ class PhpAdapter(Adapter):
                         continue
                     callee = text_of(call)
                     if callee in known and callee not in called_by_this_file:
+                        where = _relative(included_unit.path, root)
                         findings.note(
                             INDIRECT_CALL_DEPTH,
-                            f"'{name}()' calls '{callee}()', which is two hops away and "
-                            "was not followed",
+                            f"'{name}()' in {where} calls '{callee}()', which is two "
+                            "hops away and was not followed",
                         )
 
     @staticmethod
