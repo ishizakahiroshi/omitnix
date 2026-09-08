@@ -103,13 +103,62 @@ def test_a_templated_action_is_counted_rather_than_dropped() -> None:
 # --- summary ----------------------------------------------------------------------
 
 
-def test_the_leading_comment_is_the_summary_when_there_is_one() -> None:
-    result = analyze("orders.html")
-    assert result.values[Capability.SUMMARY].startswith("The order list screen.")
+def test_the_title_wins_over_a_leading_comment() -> None:
+    """orders.html has both. The title is what names the page in a sentence."""
+    assert analyze("orders.html").values[Capability.SUMMARY] == "Orders"
 
 
 def test_the_title_is_the_summary_when_there_is_no_comment() -> None:
     assert analyze("about.htm").values[Capability.SUMMARY] == "About this fictional shop"
+
+
+def test_the_leading_comment_is_the_summary_when_there_is_no_title() -> None:
+    result = analyze("notes.html")
+    assert result.values[Capability.SUMMARY].startswith("A fragment with no head")
+
+
+# --- text the grammar refuses and the specification allows -------------------------
+
+
+def test_a_bare_angle_bracket_in_text_does_not_discard_the_page() -> None:
+    """``{{ a.length > 3 }}`` is text. The page is read, and the reading says so."""
+    result = analyze("interpolated.html")
+    assert result.unknown_reason is None
+    assert values(result, Capability.SCREEN_TO_API) == ["/api/orders"]
+    assert "unescaped_text" in codes(result)
+
+
+def test_the_note_names_the_lines_the_grammar_could_not_read() -> None:
+    detail = next(
+        item.detail for item in analyze("interpolated.html").unresolved
+        if item.code == "unescaped_text"
+    )
+    assert "7" in detail and "8" in detail and "9" in detail
+
+
+def test_the_recovered_page_reads_the_same_as_its_escaped_twin() -> None:
+    """The measurement the exception rests on, kept as a test.
+
+    ``interpolated_escaped.html`` is the same document with those characters written as
+    entities, so the grammar accepts it whole. If the two ever disagree, reading the
+    recovered tree has started inventing something and the exception has to go.
+    """
+    recovered = analyze("interpolated.html")
+    escaped = analyze("interpolated_escaped.html")
+
+    assert recovered.values[Capability.SUMMARY] == escaped.values[Capability.SUMMARY]
+    assert values(recovered, Capability.SCREEN_TO_API) == values(
+        escaped, Capability.SCREEN_TO_API
+    )
+    assert codes(escaped) == set()
+
+
+def test_a_bare_less_than_in_text_is_still_refused() -> None:
+    """``<`` opens a tag. Unlike ``>`` and ``&`` it is genuinely ambiguous, so the
+    recovery is a guess about structure and the page is not read."""
+    result = analyze("stray_open_bracket.html")
+    assert result.unknown_reason is not None
+    assert "syntax error" in result.unknown_reason
 
 
 # --- files the adapter cannot read ------------------------------------------------
@@ -159,7 +208,10 @@ def html_repo(tmp_path: Path) -> Path:
 def test_the_counting_invariant_holds_over_an_html_repository(html_repo: Path) -> None:
     report = build_report(load_config(html_repo))
     assert report.coverage.holds
-    assert report.coverage.unknown == 0
+    refused = [record.path for record in report.files if record.status is Status.UNKNOWN]
+    # One fixture is written to be refused, and naming it here is the point: if any other
+    # page joins it the assertion fails, and if it stops being refused it fails too.
+    assert refused == ["src/stray_open_bracket.html"]
 
 
 def test_the_columns_outside_this_tier_are_out_of_scope_not_empty(html_repo: Path) -> None:

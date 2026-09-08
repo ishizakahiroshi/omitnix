@@ -14,6 +14,12 @@ Inline scripts are parsed with the JavaScript grammar through the TypeScript/Jav
 adapter rather than with a pattern of this file's own. It is the same language in both
 places, and two readings of it would disagree eventually.
 
+Every other adapter refuses a file the moment its grammar reports an error, because a
+table list read out of a partial tree looks exactly like one read out of a whole file.
+This one carries a single, measured exception for two characters the HTML specification
+allows and this grammar does not; :data:`TEXT_LEVEL_CHARACTERS` is where that is argued
+and what confines it.
+
 The syntax lives in ``omitnix/queries/html.scm``, not here.
 """
 
@@ -55,6 +61,39 @@ _HEADER_TYPES = frozenset({"comment", "doctype"})
 #: A reason code of this adapter's own: the page has a script it could not read, so its
 #: request list is incomplete and says so.
 SCRIPT_UNREADABLE = "script_unreadable"
+
+#: A reason code of this adapter's own: text the grammar could not read as text.
+UNESCAPED_TEXT = "unescaped_text"
+
+#: Characters that may sit bare in text, which this grammar nonetheless refuses.
+#:
+#: HTML is not a language a document can fail to be. The specification defines the
+#: recovery for every byte sequence, so a bare ``>`` and a bare ``&`` are ordinary text
+#: to every browser, and a page containing them is neither ambiguous nor broken.
+#: tree-sitter-html 0.23.2 -- the latest published version -- disagrees: ``<div>a > b
+#: </div>`` and ``<div>drag & drop</div>`` are both reported as syntax errors, in
+#: seventeen bytes.
+#:
+#: Taking the grammar's word for it refused nine of the forty-nine pages in the first
+#: real repository this adapter was pointed at, and none of the nine was broken. They
+#: were framework interpolations (``{{ a.length > 6 ? x : y }}``, ``{{ p && q }}``),
+#: a diagram arrow written in text, and the phrase "drag & drop".
+#:
+#: Measured before this was allowed rather than assumed: each of those nine documents
+#: was escaped at exactly the byte the parser objected to, over and over until it parsed
+#: cleanly -- forty-nine escapes across the nine -- and the recovered tree was compared
+#: with the repaired one. All nine produced the same title, the same leading comment,
+#: the same endpoints and the same unresolved findings from both. The recovery is
+#: faithful for everything this adapter reports, so refusing the file discarded a
+#: correct answer instead of avoiding a wrong one.
+#:
+#: This is not a general licence to read a broken tree. It is confined to these two
+#: characters, at the exact byte the parser named: an error that starts anywhere else,
+#: and any missing node, still refuses the file.
+TEXT_LEVEL_CHARACTERS = frozenset(b">&")
+
+#: How many line numbers the unresolved note prints before it summarises the rest.
+_MAX_LINES_LISTED = 5
 
 
 #: Tags whose attributes are worth reading at all. Checked before walking a tag's
@@ -110,14 +149,61 @@ def _title(parsed: Parsed) -> str:
 
 
 def _summary(parsed: Parsed) -> str:
-    """The document's leading comment, or failing that its title.
+    """The document's title, or failing that its leading comment.
 
-    The comment comes first because it was written for a reader of the source, which is
-    who reads this index; a title is written for the person using the page and is often a
-    site-wide template ("Example Shop"). Either is better than a blank, and a blank is
-    what is left when there is neither -- never a placeholder phrase.
+    The order used to be the other way round, on the reasoning that a comment is written
+    for a reader of the source -- who is also the reader of this index -- while a title is
+    written for the person using the page and is often a site-wide template ("Example
+    Shop"). Measured against the forty parseable HTML documents of the first real
+    repository this was pointed at, that reasoning did not survive: twenty-seven had a
+    usable title and no usable leading comment, and of the twelve where the two differed,
+    eleven had a title naming the page in a sentence and a comment that was machine
+    metadata -- a generator's front matter, a link checker's directive. One document was
+    better described by its comment. Eleven to one settles the default.
+
+    Either is better than a blank, and a blank is what is left when there is neither --
+    never a placeholder phrase.
     """
-    return summary_from_leading_comments(parsed, _HEADER_TYPES) or _title(parsed)
+    return _title(parsed) or summary_from_leading_comments(parsed, _HEADER_TYPES)
+
+
+def _error_nodes(node: Any) -> Iterator[Any]:
+    """Every outermost error or missing node, skipping subtrees that contain none."""
+    for child in node.children:
+        if child.type == "ERROR" or child.is_missing:
+            yield child
+        elif child.has_error:
+            yield from _error_nodes(child)
+
+
+def _unescaped_text_lines(parsed: Parsed) -> tuple[int, ...] | None:
+    """The lines where the parse failed on a character listed in
+    :data:`TEXT_LEVEL_CHARACTERS`, or ``None`` if any failure was something else.
+
+    ``None`` is the refusal: one error the grammar had a real reason for is enough to make
+    the whole tree untrustworthy, and no count of harmless ones offsets it.
+    """
+    lines: list[int] = []
+    for node in _error_nodes(parsed.root):
+        if node.is_missing or node.type != "ERROR":
+            return None
+        if node.start_byte >= len(parsed.source):
+            return None
+        if parsed.source[node.start_byte] not in TEXT_LEVEL_CHARACTERS:
+            return None
+        lines.append(node.start_point[0] + 1)
+    return tuple(sorted(set(lines)))
+
+
+def _unescaped_detail(lines: tuple[int, ...]) -> str:
+    listed = ", ".join(str(line) for line in lines[:_MAX_LINES_LISTED])
+    remainder = len(lines) - _MAX_LINES_LISTED
+    more = f" and {remainder} more" if remainder > 0 else ""
+    label = "line" if len(lines) == 1 else "lines"
+    return (
+        f"a bare '>' or '&' sits in text at {label} {listed}{more}; HTML allows that and "
+        "this grammar does not, so those spans were read as text rather than as markup"
+    )
 
 
 def _record_attribute_endpoints(parsed: Parsed, findings: Findings) -> None:
@@ -165,10 +251,16 @@ class HtmlAdapter(Adapter):
             return AnalysisResult.unknown(str(exc))
 
         parsed: Parsed | Any = grammar.parse(request.text.encode("utf-8"))
+        unescaped: tuple[int, ...] = ()
         if parsed.has_error:
-            return AnalysisResult.unknown(SYNTAX_ERROR_REASON)
+            found = _unescaped_text_lines(parsed)
+            if found is None:
+                return AnalysisResult.unknown(SYNTAX_ERROR_REASON)
+            unescaped = found
 
         findings = Findings()
+        if unescaped:
+            findings.note(UNESCAPED_TEXT, _unescaped_detail(unescaped))
         _record_attribute_endpoints(parsed, findings)
         _record_script_endpoints(parsed, findings)
 

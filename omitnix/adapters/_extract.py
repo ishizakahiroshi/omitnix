@@ -384,6 +384,14 @@ def first_description_line(block: str) -> str:
         line = _COMMENT_CLOSER.sub("", line).strip()
         if not line or _NOT_A_DESCRIPTION.match(line):
             continue
+        if not any(character.isalnum() for character in line):
+            # A rule drawn out of punctuation -- "# =========" above a banner header --
+            # is the commonest first line of a shell or PowerShell script: twenty of the
+            # thirty-one shell scripts in the first real repository this was pointed at
+            # opened with one, and each put a row of equals signs in the index where the
+            # sentence underneath belonged. A description says something; a line with no
+            # letter and no digit in it cannot.
+            continue
         return line
     return ""
 

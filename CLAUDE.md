@@ -59,7 +59,7 @@ fresh public clone でも有効な内容に保つこと。 -->
 
 | ルール | 正本（本文はここ） | 機械検査 |
 |---|---|---|
-| 発見した対象を全部解析できたかを検査し、できなければ非ゼロで終了する | `omitnix/analyze.py`（`build_report` の不変条件） | `tests/test_analyze.py` / `tests/test_cli.py` |
+| 発見した対象を全部解析できたかを検査し、できなければ非ゼロで終了する。ただし文法が厳しすぎるだけのものを壊れたファイルと同じに扱わない（実測で正当化した範囲だけ例外にする） | `omitnix/analyze.py`（`build_report` の不変条件）/ `omitnix/adapters/html.py`（`TEXT_LEVEL_CHARACTERS`） | `tests/test_analyze.py` / `tests/test_cli.py` / `tests/test_adapter_html.py` |
 | 追えなかったものを空欄にせず理由付きで `unresolved` に残す | `omitnix/adapters/base.py`（`AnalysisResult.add_unresolved`） | `tests/test_analyze.py` |
 | 能力の外の項目を「欠落」「0 件」と同じ表現にしない | `omitnix/render.py`（`n/a` / `none observed` / `not analyzed`） | `tests/test_render.py` |
 | 新規ファイルの必須項目は能力宣言から決める（能力の外の欠落で落とさない） | `omitnix/gate.py` | `tests/test_gate.py` |

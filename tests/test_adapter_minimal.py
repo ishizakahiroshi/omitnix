@@ -36,6 +36,7 @@ ADAPTERS = {
     "styles.css": CSS,
     "counter.rs": RUST,
     "deploy.sh": SHELL,
+    "banner.sh": SHELL,
     "deploy.ps1": POWERSHELL,
     "panel.vue": VUE,
 }
@@ -99,6 +100,15 @@ def test_a_shebang_is_not_mistaken_for_the_summary() -> None:
     """It names an interpreter. Promoting it would fill an index with the same words."""
     assert analyze("deploy.sh").values[Capability.SUMMARY] == (
         "Copy the built assets to the fictional staging host."
+    )
+
+
+def test_a_rule_of_punctuation_is_not_mistaken_for_the_summary() -> None:
+    """A banner comment opens with a row of equals signs. Taking it put that row in the
+    index in place of the sentence underneath, in twenty of the thirty-one shell scripts
+    of the first real repository this was pointed at."""
+    assert analyze("banner.sh").values[Capability.SUMMARY] == (
+        "Rotate the fictional staging logs once a day."
     )
 
 

@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Order summary</title>
+  </head>
+  <body>
+    <p>{{ (order.lines || []).length &gt; 3 ? 'many lines' : 'a few lines' }}</p>
+    <p>{{ ready &amp;&amp; loaded ? 'ready' : 'loading' }}</p>
+    <p>Drag &amp; drop, or drag &amp; drop, either way.</p>
+    <form action="/api/orders" method="post">
+      <button type="submit">Send</button>
+    </form>
+  </body>
+</html>
