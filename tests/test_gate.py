@@ -125,6 +125,31 @@ def test_a_new_file_the_analyzer_could_not_follow_is_reported_not_refused(
     assert "not followed: reindex.flow: unresolved (dynamic_sql)" in err
 
 
+def test_gate_still_sees_an_untracked_file_a_default_full_run_no_longer_discovers(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The interaction most likely to break by this change, proven rather than assumed.
+
+    A full run's discovery now defaults to what git tracks, so the untracked file below
+    is invisible to it. The gate asks a different question -- what does git report as
+    newly added in the working tree -- and answers it the same way regardless: it never
+    calls discovery at all (see `gate.new_files`), so a brand new, still-untracked file
+    must stay gated.
+    """
+    root = baseline(tmp_path, {"orders_list.flow": fixture("orders_list.flow")})
+    (root / "orders_purge.flow").write_text(fixture("orders_purge.flow"), encoding="utf-8")
+
+    full_code, full_out, _ = run(["--root", str(root)])
+    assert full_code == 0
+    assert "Coverage: 1/1 analyzed" in full_out  # the tracked file only, not the untracked one
+    index = (root / ".omitnix" / "index.json").read_text(encoding="utf-8")
+    assert "orders_purge.flow" not in index
+
+    code, _, err = gate(root)
+    assert code == EXIT_GATE
+    assert "orders_purge.flow: no authorization call" in err
+
+
 def test_a_repository_that_never_said_what_authorization_is_cannot_fail_on_it(
     tmp_path: Path, with_test_adapters: None
 ) -> None:

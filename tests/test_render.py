@@ -47,7 +47,7 @@ def build(tmp_path: Path):
     return build_report(load_config(tmp_path))
 
 
-def test_json_round_trips_and_check_ignores_provenance(
+def test_json_round_trips_and_check_ignores_commit_and_dirty_but_not_discovery_mode(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
     report = build(tmp_path)
@@ -55,7 +55,13 @@ def test_json_round_trips_and_check_ignores_provenance(
     assert payload["schema_version"] == 1
     assert payload["coverage"]["discovered"] == len(payload["files"])
     assert "generated" in payload
-    assert "generated" not in payload_for_check(payload)
+
+    checked = payload_for_check(payload)
+    # commit/dirty/tool/partial/adapters vary between two runs of the very same command
+    # and must not turn --check red on their own -- but tracked_only records *which
+    # question* discovery answered, and two runs that answered different questions must
+    # not compare equal, so it is the one field of `generated` that survives here.
+    assert checked["generated"] == {"tracked_only": payload["generated"]["tracked_only"]}
     assert render_json(report).endswith("\n")
 
 

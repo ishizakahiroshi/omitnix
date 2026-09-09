@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import io
 import json
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -48,6 +50,18 @@ def run(args: list[str]) -> tuple[int, str, str]:
     out, err = io.StringIO(), io.StringIO()
     code = main(args, out=out, err=err)
     return code, out.getvalue(), err.getvalue()
+
+
+def _git_commit(root: Path) -> None:
+    for command in (
+        ["git", "init", "-q"],
+        ["git", "config", "user.email", "tests@example.invalid"],
+        ["git", "config", "user.name", "omitnix tests"],
+        ["git", "config", "commit.gpgsign", "false"],
+        ["git", "add", "-A"],
+        ["git", "commit", "-q", "-m", "baseline"],
+    ):
+        subprocess.run(command, cwd=root, check=True, capture_output=True, text=True)
 
 
 def test_help_exits_zero() -> None:
@@ -232,3 +246,67 @@ def test_bad_configuration_is_reported_not_raised(tmp_path: Path, with_test_adap
     code, _, err = run(["--root", str(tmp_path)])
     assert code == EXIT_ERROR
     assert "unknown key" in err
+
+
+# --------------------------------------------------------------------------------------
+# Discovery: what git tracks by default, the whole working tree with --all-files
+# --------------------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(shutil.which("git") is None, reason="git is not installed")
+def test_a_single_repository_run_discovers_only_what_git_tracks_by_default(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The defect this whole change exists to fix, reproduced at unit scale.
+
+    A single-repository run used to walk the filesystem unconditionally, so an untracked
+    file (local scratch, a generated file, another tool's droppings) was discovered on
+    the machine that happened to hold it and invisible everywhere else -- exactly the gap
+    that made `--check` fail in CI against an index generated on a developer's machine.
+    """
+    root = clean_repo(tmp_path)
+    _git_commit(root)
+    (root / "api" / "untracked.flow").write_text(ORDERS_FLOW, encoding="utf-8")
+
+    code, out, _ = run(["--root", str(root)])
+    assert code == EXIT_OK
+    assert "Coverage: 3/3 analyzed" in out
+    index = (root / ".omitnix" / "index.json").read_text(encoding="utf-8")
+    assert "api/untracked.flow" not in index
+
+
+@pytest.mark.skipif(shutil.which("git") is None, reason="git is not installed")
+def test_all_files_walks_a_single_repository_instead_of_asking_git(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The escape hatch, and it is not workspace-only any more."""
+    root = clean_repo(tmp_path)
+    _git_commit(root)
+    (root / "api" / "untracked.flow").write_text(ORDERS_FLOW, encoding="utf-8")
+
+    code, out, _ = run(["--root", str(root), "--all-files"])
+    assert code == EXIT_OK
+    assert "Coverage: 4/4 analyzed" in out
+    index = (root / ".omitnix" / "index.json").read_text(encoding="utf-8")
+    assert "api/untracked.flow" in index
+
+
+def test_when_git_cannot_answer_the_fallback_is_named_on_stderr(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """"I could not ask git, so I walked the tree" must reach the user, not just the file.
+
+    No repository here is a git working tree (no `.git` is created), so
+    `discover_repository_files` falls back to walking and sets a note -- which used to
+    reach nowhere in a single-repository run.
+    """
+    root = clean_repo(tmp_path)
+    code, _, err = run(["--root", str(root)])
+    assert code == EXIT_OK
+    assert "git could not list tracked files" in err
+
+
+def test_all_files_cannot_be_combined_with_gate(tmp_path: Path) -> None:
+    code, _, err = run(["--root", str(tmp_path), "--gate", "--all-files"])
+    assert code == EXIT_ERROR
+    assert "--all-files cannot be combined with --gate" in err

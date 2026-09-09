@@ -35,7 +35,7 @@ from .model import (
     ValueKind,
 )
 from .registry import AdapterSet, build_adapter_set
-from .scan import SelectionResult, discover_files, select_files
+from .scan import SelectionResult, discover_repository_files, select_files
 from .schema import load_schema_tables
 
 TOOL = f"omitnix {__version__}"
@@ -196,11 +196,24 @@ def build_report(
     config: Config,
     files: list[str] | None = None,
     adapter_set: AdapterSet | None = None,
+    *,
+    tracked_only: bool = True,
 ) -> Report:
     """Run the analysis and assemble the report.
 
-    ``files`` restricts the run to an explicit list (what a pre-commit hook passes). The
-    resulting report is marked partial, because its coverage describes those files only.
+    ``files`` restricts the run to an explicit list (what a pre-commit hook passes, or
+    what ``--gate`` narrows to). The resulting report is marked partial, because its
+    coverage describes those files only, and discovery is not consulted at all: an
+    explicit list is a different question from "what does this repository contain", and
+    ``tracked_only`` has no effect on it.
+
+    Without ``files``, this is the question ``tracked_only`` answers. Default: what git
+    tracks, not everything a full filesystem walk would turn up -- a working tree also
+    holds local scratch nobody meant to include, and unlike committed content, it is not
+    the same set on every machine that runs this. See
+    :func:`omitnix.scan.discover_repository_files` for the measurement that made this the
+    default rather than the walk it replaced. ``tracked_only=False`` (the CLI's
+    ``--all-files``) asks for the walk on purpose.
     """
     adapter_set = adapter_set or build_adapter_set(config.adapters)
 
@@ -209,8 +222,11 @@ def build_report(
         schema_tables = load_schema_tables(config.root / config.schema_snapshot)
 
     partial = files is not None
+    discovery_note = ""
     if files is None:
-        selected: SelectionResult | list[str] = discover_files(config)
+        discovery = discover_repository_files(config, tracked_only=tracked_only)
+        selected: SelectionResult | list[str] = discovery.files
+        discovery_note = discovery.note
         skipped = 0
     else:
         selection = select_files(config, files)
@@ -226,6 +242,8 @@ def build_report(
         schema_tables,
         partial=partial,
         skipped=skipped,
+        tracked_only=tracked_only,
+        discovery_note=discovery_note,
     )
 
 
@@ -237,13 +255,17 @@ def assemble_report(
     *,
     partial: bool = False,
     skipped: int = 0,
+    tracked_only: bool = True,
+    discovery_note: str = "",
 ) -> Report:
     """Turn analyzed records into a report, counting them and checking the invariant.
 
     Separate from :func:`build_report` because a caller may have produced the records
     some other way -- a workspace run analyzes a repository's files across several
-    processes and hands the results back here. The counting and the invariant must not
-    have a second implementation, so there is only this one.
+    processes, over its own call to :func:`omitnix.scan.discover_repository_files`, and
+    hands the results back here along with the ``tracked_only``/``discovery_note`` that
+    discovery produced. The counting and the invariant must not have a second
+    implementation, so there is only this one.
     """
     ordered = tuple(sorted(records, key=lambda record: record.path))
 
@@ -270,6 +292,8 @@ def assemble_report(
         tool=TOOL,
         partial=partial,
         adapters=adapter_set.info(),
+        tracked_only=tracked_only,
+        discovery_note=discovery_note,
     )
     return Report(
         generated=generated,

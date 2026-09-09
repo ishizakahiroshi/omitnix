@@ -120,6 +120,16 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help="print the record for one file as JSON and exit",
     )
+    parser.add_argument(
+        "--all-files",
+        action="store_true",
+        help=(
+            "walk the working directory instead of analyzing what git tracks. Includes "
+            "untracked files, and with them whatever local scratch the working directory "
+            "happens to hold. Applies to a single repository the same way it does inside "
+            "--workspace; the default either way is what git tracks."
+        ),
+    )
 
     workspace = parser.add_argument_group(
         "workspace mode",
@@ -165,15 +175,6 @@ def _build_parser() -> argparse.ArgumentParser:
         help=(
             "do not add the workspace default exclusions to each repository. Everything "
             "a repository contains is discovered, and most of it will be unknown."
-        ),
-    )
-    workspace.add_argument(
-        "--all-files",
-        action="store_true",
-        help=(
-            "walk each working directory instead of analyzing what git tracks. Includes "
-            "untracked files, and with them whatever local scratch a working directory "
-            "happens to hold."
         ),
     )
     workspace.add_argument(
@@ -273,7 +274,6 @@ _WORKSPACE_ONLY = (
     ("--exclude-repo", "exclude_repo"),
     ("--write-per-repo", "write_per_repo"),
     ("--no-workspace-excludes", "no_workspace_excludes"),
-    ("--all-files", "all_files"),
     ("--jobs", "jobs"),
     ("--dry-run", "dry_run"),
 )
@@ -468,6 +468,13 @@ def _describe_json_difference(stored: dict, fresh: dict) -> list[str]:
         lines.append(f"coverage {stored.get('coverage')} -> {fresh.get('coverage')}")
     if stored.get("tables") != fresh.get("tables"):
         lines.append("the table reverse index differs")
+    stored_tracked = (stored.get("generated") or {}).get("tracked_only")
+    fresh_tracked = (fresh.get("generated") or {}).get("tracked_only")
+    if stored_tracked != fresh_tracked:
+        # Named explicitly rather than left to read as ordinary added/removed noise: the
+        # two runs asked discovery a different question, which is not the same defect as
+        # the document being out of date.
+        lines.append(f"discovery mode changed: tracked_only {stored_tracked} -> {fresh_tracked}")
     if not lines:
         lines.append("content differs")
     return lines
@@ -502,6 +509,13 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
         print("omitnix: --since only applies with --gate", file=err)
         return EXIT_ERROR
 
+    if args.gate and args.all_files:
+        # The gate never calls discovery at all -- it asks git directly which files are
+        # new (see gate.new_files) -- so this flag has nothing to apply to there. Refused
+        # rather than silently ignored, same reasoning as --since above.
+        print("omitnix: --all-files cannot be combined with --gate", file=err)
+        return EXIT_ERROR
+
     try:
         if args.print_path:
             return _run_print(args, out, err)
@@ -509,10 +523,16 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
         config = load_config(args.root, args.config)
         if args.gate:
             return _run_gate(args, config, out, err)
-        report = build_report(config, files=args.files)
+        report = build_report(config, files=args.files, tracked_only=not args.all_files)
     except OmitnixError as exc:
         print(f"omitnix: {exc}", file=err)
         return EXIT_ERROR
+
+    if report.generated.discovery_note:
+        # "git could not list tracked files, so the working tree was walked instead" is a
+        # different answer from "here is what git tracks", and the two must never look
+        # alike to whoever reads the run.
+        print(f"omitnix: {report.generated.discovery_note}", file=err)
 
     if args.files:
         selection_note = report.coverage.skipped_by_config

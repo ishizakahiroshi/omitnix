@@ -41,12 +41,11 @@ from typing import Any
 from .analyze import TOOL, analyze_file, assemble_report
 from .config import Config, load_config
 from .errors import OmitnixError
-from .gitmeta import tracked_files
-from .globs import glob_match, matches_any, normalize
+from .globs import glob_match, normalize
 from .model import Coverage, FileRecord, Report, Status
 from .registry import AdapterSet, build_adapter_set
 from .render import render_json
-from .scan import discover_with_stats, effective_exclude
+from .scan import RepoDiscovery, discover_repository_files
 from .schema import load_schema_tables
 
 __all__ = [
@@ -546,74 +545,6 @@ def repository_config(
     return replace(config, exclude=config.exclude + extra)
 
 
-@dataclass(frozen=True, slots=True)
-class RepoDiscovery:
-    """The files one repository offers a workspace run, and how they were found."""
-
-    files: list[str]
-    #: ``tracked`` or ``walked``. Reported per repository: the two answer different
-    #: questions, and a page that mixed them without saying so would be comparing a
-    #: repository's committed content against another's working directory.
-    mode: str
-    excluded_files: int = 0
-    pruned_directories: int = 0
-    #: Tracked by git but not present on disk (deleted, or a submodule gitlink). Counted
-    #: rather than dropped: they are files the index says exist.
-    tracked_but_absent: int = 0
-    note: str = ""
-
-
-def discover_repository_files(config: Config, *, tracked_only: bool = True) -> RepoDiscovery:
-    """What to analyze in one repository during a workspace run.
-
-    The default is what git tracks. A working tree also holds local scratch that is
-    ignored on purpose -- one repository measured here keeps 24,436 files under a `tmp/`
-    directory of database data directories and browser profiles -- and none of it is the
-    repository's content. Committed files are, and they are the same set on every machine.
-
-    The cost of that choice is that a brand new file, not yet added, is invisible here.
-    That is the right trade for a survey of many repositories and the wrong one for the
-    new-file gate, which is why the gate does not use this and looks at the working tree.
-
-    When git cannot answer, this walks the tree instead and says so. Reporting zero files
-    because the question could not be asked would be a repository silently emptied.
-    """
-    exclude = effective_exclude(config)
-    if tracked_only:
-        listed = tracked_files(config.root)
-        if listed is not None:
-            kept: list[str] = []
-            excluded = 0
-            absent = 0
-            for raw in listed:
-                rel = normalize(raw)
-                if not (matches_any(config.include, rel) and not matches_any(exclude, rel)):
-                    excluded += 1
-                    continue
-                if not (config.root / rel).is_file():
-                    absent += 1
-                    continue
-                kept.append(rel)
-            return RepoDiscovery(
-                files=sorted(kept),
-                mode="tracked",
-                excluded_files=excluded,
-                tracked_but_absent=absent,
-            )
-        note = "git could not list tracked files, so the working tree was walked instead"
-    else:
-        note = ""
-
-    walked = discover_with_stats(config)
-    return RepoDiscovery(
-        files=walked.files,
-        mode="walked",
-        excluded_files=walked.excluded_files,
-        pruned_directories=walked.pruned_directories,
-        note=note,
-    )
-
-
 def _write_documents(report: Report, target_dir: Path) -> tuple[Path, ...]:
     target_dir.mkdir(parents=True, exist_ok=True)
     json_path = target_dir / "index.json"
@@ -664,7 +595,7 @@ def run_repository(
     }
 
     try:
-        discovery = discover_repository_files(config, tracked_only=tracked_only)
+        discovery: RepoDiscovery = discover_repository_files(config, tracked_only=tracked_only)
         schema_tables: frozenset[str] = frozenset()
         if config.schema_snapshot:
             schema_tables = load_schema_tables(config.root / config.schema_snapshot)
@@ -686,7 +617,14 @@ def run_repository(
             for produced in executor.map(_analyze_chunk, batches):
                 records.extend(produced)
 
-        report = assemble_report(config, records, adapter_set, schema_tables)
+        report = assemble_report(
+            config,
+            records,
+            adapter_set,
+            schema_tables,
+            tracked_only=tracked_only,
+            discovery_note=discovery.note,
+        )
     except OmitnixError as exc:
         return RepositoryRun(
             **common, ok=False, error=str(exc), seconds=time.perf_counter() - started

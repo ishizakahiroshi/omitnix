@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "c863e5b74df3d3ab91542d3acc17198004b5d9ff",
+    "commit": "82144dcd006816c8b9c992e5f8097088bc0428b3",
     "dirty": true,
     "tool": "omitnix 0.1.0",
     "partial": false,
@@ -129,7 +129,9 @@
           "summary"
         ]
       }
-    ]
+    ],
+    "tracked_only": true,
+    "discovery_note": ""
   },
   "coverage": {
     "discovered": 57,

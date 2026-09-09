@@ -210,13 +210,34 @@ class AdapterInfo:
 
 @dataclass(frozen=True, slots=True)
 class GeneratedMeta:
-    """Provenance of the run itself. Deliberately excluded from ``--check``."""
+    """Provenance of the run itself.
+
+    Mostly deliberately excluded from ``--check`` (see
+    :func:`omitnix.render.payload_for_check`) -- ``commit``, ``dirty``, ``tool``,
+    ``partial`` and ``adapters`` vary between two runs of the *same* command for reasons
+    that have nothing to do with the inventory being stale. ``tracked_only`` is the one
+    exception: it is not run-to-run noise, it is which question discovery answered, and
+    two runs that answered different questions must not compare equal.
+    """
 
     commit: str | None
     dirty: bool
     tool: str
     partial: bool
     adapters: tuple[AdapterInfo, ...] = ()
+    #: Whether discovery was asked for what git tracks (the default) or for everything
+    #: ``--all-files`` walks instead. Carried here, next to ``commit``, because it is a
+    #: fact about how the run was asked to look, not about what it found -- and because it
+    #: is the one field of this dataclass that ``--check`` must still compare: a run that
+    #: discovered the tracked set and a run that discovered the whole working tree can
+    #: legitimately disagree about which files exist, and treating that as "the document
+    #: is stale" would be right, not a false alarm the way ``commit`` changing is.
+    tracked_only: bool = True
+    #: Set when git could not answer and discovery fell back to walking the tree instead.
+    #: Kept out of ``--check`` (unlike ``tracked_only``) because it is provenance of the
+    #: same kind as ``commit``: whether git could be asked at all on this machine, this
+    #: run, not a fact about the files that were found.
+    discovery_note: str = ""
 
     def commit_label(self) -> str:
         if self.commit is None:
@@ -230,6 +251,8 @@ class GeneratedMeta:
             "tool": self.tool,
             "partial": self.partial,
             "adapters": [adapter.to_json() for adapter in self.adapters],
+            "tracked_only": self.tracked_only,
+            "discovery_note": self.discovery_note,
         }
 
 

@@ -44,12 +44,12 @@ Coverage: 202/210 analyzed, 8 unresolved, 0 unknown
 
 ```json
 {
-  "generated": { "commit": "0123456", "dirty": false, "tool": "omitnix", "partial": false },
+  "generated": { "commit": "0123456", "dirty": false, "tool": "omitnix", "partial": false, "tracked_only": true },
   "coverage": { "discovered": 210, "analyzed": 202, "unresolved": 8, "unknown": 0 }
 }
 ```
 
-`generated` is excluded when `--check` compares two runs — see [Usage](#usage) — because the commit and dirty flag differ on every commit for reasons that have nothing to do with whether the inventory is stale.
+Most of `generated` is excluded when `--check` compares two runs — see [Usage](#usage) — because the commit and dirty flag differ on every commit for reasons that have nothing to do with whether the inventory is stale. `tracked_only` is the exception: it says which question discovery answered, and two runs that answered different questions must not compare equal (see [What it looks at by default](#what-it-looks-at-by-default)).
 
 And it never says "unused". It says: no static reference was observed by this analyzer at this commit.
 
@@ -97,6 +97,7 @@ The tool itself writes `index.json`; the same facts read as a table like this (f
 
 ```
 omitnix                       # full run; writes .omitnix/index.json
+omitnix --all-files           # full run over the whole working tree, not just what git tracks
 omitnix --check               # write nothing; fail if the generated document is stale
 omitnix --files a.php b.php   # analyze an explicit list, as a pre-commit hook passes it
 omitnix --gate --files a.php  # check only the newly added files among them
@@ -114,8 +115,34 @@ files takes far longer. Measured on this project itself, 2026-09-08: 57 files in
 `--files` reports on that subset and, by default, writes nothing: a partial run must not
 overwrite the full index with a slice of it. Pass `--write` if that is what you want.
 
-`--check` compares the inventory, not the `generated` block (commit, dirty flag), so it does not fail merely
-because the commit moved on.
+`--check` compares the inventory, not most of the `generated` block (commit, dirty flag), so it does not fail merely
+because the commit moved on. It does compare `generated.tracked_only` — see below.
+
+### What a full run discovers, and why the default changed
+
+A plain `omitnix` discovers what git tracks, the same default a workspace run has always
+used (see [Across many repositories](#across-many-repositories)) — not everything a
+filesystem walk turns up. `--all-files` asks for the walk instead, on a single repository
+exactly as it does inside `--workspace`.
+
+This used to be the other way around: a single-repository run walked the working tree
+unconditionally, and `--workspace` was the only mode that asked git. That meant the same
+tool answered two different questions depending on which mode was in use, and the
+single-repository default was the wrong one. It was found by wiring `omitnix --check` into
+one real repository's CI: the committed `.omitnix/index.json` had been generated on a
+developer's machine, whose working tree held 66 files git does not track — a generated
+file, other tools' scratch directories, stray files nobody meant to commit. A clean CI
+checkout of the very same commit has none of them, so a fresh run there discovered 738
+files where the index said 803, `--check` reported them as `removed`, and the job failed
+for a reason that had nothing to do with the inventory being stale — the index was never
+reproducible from the repository at all.
+
+The cost of the tracked-only default is the same one the workspace default already pays: a
+brand new file, not yet added, is invisible to a full run. That is the right trade for a
+document meant to be regenerated identically from a clean checkout, and the wrong one for
+the [new-file gate](#the-new-file-gate), which asks git a different question — "what is new
+in the working tree" — and does not use this discovery path at all, which is also why the
+gate keeps seeing an untracked file that a full run no longer does.
 
 ### Exit codes
 
@@ -267,6 +294,13 @@ The files git tracks, minus build output, dependency trees, prose, declarative d
 binary assets, and keys and certificates. A repository that disagrees writes its own
 `.omitnix.yaml`; one that says `exclude_defaults: false` is walked exactly as written and
 the workspace adds nothing to it.
+
+"The files git tracks" is not a workspace-only rule — a single-repository run (no
+`--workspace` at all) uses the same default; see [What a full run discovers, and why the
+default changed](#what-a-full-run-discovers-and-why-the-default-changed). Only the extra
+exclusions in this section (build output, prose, declarative data, binary assets) are
+workspace-specific; a single repository keeps its own tool defaults (`vendor/`,
+`node_modules/`, `dist/`, `.git/`) and whatever `.omitnix.yaml` adds.
 
 The defaults are measured rather than guessed. Across 52 repositories on one machine
 (2026-09-08):

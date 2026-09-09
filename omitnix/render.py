@@ -37,11 +37,27 @@ def to_payload(report: Report) -> dict[str, Any]:
 def payload_for_check(payload: dict[str, Any]) -> dict[str, Any]:
     """The part of the payload ``--check`` compares.
 
-    ``generated`` is excluded on purpose. It holds the commit SHA and the dirty flag,
-    which differ on every commit; comparing them would make ``--check`` fail for reasons
-    that have nothing to do with the inventory being out of date.
+    Most of ``generated`` is excluded on purpose. It holds the commit SHA and the dirty
+    flag, which differ on every commit; comparing them would make ``--check`` fail for
+    reasons that have nothing to do with the inventory being out of date.
+
+    ``generated.tracked_only`` is kept, deliberately, and is the one field of that block
+    that still enters the comparison. It is not run-to-run noise like the commit SHA --
+    it records which question discovery answered (git's tracked set, or everything
+    ``--all-files`` walks), and a run that answered a different question can legitimately
+    discover a different set of files. Dropping it here would let two documents that
+    describe different realities compare equal, which is the exact defect this exists to
+    catch: found 2026-09-09, wiring `--check` into CI against an index committed from a
+    developer's machine, whose working tree held files git does not track. Comparing that
+    index against a clean checkout reported files "removed" that were never really there,
+    with nothing in the diff to say the real cause was a different discovery mode rather
+    than a stale document.
     """
-    return {key: value for key, value in payload.items() if key != "generated"}
+    checked = {key: value for key, value in payload.items() if key != "generated"}
+    generated = payload.get("generated") or {}
+    if "tracked_only" in generated:
+        checked["generated"] = {"tracked_only": generated["tracked_only"]}
+    return checked
 
 
 def render_json(report: Report) -> str:
