@@ -479,13 +479,13 @@ def _use_adapter_search_path(entries: tuple[str, ...]) -> None:
 
 
 def _analyze_chunk(
-    job: tuple[Config, frozenset[str], tuple[str, ...], tuple[str, ...]],
+    job: tuple[Config, frozenset[str], tuple[str, ...], tuple[str, ...], frozenset[str]],
 ) -> list[FileRecord]:
     """Analyze a slice of one repository's files. Runs in a worker process."""
-    config, schema_tables, paths, search_path = job
+    config, schema_tables, paths, search_path, in_scope = job
     _use_adapter_search_path(search_path)
     adapter_set = _adapter_set_for(config.adapters)
-    return [analyze_file(rel, adapter_set, config, schema_tables) for rel in paths]
+    return [analyze_file(rel, adapter_set, config, schema_tables, in_scope) for rel in paths]
 
 
 def _chunks(paths: list[str], jobs: int) -> list[tuple[str, ...]]:
@@ -600,17 +600,21 @@ def run_repository(
         if config.schema_snapshot:
             schema_tables = load_schema_tables(config.root / config.schema_snapshot)
 
+        # Every worker is held to the whole repository's selection, not to its own slice.
+        # A batch is a scheduling detail; what an adapter may reach is not.
+        in_scope = frozenset(discovery.files)
+
         if executor is None or len(discovery.files) < 2:
             adapter_set = _adapter_set_for(config.adapters)
             records = [
-                analyze_file(rel, adapter_set, config, schema_tables)
+                analyze_file(rel, adapter_set, config, schema_tables, in_scope)
                 for rel in discovery.files
             ]
         else:
             adapter_set = _adapter_set_for(config.adapters)
             search_path = adapter_search_path()
             batches = [
-                (config, schema_tables, chunk, search_path)
+                (config, schema_tables, chunk, search_path, in_scope)
                 for chunk in _chunks(discovery.files, jobs)
             ]
             records = []

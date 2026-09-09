@@ -40,6 +40,7 @@ from .globs import normalize
 from .model import Status
 from .registry import build_adapter_set
 from .render import payload_for_check, render_json, to_payload
+from .scan import discover_files
 from .schema import load_schema_tables
 from .workspace import (
     WORKSPACE_OUTPUT_DIR,
@@ -214,7 +215,12 @@ def _run_print(args: argparse.Namespace, out, err) -> int:
         print(f"omitnix: no such file: {args.print_path}", file=err)
         return EXIT_ERROR
 
-    record = analyze_file(rel, adapter_set, config, schema_tables)
+    # --print exists to explain one line of the index, so it has to be held to the same
+    # scope the index was built under. Analyzing the file on its own terms would let it
+    # follow a reference the full run refuses, and print an answer the index never shows.
+    in_scope = frozenset(discover_files(config))
+
+    record = analyze_file(rel, adapter_set, config, schema_tables, in_scope)
     print(json.dumps(record.to_json(), indent=2, ensure_ascii=False), file=out)
     if record.status is Status.UNKNOWN and config.fail_on_unknown:
         return EXIT_UNKNOWN

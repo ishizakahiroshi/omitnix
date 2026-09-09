@@ -301,8 +301,25 @@ def _repository_root(request: AnalysisRequest) -> Path:
     return root
 
 
-def _include_target(node: Any, unit: _Unit, root: Path) -> tuple[Path | None, str]:
-    """Resolve a ``require``/``include`` argument. Returns (path, why not)."""
+def _include_target(
+    node: Any, unit: _Unit, root: Path, in_scope: frozenset[str] | None
+) -> tuple[Path | None, str]:
+    """Resolve a ``require``/``include`` argument. Returns (path, why not).
+
+    Two rules govern the reason it gives back, and both come from the same defect.
+
+    Never name the resolved absolute path. ``__DIR__`` expands to wherever the checkout
+    happens to live, so a detail built from it records the machine rather than the
+    repository, and the shortening applied to long details then eats the one part the
+    reader needs -- the file name. A path inside the repository is named relative to it;
+    anything else is named by the source text of the include itself, which is the same
+    on every machine.
+
+    Decide out-of-scope before touching the disk. A target outside the scanned set is
+    reported identically whether or not it exists locally: a developer's checkout holds
+    generated files no CI checkout has, and a reason that varies with the disk would
+    reintroduce exactly the disagreement this refusal exists to end.
+    """
     directory = unit.path.parent
     constants = {
         "__DIR__": directory.as_posix(),
@@ -319,14 +336,20 @@ def _include_target(node: Any, unit: _Unit, root: Path) -> tuple[Path | None, st
     try:
         resolved = candidate.resolve()
     except OSError:
-        return None, f"the required path could not be resolved: {_preview(literal)}"
+        return None, f"the required path could not be resolved: {_preview(text_of(node))}"
 
     try:
-        resolved.relative_to(root.resolve())
+        relative = resolved.relative_to(root.resolve()).as_posix()
     except ValueError:
-        return None, f"the required file is outside the repository: {_preview(literal)}"
+        return None, f"the required file is outside the repository: {_preview(text_of(node))}"
+
+    if in_scope is not None and relative not in in_scope:
+        return None, (
+            "the required file is outside this scan, so it was not followed: "
+            f"{relative}"
+        )
     if not resolved.is_file():
-        return None, f"the required file was not found: {_preview(literal)}"
+        return None, f"the required file was not found: {relative}"
     return resolved, ""
 
 
@@ -419,7 +442,7 @@ class PhpAdapter(Adapter):
         included: list[_Unit] = []
 
         for node in unit.parsed.get("include.path"):
-            target, why_not = _include_target(node, unit, root)
+            target, why_not = _include_target(node, unit, root, request.in_scope)
             if target is None:
                 findings.note(INDIRECT_CALL_DEPTH, why_not)
                 continue

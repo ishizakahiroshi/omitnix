@@ -97,6 +97,7 @@ def analyze_file(
     adapter_set: AdapterSet,
     config: Config,
     schema_tables: frozenset[str] = frozenset(),
+    in_scope: frozenset[str] | None = None,
 ) -> FileRecord:
     """Analyze one file. Never raises for a file it cannot handle -- it reports it."""
     adapter = adapter_set.for_path(rel)
@@ -123,6 +124,7 @@ def analyze_file(
         authentication_functions=config.authentication_functions,
         authorization_functions=config.authorization_functions,
         schema_tables=schema_tables,
+        in_scope=in_scope,
     )
     try:
         result = adapter.analyze(request)
@@ -233,7 +235,13 @@ def build_report(
         selected = selection
         skipped = selection.skipped
 
-    records = [analyze_file(rel, adapter_set, config, schema_tables) for rel in sorted(selected)]
+    # The scope every adapter is held to. Built from the same selection the run analyzes,
+    # so an adapter can never reach a file this report does not account for.
+    in_scope = frozenset(selected)
+    records = [
+        analyze_file(rel, adapter_set, config, schema_tables, in_scope)
+        for rel in sorted(selected)
+    ]
 
     return assemble_report(
         config,

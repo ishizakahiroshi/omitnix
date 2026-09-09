@@ -52,6 +52,22 @@ class AnalysisRequest:
     authorization_functions: tuple[str, ...] = ()
     #: Table names from the schema snapshot, when one is configured. Empty otherwise.
     schema_tables: frozenset[str] = frozenset()
+    #: Repository-relative POSIX paths of every file this run discovered.
+    #:
+    #: An adapter that follows a reference to another file -- a PHP ``require``, an
+    #: import -- must not read one that is absent from this set, however plainly it sits
+    #: on the disk. The index has to be a function of the repository, not of the machine
+    #: that generated it. Measured on 2026-09-09: a deploy script writes a version file
+    #: that the repository deliberately does not track, every developer has it, no CI
+    #: checkout does, and following it moved fifteen files and two coverage counts. The
+    #: index could never agree with itself.
+    #:
+    #: An out-of-scope target is not a missing one. Report it as unresolved with the
+    #: reason, and say the same thing whether or not the file happens to exist locally --
+    #: a message that varies with the disk reintroduces the defect it describes.
+    #:
+    #: ``None`` means the core stated no set. Every path in the core passes one.
+    in_scope: frozenset[str] | None = None
 
 
 @dataclass(slots=True)

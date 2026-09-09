@@ -64,7 +64,7 @@ fresh public clone でも有効な内容に保つこと。 -->
 | 能力の外の項目を「欠落」「0 件」と同じ表現にしない | `omitnix/render.py`（`n/a` / `none observed` / `not analyzed`） | `tests/test_render.py` |
 | 新規ファイルの必須項目は能力宣言から決める（能力の外の欠落で落とさない） | `omitnix/gate.py` | `tests/test_gate.py` |
 | SQL パーサを自作しない（sqlglot に任せる） | `omitnix/adapters/_sql.py` | `tests/test_php_adapter.py` |
-| 同じソースからは同じ生成物（捕捉は文書順・set を経由しない） | `omitnix/adapters/_treesitter.py` | `tests/test_determinism.py` |
+| 同じソースからは同じ生成物（捕捉は文書順・set を経由しない。走査集合の外は追わず、理由もディスクの有無で変えない） | `omitnix/adapters/_treesitter.py` / `omitnix/adapters/base.py`（`AnalysisRequest.in_scope`） | `tests/test_determinism.py` / `tests/test_php_adapter.py` |
 | 生成物に OS を出さない（改行は LF 固定・プラットフォーム分岐を書かない） | `omitnix/cli.py` | `tests/test_cli.py` |
 | 参照 0 件を「未使用」と書かない | `README.md` の Why it exists 節 | なし（レビューで見る） |
 | README・設定サンプル・fixture に実在するテーブル名や関数名を書かない | `docs/local/plan_progmap-oss_c1_naming-init.md` | `scripts/secrets-scan.mjs`（layer 2/3） |
