@@ -44,6 +44,7 @@ _KNOWN_KEYS = frozenset(
         "schema_snapshot",
         "output_dir",
         "gate_exemptions",
+        "fail_on_unknown",
     }
 )
 
@@ -79,6 +80,27 @@ class Config:
     schema_snapshot: str | None = None
     output_dir: str = DEFAULT_OUTPUT_DIR
     gate_exemptions: tuple[GateExemption, ...] = ()
+    #: Whether a file that could not be analyzed makes the run fail.
+    #:
+    #: Off by default, and that default is the correction of a mistake. The rule used to
+    #: be unconditional, on the reasoning that a gap nobody is forced to look at is a gap
+    #: that gets ignored. What it actually produced was homework: a repository could only
+    #: go green by writing, into its configuration, a sentence about why each unreadable
+    #: thing was out of scope. Measured on one real repository, thirty-six of its
+    #: fifty-two exclusion entries existed for no other reason -- "png files are not
+    #: program source" is not a decision anybody made, it is paperwork the tool demanded.
+    #:
+    #: Worse, some of those gaps are not the repository's to close. A grammar that cannot
+    #: read valid source of a language its adapter claims is this tool's defect, and
+    #: failing the run over it leaves the repository a choice between editing correct code
+    #: and writing a false reason. Neither is a thing to ask of somebody.
+    #:
+    #: What makes a gap impossible to ignore is that the generated documents say so, in
+    #: the coverage line and by name. That is a property of the report and always holds.
+    #: Failing the run is a *policy* on top of it, and it only makes sense where the
+    #: person reading the failure has an action available -- which is why the new-file
+    #: gate, where the author is right there and can fix it, stays strict either way.
+    fail_on_unknown: bool = False
     source_path: Path | None = None
     #: False when the repository said ``exclude_defaults: false``, i.e. it wants to be
     #: walked with exactly the exclusions it wrote. Recorded rather than inferred from
@@ -226,6 +248,10 @@ def load_config(root: Path, config_path: Path | None = None) -> Config:
     if not isinstance(output_dir, str) or not output_dir:
         raise ConfigError(f"{config_path}: 'output_dir' must be a non-empty string")
 
+    fail_on_unknown = raw.get("fail_on_unknown", False)
+    if not isinstance(fail_on_unknown, bool):
+        raise ConfigError(f"{config_path}: 'fail_on_unknown' must be true or false")
+
     return Config(
         root=root,
         include=include,
@@ -240,6 +266,7 @@ def load_config(root: Path, config_path: Path | None = None) -> Config:
         schema_snapshot=schema_snapshot,
         output_dir=output_dir,
         gate_exemptions=_parse_gate_exemptions(raw.get("gate_exemptions"), config_path),
+        fail_on_unknown=fail_on_unknown,
         source_path=config_path,
         exclude_defaults_kept=keep_defaults,
     )

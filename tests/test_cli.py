@@ -64,14 +64,40 @@ def test_full_run_writes_both_documents(tmp_path: Path, with_test_adapters: None
     assert "Coverage: 3/3 analyzed" in out
 
 
-def test_an_unanalyzable_file_fails_the_run(tmp_path: Path, with_test_adapters: None) -> None:
+WIDE_INCLUDE = "include:\n  - '**/*.flow'\n  - '**/*.unheardof'\n"
+
+
+def test_an_unanalyzable_file_is_named_but_does_not_fail_the_run(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Reported, not punished.
+
+    The file is named and counted; the run still succeeds. Failing by default made every
+    repository owe its configuration a written excuse for each thing no adapter claims,
+    and some of those gaps -- a grammar that cannot read valid source of a language its
+    own adapter claims -- have no fix the repository could apply. What keeps a gap from
+    hiding is that it is printed and written into the documents, and that happens
+    whatever the exit code is.
+    """
     root = clean_repo(tmp_path)
     (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
     # Widen the include patterns so the new extension is discovered rather than filtered.
-    write_repo(root, {".omitnix.yaml": "include:\n  - '**/*.flow'\n  - '**/*.unheardof'\n"})
+    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE})
+    code, _, err = run(["--root", str(root)])
+    assert code == EXIT_OK
+    assert "could not be analyzed" in err
+    assert "api/helper.unheardof" in err
+
+
+def test_a_repository_can_ask_to_fail_on_what_could_not_be_analyzed(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Strictness stays available to whoever will carry it, and is imposed on nobody."""
+    root = clean_repo(tmp_path)
+    (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
+    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE + "fail_on_unknown: true\n"})
     code, _, err = run(["--root", str(root)])
     assert code == EXIT_UNKNOWN
-    assert "could not be analyzed" in err
     assert "api/helper.unheardof" in err
 
 
@@ -112,15 +138,15 @@ def test_check_fails_when_the_source_moved_on(tmp_path: Path, with_test_adapters
 def test_check_fails_on_an_unknown_file_even_when_the_documents_are_current(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
-    """Current and complete are different claims, and CI may only ever run --check.
+    """Current and complete are different claims, and --check states both.
 
     A document that records an unanalyzable file faithfully is still a document with a
-    hole in it. If --check passed here, a job wired to it would go green on exactly the
-    state this tool exists to refuse.
+    hole in it, so --check names the hole even when nothing is stale. Whether that also
+    fails the job is the repository's call; this is the repository that made it.
     """
     root = clean_repo(tmp_path)
     (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
-    write_repo(root, {".omitnix.yaml": "include:\n  - '**/*.flow'\n  - '**/*.unheardof'\n"})
+    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE + "fail_on_unknown: true\n"})
 
     assert run(["--root", str(root)])[0] == EXIT_UNKNOWN  # generated, and it says so
 
@@ -150,11 +176,17 @@ def test_print_reports_one_file(tmp_path: Path, with_test_adapters: None) -> Non
     assert record["fields"]["screen_to_api"] == {"state": "out_of_scope"}
 
 
-def test_print_on_an_unanalyzable_file_is_not_a_success(
+def test_print_says_unknown_in_the_record_whatever_the_exit_code(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
+    """The record is the answer; the exit code only follows the repository's policy."""
     root = clean_repo(tmp_path)
     (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
+    code, out, _ = run(["--root", str(root), "--print", "api/helper.unheardof"])
+    assert code == EXIT_OK
+    assert json.loads(out)["status"] == "unknown"
+
+    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE + "fail_on_unknown: true\n"})
     code, out, _ = run(["--root", str(root), "--print", "api/helper.unheardof"])
     assert code == EXIT_UNKNOWN
     assert json.loads(out)["status"] == "unknown"

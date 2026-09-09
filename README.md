@@ -1,11 +1,11 @@
 # omitnix
 
-Static code inventory that **fails when anything discovered is left unanalyzed**.
+Static code inventory that **never lets "not analyzed" look like "nothing there"**.
 
 > Status: early development. Eleven language adapters ship (`pip install omitnix[all]`; see
-> [Languages](#languages)). A file type none of them claims is reported as `unknown` and fails
-> the run until it gets an adapter or an explicit exclusion — intended, but not yet
-> convenient. This is a personal hobby project; **no support is provided.**
+> [Languages](#languages)). A file type none of them claims is reported as `unknown` and named
+> in the generated documents; whether that also fails the run is opt-in
+> (`fail_on_unknown`). This is a personal hobby project; **no support is provided.**
 
 ## What it is
 
@@ -28,7 +28,11 @@ So `omitnix` treats completeness as the product:
 discovered == analyzed + unresolved + unknown
 ```
 
-If a discovered file cannot be classified, it is counted as `unknown` and the run **exits non-zero**. Anything the analyzer could not follow (dynamically built SQL, indirect calls beyond one hop) is recorded as `unresolved` with a reason — never as a blank cell.
+If a discovered file cannot be classified, it is counted as `unknown` and **named, in the coverage line and by path**. Anything the analyzer could not follow (dynamically built SQL, indirect calls beyond one hop) is recorded as `unresolved` with a reason — never as a blank cell.
+
+Whether an `unknown` also **fails** the run is a separate question, and the answer is off by default (`fail_on_unknown: true` turns it on). Making it unconditional was a mistake worth naming: it turned every gap into homework. A repository could only go green by writing, into its configuration, a sentence explaining each thing no adapter claims — and measured on one real repository, 36 of its 52 exclusion entries existed for no other reason. "PNG files are not program source" is not a decision anybody made; it is paperwork the tool demanded. Worse, some gaps are not the repository's to close at all: a grammar that cannot read valid source of a language its own adapter claims is *this tool's* defect, and failing the build over it offers a choice between editing correct code and writing a false reason.
+
+What keeps a gap from hiding is that the documents say so. That always holds. Failing the run is a policy on top, and it earns its place only where the person reading the failure has something they can do — which is why the [new-file gate](#the-new-file-gate) stays strict either way.
 
 Generated output always states what it is and is not:
 
@@ -94,8 +98,8 @@ because the commit moved on.
 
 | code | meaning |
 |---|---|
-| 0 | every discovered file was analyzed |
-| 1 | at least one discovered file is `unknown` |
+| 0 | the run finished; anything unreadable was reported rather than hidden |
+| 1 | a discovered file is `unknown` **and** `fail_on_unknown` is set |
 | 2 | usage, configuration, or adapter-contract error |
 | 3 | `--check` found the generated documents out of date |
 | 4 | `--gate` refused a newly added file |

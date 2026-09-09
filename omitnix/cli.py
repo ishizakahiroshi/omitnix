@@ -3,16 +3,20 @@
 Exit codes are the interface a hook or CI job actually consumes:
 
 ===  ==========================================================================
-0    every discovered file was analyzed
-1    at least one discovered file is ``unknown``
+0    the run finished; anything unreadable was reported rather than hidden
+1    a discovered file is ``unknown`` **and** the repository asked to fail on that
 2    usage, configuration, or adapter-contract error
 3    ``--check`` found the generated documents out of date
 4    ``--gate`` refused a newly added file
 ===  ==========================================================================
 
-4 is separate from 1 on purpose: a hook that blocks a commit wants to distinguish "the
-file you are adding is not acceptable" from "the repository contains something this tool
-cannot read", because the second is usually somebody else's file and a different fix.
+1 is opt-in (``fail_on_unknown`` in the configuration, off by default) and 4 is not.
+That asymmetry is the point. A refused new file is being added right now by the person
+reading the message, who can supply what is missing. A file this tool cannot read is
+usually somebody else's, and sometimes nobody's fault at all -- a grammar that chokes on
+valid source has no fix the repository can apply. Failing a build over it only converts
+a reported gap into a chore, which is how a check gets switched off. What keeps the gap
+visible is that the generated documents name it, and they do that either way.
 
 ``--workspace`` reuses the same codes across many repositories: 1 when any repository
 that ran holds an unknown file, and 2 when a repository could not be run at all. The
@@ -217,7 +221,9 @@ def _run_print(args: argparse.Namespace, out, err) -> int:
 
     record = analyze_file(rel, adapter_set, config, schema_tables)
     print(json.dumps(record.to_json(), indent=2, ensure_ascii=False), file=out)
-    return EXIT_UNKNOWN if record.status is Status.UNKNOWN else EXIT_OK
+    if record.status is Status.UNKNOWN and config.fail_on_unknown:
+        return EXIT_UNKNOWN
+    return EXIT_OK
 
 
 def _run_gate(args: argparse.Namespace, config: Config, out, err) -> int:
@@ -453,15 +459,18 @@ def _run_check(report, config, out, err) -> int:
         print("  regenerate with: omitnix", file=err)
         return EXIT_STALE
 
-    # Being current is not the same as being complete. A committed document can record
-    # unknown files faithfully and still be a document with holes in it, and a job that
-    # only ever runs --check must not go green on one.
+    # Being current is not the same as being complete, so an unknown file is still named
+    # here even when the documents match. Whether it also fails the run is the
+    # repository's call: see Config.fail_on_unknown for why that is not this tool's to
+    # decide by default.
     if report.coverage.unknown:
         print(f"omitnix: up to date, but {report.coverage.headline()}", file=out)
         _report_unknown(report, config, err)
-        return EXIT_UNKNOWN
+        if config.fail_on_unknown:
+            return EXIT_UNKNOWN
 
-    print(f"omitnix: up to date. {report.coverage.headline()}", file=out)
+    else:
+        print(f"omitnix: up to date. {report.coverage.headline()}", file=out)
     return EXIT_OK
 
 
@@ -565,7 +574,8 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
 
     if report.coverage.unknown:
         _report_unknown(report, config, err)
-        return EXIT_UNKNOWN
+        if config.fail_on_unknown:
+            return EXIT_UNKNOWN
 
     return EXIT_OK
 

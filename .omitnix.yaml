@@ -1,5 +1,12 @@
 # omitnix, pointed at itself.
 #
+# `fail_on_unknown` is on here and off everywhere by default. This repository is the one
+# place where every unreadable file is somebody-in-this-repository's to fix: the adapters
+# are here. Elsewhere the same setting would demand a written excuse for each thing no
+# adapter claims, including gaps the repository has no power to close, so it is opt-in.
+# Keeping it on here also means the strict path has a user and cannot quietly rot.
+fail_on_unknown: true
+#
 # The tool's contract is that everything it discovers must be analyzed, so the only way
 # to make a run pass is to widen what an adapter understands or to write down, here, why
 # a path is not the tool's business. That makes this file the honest part of the run: an
