@@ -1,9 +1,10 @@
 """The command line contract: what each flag does, and what each exit code means.
 
 The exit codes are the part other tools consume, so they are asserted directly rather
-than through the text of a message: 1 for a file that could not be analyzed, 3 for a
-generated document that is out of date, 2 for a configuration this tool refuses to guess
-at.
+than through the text of a message: 3 for a generated document that is out of date, 2 for
+a configuration this tool refuses to guess at, and 1 for a file that could not be analyzed
+*in a repository that asked to fail on that* -- which is why several tests below appear in
+pairs, one for the default and one for ``fail_on_unknown: true``.
 """
 
 from __future__ import annotations

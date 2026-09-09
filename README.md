@@ -62,7 +62,7 @@ Every per-file field — summary, authentication, authorization, tables read, ta
 | `out_of_scope` | the field is outside the declared capabilities of the adapter that handled the file. Not a missing value. | `{"state": "out_of_scope"}` — no `value` key at all |
 | `none_observed` | the adapter declares this capability and looked, and found nothing at this commit. Never "unused". | `{"state": "none_observed", "value": []}` |
 | `value` | an ordinary result, including an empty list the adapter is confident is complete. | `{"state": "value", "value": [...]}` |
-| *(not a field state)* | the file itself could not be analyzed at all. `fields` is `{}`, `status` is `"unknown"`, and `unknown_reason` says why. Every such file is counted under `coverage.unknown` and the run exits non-zero unless `fail_on_unknown` says otherwise. | top-level `"status": "unknown"` on the file record |
+| *(not a field state)* | the file itself could not be analyzed at all. `fields` is `{}`, `status` is `"unknown"`, and `unknown_reason` says why. Every such file is counted under `coverage.unknown` and named on stderr; the run still exits 0 unless the repository set `fail_on_unknown`. | top-level `"status": "unknown"` on the file record |
 
 This table used to be spelled out in prose at the top of the generated `index.md`. It moved here when that document was removed: the four states themselves were never Markdown-only — they are `FieldState` values (`omitnix/model.py`) present in `index.json` on every run — only the words explaining them lived in the file that got deleted.
 
