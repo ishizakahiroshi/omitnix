@@ -61,4 +61,3 @@ def test_output_paths_follow_the_configured_directory(tmp_path: Path) -> None:
     write_repo(tmp_path, {".omitnix.yaml": "output_dir: docs/inventory\n"})
     config = load_config(tmp_path)
     assert config.json_path == config.root / "docs/inventory" / "index.json"
-    assert config.markdown_path == config.root / "docs/inventory" / "index.md"

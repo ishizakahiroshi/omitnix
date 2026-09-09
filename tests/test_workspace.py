@@ -18,7 +18,6 @@ from omitnix.workspace import (
     WORKSPACE_DEFAULT_EXCLUDE,
     discover_repositories,
     record_id,
-    render_workspace_markdown,
     run_workspace,
     workspace_payload,
 )
@@ -221,10 +220,6 @@ def test_the_same_table_name_in_two_repositories_is_not_one_row(
     assert tables["alpha"][0]["written_by"] == []
     assert tables["beta"][0]["written_by"] == ["beta/write.flow"]
 
-    markdown = render_workspace_markdown(result)
-    assert "Tables, by repository" in markdown
-    assert "never merged across repositories" in markdown
-
 
 # --------------------------------------------------------------------------------------
 # Counting
@@ -258,10 +253,6 @@ def test_a_repository_that_cannot_be_run_is_counted_and_stops_nothing(
     # Its files are in no total. Folding it in as a zero would be the repository-sized
     # version of counting an unanalyzable file as analyzed.
     assert result.coverage.discovered == 2
-
-    markdown = render_workspace_markdown(result)
-    assert "Repositories that could not be run (1)" in markdown
-    assert "broken" in markdown
 
 
 def test_an_unknown_file_anywhere_fails_the_workspace_run(
@@ -308,13 +299,10 @@ def test_a_repository_without_configuration_is_not_configured_not_unauthorized(
 
     assert entry["authorization_functions_configured"] is False
     assert entry["configuration"]["source"] == "defaults"
-
-    markdown = render_workspace_markdown(result)
-    assert "not configured" in markdown
-    assert "Authorization not configured (1 repositories)" in markdown
-    # The words that must never appear about a repository nobody configured.
-    assert "no authorization call" not in markdown
-    assert "nothing here says these repositories lack authorization" in markdown
+    # `unconfigured_authorization` is what a caller reads back to tell "not configured"
+    # apart from "checked and found nothing" -- the same distinction the CLI's own
+    # stderr message states (see test_the_warning_is_printed_and_not_only_written).
+    assert result.unconfigured_authorization == (result.runs[0],)
 
 
 def test_the_warning_is_printed_and_not_only_written(
@@ -439,7 +427,6 @@ def test_a_repository_git_cannot_answer_for_is_walked_and_says_so(
     assert entry["discovery"]["mode"] == "walked"
     assert "git could not list tracked files" in entry["discovery"]["note"]
     assert entry["coverage"]["discovered"] == 1
-    assert "Read a different way (1)" in render_workspace_markdown(result)
 
 
 def test_tracked_files_are_the_default_target(tmp_path: Path, with_test_adapters: None) -> None:
@@ -490,8 +477,9 @@ def test_nothing_is_written_into_a_scanned_repository_by_default(
     assert code == EXIT_OK
     assert not (repo / ".omitnix").exists()
     assert (out_dir / "workspace.json").is_file()
-    assert (out_dir / "workspace.md").is_file()
+    assert not (out_dir / "workspace.md").exists()
     assert (out_dir / "repos" / "alpha" / "index.json").is_file()
+    assert not (out_dir / "repos" / "alpha" / "index.md").exists()
     assert "wrote" in out
 
 
@@ -512,6 +500,7 @@ def test_write_per_repo_is_the_only_way_into_a_repository(
 
     assert code == EXIT_OK
     assert (repo / ".omitnix" / "index.json").is_file()
+    assert not (repo / ".omitnix" / "index.md").exists()
 
 
 def test_the_workspace_output_is_not_analyzed_as_repository_content(

@@ -24,9 +24,14 @@ from omitnix.adapters.vue import ADAPTER as VUE
 from omitnix.analyze import build_report
 from omitnix.config import load_config
 from omitnix.gate import run_gate
-from omitnix.model import GATE_REQUIRED_CAPABILITIES, Capability, FieldState, Status
+from omitnix.model import (
+    CAPABILITY_ORDER,
+    GATE_REQUIRED_CAPABILITIES,
+    Capability,
+    FieldState,
+    Status,
+)
 from omitnix.registry import build_adapter_set
-from omitnix.render import OUT_OF_SCOPE_CELL, render_markdown
 
 from .conftest import FIXTURES
 
@@ -191,13 +196,16 @@ def test_a_stylesheet_row_reads_as_out_of_scope_rather_than_as_a_missing_check(
     for capability in GATE_REQUIRED_CAPABILITIES:
         assert record.fields[capability].state is FieldState.OUT_OF_SCOPE
 
-    row = next(
-        line
-        for line in render_markdown(report).splitlines()
-        if line.startswith("| `src/styles.css`")
-    )
-    assert row.count(OUT_OF_SCOPE_CELL) == 6
-    assert "none observed" not in row
+    # Every one of the six capability columns reads out_of_scope, and none reads
+    # none_observed: a stylesheet must never look like a file that was checked for an
+    # authorization call and found to have none.
+    assert len(record.fields) == len(CAPABILITY_ORDER)
+    states = {capability: record.fields[capability].state for capability in CAPABILITY_ORDER}
+    assert set(states.values()) == {FieldState.OUT_OF_SCOPE}
+
+    payload = record.to_json()["fields"]
+    assert len(payload) == len(CAPABILITY_ORDER)
+    assert all(field == {"state": "out_of_scope"} for field in payload.values())
 
 
 # --- an extension nobody claims still fails ---------------------------------------

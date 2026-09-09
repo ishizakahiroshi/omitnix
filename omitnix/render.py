@@ -1,11 +1,13 @@
-"""Rendering the report: JSON for machines, Markdown for people and AI assistants.
+"""Rendering the report to JSON, the tool's only generated document.
 
-The Markdown is the part that has to be careful with words. A generated document is read
-later, out of context, by someone who will treat a blank cell as a fact. So:
-
-* a field outside the adapter's capabilities is ``n/a``, never blank
-* a field the adapter looked for and did not find is ``none observed``, never "unused"
-* the commit and the coverage counts are in the first three lines, always
+A Markdown rendering used to sit next to this one. It was removed (2026-09) once a
+second tool started reading `.omitnix/index.json` and writing the readable document
+itself: two renderers of the same facts drift, and a 3,538-row flat table nobody opened
+was evidence that this tool's readable output was not earning its cost to maintain. The
+facts it used to spell out in prose -- a field outside an adapter's capabilities, a field
+the adapter looked for and found nothing, a file that could not be analyzed at all -- are
+unchanged; they live in ``FieldState`` (:mod:`omitnix.model`) and in each file record's
+``status``, and are explained for a human reader in the README rather than rendered twice.
 """
 
 from __future__ import annotations
@@ -13,58 +15,13 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from .model import (
-    CAPABILITY_ORDER,
-    Capability,
-    Field,
-    FieldState,
-    FileRecord,
-    GeneratedMeta,
-    Report,
-    Status,
-)
+from .model import Report
 
 __all__ = [
     "to_payload",
     "payload_for_check",
     "render_json",
-    "render_markdown",
-    "provenance_line",
-    "PROVENANCE_PREFIXES",
 ]
-
-OUT_OF_SCOPE_CELL = "n/a"
-NONE_OBSERVED_CELL = "none observed"
-NOT_ANALYZED_CELL = "not analyzed"
-NO_ADAPTER_CELL = "none"
-
-#: How the first line of a document states where its contents came from.
-#:
-#: There are two forms because there are two situations, and collapsing them would make
-#: the common one a lie. A document is almost always generated just before the commit
-#: that carries it, so the tree it describes is the tree *plus* the changes about to be
-#: committed -- not the named commit. Saying "generated from commit X" there would point
-#: a reader at a commit whose content is not what was analyzed.
-CLEAN_PROVENANCE_PREFIX = "Generated from commit: "
-DIRTY_PROVENANCE_PREFIX = "Generated from a working tree based on commit "
-PROVENANCE_PREFIXES = (CLEAN_PROVENANCE_PREFIX, DIRTY_PROVENANCE_PREFIX)
-
-
-def provenance_line(generated: GeneratedMeta) -> str:
-    if generated.commit is None:
-        return f"{CLEAN_PROVENANCE_PREFIX}unknown (not a git working tree)"
-    if generated.dirty:
-        return f"{DIRTY_PROVENANCE_PREFIX}{generated.commit} (uncommitted changes present)"
-    return f"{CLEAN_PROVENANCE_PREFIX}{generated.commit}"
-
-_CAPABILITY_HEADINGS: dict[Capability, str] = {
-    Capability.SUMMARY: "summary",
-    Capability.AUTHENTICATION: "authn",
-    Capability.AUTHORIZATION: "authz",
-    Capability.READS: "reads",
-    Capability.WRITES: "writes",
-    Capability.SCREEN_TO_API: "screen -> api",
-}
 
 
 def to_payload(report: Report) -> dict[str, Any]:
@@ -89,167 +46,3 @@ def payload_for_check(payload: dict[str, Any]) -> dict[str, Any]:
 
 def render_json(report: Report) -> str:
     return json.dumps(to_payload(report), indent=2, ensure_ascii=False, sort_keys=False) + "\n"
-
-
-def _cell(text: str) -> str:
-    return text.replace("|", r"\|").replace("\n", " ").strip()
-
-
-def _code(text: str) -> str:
-    return f"`{_cell(text)}`"
-
-
-def _field_cell(field: Field | None) -> str:
-    if field is None:
-        return OUT_OF_SCOPE_CELL
-    if field.state is FieldState.OUT_OF_SCOPE:
-        return OUT_OF_SCOPE_CELL
-    if field.state is FieldState.NONE_OBSERVED:
-        return NONE_OBSERVED_CELL
-    if isinstance(field.value, list):
-        return ", ".join(_code(item) for item in field.value)
-    return _cell(str(field.value))
-
-
-def _file_row(record: FileRecord) -> str:
-    cells = [_code(record.path), record.adapter or NO_ADAPTER_CELL, str(record.status)]
-    if record.status is Status.UNKNOWN:
-        # Nothing was extracted, so none of the three field states applies. Saying "n/a"
-        # here would claim the fields are outside an adapter's capabilities instead.
-        cells.extend([NOT_ANALYZED_CELL] * len(CAPABILITY_ORDER))
-    else:
-        cells.extend(_field_cell(record.fields.get(capability)) for capability in CAPABILITY_ORDER)
-    return "| " + " | ".join(cells) + " |"
-
-
-def _table_lines(header: list[str], rows: list[list[str]]) -> list[str]:
-    lines = ["| " + " | ".join(header) + " |", "|" + "|".join(["---"] * len(header)) + "|"]
-    lines.extend("| " + " | ".join(row) + " |" for row in rows)
-    return lines
-
-
-def render_markdown(report: Report) -> str:
-    coverage = report.coverage
-    lines: list[str] = ["# omitnix index", ""]
-    lines.append(provenance_line(report.generated))
-    lines.append(coverage.headline())
-    lines.append("")
-    lines.append(f"Generated by {report.generated.tool}. Do not edit by hand.")
-    if report.generated.partial:
-        lines.append(
-            "This run covered an explicit file list, so the counts above describe those "
-            "files only and not the repository."
-        )
-    if coverage.skipped_by_config:
-        lines.append(
-            f"{coverage.skipped_by_config} requested path(s) were excluded by the "
-            "configuration and are not counted above."
-        )
-    lines.append("")
-
-    lines.append("## How to read this document")
-    lines.append("")
-    lines.append(
-        f"- `{OUT_OF_SCOPE_CELL}` means the field is outside the declared capabilities of the "
-        "adapter that handled the file. It is not a missing value."
-    )
-    lines.append(
-        f"- `{NONE_OBSERVED_CELL}` means the analyzer observed no static reference at this "
-        "commit. It does not mean the thing is unused."
-    )
-    lines.append(
-        f"- `{NOT_ANALYZED_CELL}` means the file was discovered but could not be analyzed at "
-        "all. Every such file is listed under Unknown, and the run exits non-zero."
-    )
-    lines.append(
-        "- Anything the analyzer looked at but could not follow is listed under Unresolved, "
-        "with a reason. It is never left blank."
-    )
-    lines.append("")
-
-    lines.append("## Files")
-    lines.append("")
-    header = ["file", "adapter", "status"] + [
-        _CAPABILITY_HEADINGS[capability] for capability in CAPABILITY_ORDER
-    ]
-    if report.files:
-        lines.append("| " + " | ".join(header) + " |")
-        lines.append("|" + "|".join(["---"] * len(header)) + "|")
-        lines.extend(_file_row(record) for record in report.files)
-    else:
-        lines.append("No file was discovered under the configured include patterns.")
-    lines.append("")
-
-    unresolved = [record for record in report.files if record.status is Status.UNRESOLVED]
-    lines.append(f"## Unresolved ({len(unresolved)})")
-    lines.append("")
-    if unresolved:
-        rows = [
-            [_code(record.path), _cell(item.code), _cell(item.detail) or "-"]
-            for record in unresolved
-            for item in record.unresolved
-        ]
-        lines.extend(_table_lines(["file", "reason", "detail"], rows))
-    else:
-        lines.append("Nothing was left unresolved in this run.")
-    lines.append("")
-
-    unknown = [record for record in report.files if record.status is Status.UNKNOWN]
-    lines.append(f"## Unknown ({len(unknown)})")
-    lines.append("")
-    if unknown:
-        lines.append(
-            "These files were discovered but could not be analyzed. The run exits "
-            "non-zero while this section is not empty: give the extension an adapter, "
-            "or exclude it explicitly in `.omitnix.yaml`."
-        )
-        lines.append("")
-        rows = [
-            [_code(record.path), _cell(record.unknown_reason or "-")] for record in unknown
-        ]
-        lines.extend(_table_lines(["file", "reason"], rows))
-    else:
-        lines.append("Every discovered file was analyzed.")
-    lines.append("")
-
-    lines.append("## Tables")
-    lines.append("")
-    if report.tables:
-        no_reference = (
-            "no static reference observed by this analyzer at "
-            f"commit {report.generated.commit_label()}"
-        )
-        rows = []
-        for table in report.tables:
-            if table.observed_nowhere:
-                rows.append([_code(table.name), no_reference, no_reference])
-                continue
-            rows.append(
-                [
-                    _code(table.name),
-                    ", ".join(_code(path) for path in table.read_by) or NONE_OBSERVED_CELL,
-                    ", ".join(_code(path) for path in table.written_by) or NONE_OBSERVED_CELL,
-                ]
-            )
-        lines.extend(_table_lines(["table", "read by", "written by"], rows))
-    else:
-        lines.append("No table was observed, and no schema snapshot was configured.")
-    lines.append("")
-
-    lines.append("## Adapters in this run")
-    lines.append("")
-    if report.generated.adapters:
-        rows = [
-            [
-                _cell(adapter.name),
-                ", ".join(_code(extension) for extension in adapter.extensions),
-                ", ".join(str(capability) for capability in adapter.capabilities) or "-",
-            ]
-            for adapter in report.generated.adapters
-        ]
-        lines.extend(_table_lines(["adapter", "extensions", "capabilities"], rows))
-    else:
-        lines.append("No adapter is installed, so every discovered file counts as unknown.")
-    lines.append("")
-
-    return "\n".join(lines)

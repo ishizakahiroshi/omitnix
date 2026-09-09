@@ -55,12 +55,15 @@ def test_help_exits_zero() -> None:
     assert excinfo.value.code == 0
 
 
-def test_full_run_writes_both_documents(tmp_path: Path, with_test_adapters: None) -> None:
+def test_full_run_writes_only_the_json_index(tmp_path: Path, with_test_adapters: None) -> None:
+    """The one generated document. A Markdown rendering used to sit next to it; it was
+    removed once a second tool started reading the JSON and writing the readable document
+    itself, so this run must not leave one behind."""
     root = clean_repo(tmp_path)
     code, out, _ = run(["--root", str(root)])
     assert code == EXIT_OK
     assert (root / ".omitnix" / "index.json").is_file()
-    assert (root / ".omitnix" / "index.md").is_file()
+    assert not (root / ".omitnix" / "index.md").exists()
     assert "Coverage: 3/3 analyzed" in out
 
 
@@ -101,18 +104,17 @@ def test_a_repository_can_ask_to_fail_on_what_could_not_be_analyzed(
     assert "api/helper.unheardof" in err
 
 
-def test_generated_documents_use_lf_on_every_platform(
+def test_generated_document_uses_lf_on_every_platform(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
-    """These documents get committed, so the platform that generated them must not show.
+    """This document gets committed, so the platform that generated it must not show.
 
     Written in text mode without an explicit newline, Python would emit CRLF on Windows
     and LF elsewhere, and regenerating on another machine would read as a whole-file diff.
     """
     root = clean_repo(tmp_path)
     assert run(["--root", str(root)])[0] == EXIT_OK
-    for name in ("index.json", "index.md"):
-        assert b"\r\n" not in (root / ".omitnix" / name).read_bytes()
+    assert b"\r\n" not in (root / ".omitnix" / "index.json").read_bytes()
 
 
 def test_check_is_quiet_when_up_to_date(tmp_path: Path, with_test_adapters: None) -> None:
@@ -210,7 +212,7 @@ def test_partial_run_does_not_overwrite_the_full_index(
 
     code, out, err = run(["--root", str(root), "--files", "api/orders_list.flow"])
     assert code == EXIT_OK
-    assert "documents were not written" in err
+    assert "the document was not written" in err
     assert "Coverage: 1/1 analyzed" in out
     assert (root / ".omitnix" / "index.json").read_text(encoding="utf-8") == before
 

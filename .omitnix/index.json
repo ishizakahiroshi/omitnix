@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "a604faab1385c90f625aae6977b33f5e317e9821",
+    "commit": "c863e5b74df3d3ab91542d3acc17198004b5d9ff",
     "dirty": true,
     "tool": "omitnix 0.1.0",
     "partial": false,
@@ -1112,7 +1112,7 @@
       "fields": {
         "summary": {
           "state": "value",
-          "value": "Rendering the report: JSON for machines, Markdown for people and AI assistants."
+          "value": "Rendering the report to JSON, the tool's only generated document."
         },
         "authentication": {
           "state": "none_observed",
@@ -1861,7 +1861,7 @@
       "fields": {
         "summary": {
           "state": "value",
-          "value": "What the generated documents say, and what they must never say."
+          "value": "What the generated document says, and what it must never say."
         },
         "authentication": {
           "state": "none_observed",

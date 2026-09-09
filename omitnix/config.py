@@ -112,10 +112,6 @@ class Config:
     def json_path(self) -> Path:
         return self.root / self.output_dir / "index.json"
 
-    @property
-    def markdown_path(self) -> Path:
-        return self.root / self.output_dir / "index.md"
-
 
 def _as_str_tuple(value: Any, key: str) -> tuple[str, ...]:
     if value is None:

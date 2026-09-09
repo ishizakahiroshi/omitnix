@@ -6,7 +6,7 @@ Exit codes are the interface a hook or CI job actually consumes:
 0    the run finished; anything unreadable was reported rather than hidden
 1    a discovered file is ``unknown`` **and** the repository asked to fail on that
 2    usage, configuration, or adapter-contract error
-3    ``--check`` found the generated documents out of date
+3    ``--check`` found the generated document out of date
 4    ``--gate`` refused a newly added file
 ===  ==========================================================================
 
@@ -39,13 +39,7 @@ from .gate import new_files, run_gate
 from .globs import normalize
 from .model import Status
 from .registry import build_adapter_set
-from .render import (
-    PROVENANCE_PREFIXES,
-    payload_for_check,
-    render_json,
-    render_markdown,
-    to_payload,
-)
+from .render import payload_for_check, render_json, to_payload
 from .schema import load_schema_tables
 from .workspace import (
     WORKSPACE_OUTPUT_DIR,
@@ -93,14 +87,14 @@ def _build_parser() -> argparse.ArgumentParser:
         "--write",
         action="store_true",
         help=(
-            "with --files, write the generated documents anyway. Off by default because "
+            "with --files, write the generated document anyway. Off by default because "
             "a partial run would overwrite the full index with a subset."
         ),
     )
     parser.add_argument(
         "--check",
         action="store_true",
-        help="write nothing; compare the generated documents on disk with a fresh run",
+        help="write nothing; compare the generated document on disk with a fresh run",
     )
     parser.add_argument(
         "--gate",
@@ -393,7 +387,7 @@ def _run_workspace(args: argparse.Namespace, out, err) -> int:
     if coverage.unknown:
         print(
             f"omitnix: {coverage.unknown} discovered file(s) could not be analyzed. "
-            f"They are listed by extension in {documents[1]}.",
+            f"Each repository's entry in {documents[0]} lists them by extension.",
             file=err,
         )
         return EXIT_UNKNOWN
@@ -411,20 +405,7 @@ def _report_unknown(report, config: Config, err) -> None:
     for record in unknown[:20]:
         print(f"  {record.path}: {record.unknown_reason}", file=err)
     if len(unknown) > 20:
-        print(f"  ... {len(unknown) - 20} more (see {config.markdown_path})", file=err)
-
-
-def _strip_commit_line(text: str) -> str:
-    """Drop the provenance line before comparing.
-
-    It names the commit and whether the tree was dirty, which differ on every run for
-    reasons that have nothing to do with whether the inventory is current.
-    """
-    return "\n".join(
-        line
-        for line in text.splitlines()
-        if not line.startswith(PROVENANCE_PREFIXES)
-    )
+        print(f"  ... {len(unknown) - 20} more (see {config.json_path})", file=err)
 
 
 def _run_check(report, config, out, err) -> int:
@@ -444,23 +425,15 @@ def _run_check(report, config, out, err) -> int:
             if stored_payload != fresh_payload:
                 differences.extend(_describe_json_difference(stored_payload, fresh_payload))
 
-    markdown_path = config.markdown_path
-    if not markdown_path.is_file():
-        differences.append(f"{markdown_path} does not exist")
-    elif _strip_commit_line(markdown_path.read_text(encoding="utf-8")) != _strip_commit_line(
-        render_markdown(report)
-    ):
-        differences.append(f"{markdown_path} differs from a fresh run")
-
     if differences:
-        print("omitnix: generated documents are out of date", file=err)
+        print("omitnix: generated document is out of date", file=err)
         for line in differences:
             print(f"  {line}", file=err)
         print("  regenerate with: omitnix", file=err)
         return EXIT_STALE
 
     # Being current is not the same as being complete, so an unknown file is still named
-    # here even when the documents match. Whether it also fails the run is the
+    # here even when the document matches. Whether it also fails the run is the
     # repository's call: see Config.fail_on_unknown for why that is not this tool's to
     # decide by default.
     if report.coverage.unknown:
@@ -517,7 +490,7 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
         return rejected
 
     if args.gate and (args.check or args.write):
-        # The gate reports on new files only. Letting it write or compare the documents
+        # The gate reports on new files only. Letting it write or compare the document
         # would put a slice of the repository where the full index belongs.
         print("omitnix: --gate cannot be combined with --check or --write", file=err)
         return EXIT_ERROR
@@ -555,18 +528,17 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
     wrote: list[Path] = []
     if args.files and not args.write:
         print(
-            "omitnix: partial run (--files); documents were not written. "
-            "Pass --write to overwrite them with this subset.",
+            "omitnix: partial run (--files); the document was not written. "
+            "Pass --write to overwrite it with this subset.",
             file=err,
         )
     else:
         output_dir = config.root / config.output_dir
         output_dir.mkdir(parents=True, exist_ok=True)
-        # newline="\n" on purpose: these documents are meant to be committed, and the
+        # newline="\n" on purpose: this document is meant to be committed, and the
         # platform that happened to run the tool must not show up as a whole-file diff.
         config.json_path.write_text(render_json(report), encoding="utf-8", newline="\n")
-        config.markdown_path.write_text(render_markdown(report), encoding="utf-8", newline="\n")
-        wrote = [config.json_path, config.markdown_path]
+        wrote = [config.json_path]
 
     print(report.coverage.headline(), file=out)
     for path in wrote:

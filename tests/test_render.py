@@ -1,9 +1,16 @@
-"""What the generated documents say, and what they must never say.
+"""What the generated document says, and what it must never say.
 
-A generated document is read later, out of context, by someone who will treat a blank
-cell as a fact. So these tests are about wording as much as structure: a field outside an
-adapter's capabilities reads differently from one it looked for and did not find, a file
-nothing could analyze is not dressed up as either, and no table is ever called unused.
+A generated document is read later, out of context, by someone -- or something, an AI
+assistant reading it as evidence -- who will treat a missing key or an empty value as a
+fact. So these tests are about the JSON as much as its structure: a field outside an
+adapter's capabilities carries a different ``state`` from one it looked for and did not
+find, a file nothing could analyze is not dressed up as either, and no table is ever
+called unused.
+
+A Markdown rendering of the same facts used to live in this module and was tested here
+too. It was removed (2026-09): a second tool started reading ``index.json`` and writing
+the readable document itself, so the four states below are asserted directly against the
+JSON now instead of through a rendered table row.
 """
 
 from __future__ import annotations
@@ -12,18 +19,8 @@ from pathlib import Path
 
 from omitnix.analyze import build_report
 from omitnix.config import load_config
-from omitnix.model import GeneratedMeta
-from omitnix.render import (
-    NONE_OBSERVED_CELL,
-    NOT_ANALYZED_CELL,
-    OUT_OF_SCOPE_CELL,
-    PROVENANCE_PREFIXES,
-    payload_for_check,
-    provenance_line,
-    render_json,
-    render_markdown,
-    to_payload,
-)
+from omitnix.model import Capability, FieldState, Status
+from omitnix.render import payload_for_check, render_json, to_payload
 
 from .conftest import ORDERS_FLOW, PLAIN_NOTE, REINDEX_FLOW, write_repo
 
@@ -50,62 +47,6 @@ def build(tmp_path: Path):
     return build_report(load_config(tmp_path))
 
 
-def test_markdown_states_its_provenance_first(tmp_path: Path, with_test_adapters: None) -> None:
-    markdown = render_markdown(build(tmp_path))
-    lines = markdown.splitlines()
-    assert lines[0] == "# omitnix index"
-    assert lines[2].startswith(PROVENANCE_PREFIXES)
-    assert lines[3].startswith("Coverage: ")
-    assert "analyzed," in lines[3] and "unresolved," in lines[3] and "unknown" in lines[3]
-
-
-def test_a_dirty_tree_is_not_described_as_the_commit_it_sits_on() -> None:
-    """The usual case: the document is generated just before the commit that carries it.
-
-    Saying "generated from commit X" then points the reader at a commit whose content is
-    not what was analyzed -- and this document is committed, so that reader is everyone.
-    """
-    clean = GeneratedMeta(commit="0123456", dirty=False, tool="omitnix", partial=False)
-    dirty = GeneratedMeta(commit="0123456", dirty=True, tool="omitnix", partial=False)
-    absent = GeneratedMeta(commit=None, dirty=False, tool="omitnix", partial=False)
-
-    assert provenance_line(clean) == "Generated from commit: 0123456"
-    assert provenance_line(dirty).startswith("Generated from a working tree based on commit")
-    assert "uncommitted changes present" in provenance_line(dirty)
-    assert "unknown (not a git working tree)" in provenance_line(absent)
-    # Whatever the wording, --check has to be able to drop the line.
-    for meta in (clean, dirty, absent):
-        assert provenance_line(meta).startswith(PROVENANCE_PREFIXES)
-
-
-def test_markdown_separates_out_of_scope_from_none_observed(
-    tmp_path: Path, with_test_adapters: None
-) -> None:
-    markdown = render_markdown(build(tmp_path))
-    assert OUT_OF_SCOPE_CELL in markdown
-    assert NONE_OBSERVED_CELL in markdown
-    assert OUT_OF_SCOPE_CELL != NONE_OBSERVED_CELL
-    assert "It is not a missing value." in markdown
-
-
-def test_markdown_never_calls_anything_unused(tmp_path: Path, with_test_adapters: None) -> None:
-    markdown = render_markdown(build(tmp_path))
-    assert "audit_log" in markdown
-    assert "no static reference observed" in markdown
-    assert "unused" not in markdown.replace("does not mean the thing is unused", "")
-
-
-def test_unknown_rows_are_not_dressed_up_as_out_of_scope(
-    tmp_path: Path, with_test_adapters: None
-) -> None:
-    write_repo(tmp_path, {"api/helper.unheardof": "x"})
-    report = build_report(load_config(tmp_path))
-    markdown = render_markdown(report)
-    row = next(line for line in markdown.splitlines() if "helper.unheardof" in line and "|" in line)
-    assert NOT_ANALYZED_CELL in row
-    assert OUT_OF_SCOPE_CELL not in row
-
-
 def test_json_round_trips_and_check_ignores_provenance(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
@@ -119,11 +60,65 @@ def test_json_round_trips_and_check_ignores_provenance(
 
 
 def test_field_states_survive_serialisation(tmp_path: Path, with_test_adapters: None) -> None:
+    """The three per-field states are distinguishable after a JSON round trip.
+
+    ``out_of_scope`` (the field is outside what this adapter declares -- never a missing
+    value), ``none_observed`` (the adapter looked and found nothing -- never "unused"),
+    and ``value`` (an ordinary result, even an empty list) must all read differently, or
+    "did not look" and "looked and found nothing" collapse into the same JSON shape.
+    """
     payload = to_payload(build(tmp_path))
     by_path = {entry["path"]: entry for entry in payload["files"]}
+
     note = by_path["docs/RELEASE.note"]["fields"]
     assert note["authorization"] == {"state": "out_of_scope"}
+    # out_of_scope carries no "value" key at all -- there is nothing to be empty or absent.
+    assert "value" not in note["authorization"]
+
     reindex = by_path["batch/reindex.flow"]["fields"]
     # An empty list is still "the analyzer looked and found none", never a blank cell.
     assert reindex["authorization"] == {"state": "none_observed", "value": []}
     assert reindex["writes"] == {"state": "value", "value": ["search_index"]}
+
+
+def test_out_of_scope_and_none_observed_are_never_the_same_state(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The distinction the whole project exists for, asserted directly on ``FieldState``."""
+    report = build(tmp_path)
+    note = report.file("docs/RELEASE.note")
+    reindex = report.file("batch/reindex.flow")
+
+    assert note.fields[Capability.AUTHORIZATION].state is FieldState.OUT_OF_SCOPE
+    assert reindex.fields[Capability.AUTHORIZATION].state is FieldState.NONE_OBSERVED
+    assert FieldState.OUT_OF_SCOPE != FieldState.NONE_OBSERVED
+
+
+def test_an_unanalyzable_file_carries_no_field_states_at_all(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The fourth state -- "not analyzed" -- is not a ``FieldState`` at all.
+
+    It is the file record's own ``status``. A file nothing could read has no adapter
+    output to report a state *for*, so ``fields`` is empty and the reason lives in
+    ``unknown_reason`` -- never rendered as if it were an observed, empty value.
+    """
+    write_repo(tmp_path, {"api/helper.unheardof": "x"})
+    report = build_report(load_config(tmp_path))
+    record = report.file("api/helper.unheardof")
+
+    assert record.status is Status.UNKNOWN
+    assert record.fields == {}
+    assert record.unknown_reason is not None
+    assert to_payload(report)["files"][0]["fields"] == {}
+
+
+def test_tables_with_no_reference_are_reported_never_as_unused(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    report = build(tmp_path)
+    by_name = {table.name: table for table in report.tables}
+    audit_log = by_name["audit_log"]
+    assert audit_log.observed_nowhere
+    assert audit_log.read_by == ()
+    assert audit_log.written_by == ()

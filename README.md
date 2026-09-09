@@ -4,17 +4,19 @@ Static code inventory that **never lets "not analyzed" look like "nothing there"
 
 > Status: early development. Eleven language adapters ship (`pip install omitnix[all]`; see
 > [Languages](#languages)). A file type none of them claims is reported as `unknown` and named
-> in the generated documents; whether that also fails the run is opt-in
+> in the generated document; whether that also fails the run is opt-in
 > (`fail_on_unknown`). This is a personal hobby project; **no support is provided.**
 
 ## What it is
 
-`omitnix` walks a codebase and produces two things:
+`omitnix` walks a codebase and writes one generated document, `.omitnix/index.json`, holding two things:
 
 - a per-file index (summary, authentication, authorization check, tables read, tables written)
 - a reverse index from database tables back to the files that touch them
 
 It never connects to a database. Schema information, when used, is read from a JSON snapshot produced by another tool.
+
+There used to be a second, human-readable rendering of the same facts, `.omitnix/index.md`. It was removed (2026-09) once a second tool ([OpenWiki](https://github.com/langchain-ai/openwiki)) started reading `index.json` and writing the readable document itself: two renderers of one set of facts drift out of sync, and on a real repository the flat Markdown table had grown to 3,538 rows that nobody opened. `omitnix` now writes the evidence; the document a person reads is somebody else's job.
 
 ## Why it exists
 
@@ -32,16 +34,37 @@ If a discovered file cannot be classified, it is counted as `unknown` and **name
 
 Whether an `unknown` also **fails** the run is a separate question, and the answer is off by default (`fail_on_unknown: true` turns it on). Making it unconditional was a mistake worth naming: it turned every gap into homework. A repository could only go green by writing, into its configuration, a sentence explaining each thing no adapter claims — and measured on one real repository, 36 of its 52 exclusion entries existed for no other reason. "PNG files are not program source" is not a decision anybody made; it is paperwork the tool demanded. Worse, some gaps are not the repository's to close at all: a grammar that cannot read valid source of a language its own adapter claims is *this tool's* defect, and failing the build over it offers a choice between editing correct code and writing a false reason.
 
-What keeps a gap from hiding is that the documents say so. That always holds. Failing the run is a policy on top, and it earns its place only where the person reading the failure has something they can do — which is why the [new-file gate](#the-new-file-gate) stays strict either way.
+What keeps a gap from hiding is that the document says so. That always holds. Failing the run is a policy on top, and it earns its place only where the person reading the failure has something they can do — which is why the [new-file gate](#the-new-file-gate) stays strict either way.
 
-Generated output always states what it is and is not:
+Every run prints the same coverage line, and `index.json` carries the same numbers plus the commit it was generated from:
 
 ```
-Generated from commit: 0123456
-Coverage: 202/202 analyzed, 8 unresolved, 0 unknown
+Coverage: 202/210 analyzed, 8 unresolved, 0 unknown
 ```
+
+```json
+{
+  "generated": { "commit": "0123456", "dirty": false, "tool": "omitnix", "partial": false },
+  "coverage": { "discovered": 210, "analyzed": 202, "unresolved": 8, "unknown": 0 }
+}
+```
+
+`generated` is excluded when `--check` compares two runs — see [Usage](#usage) — because the commit and dirty flag differ on every commit for reasons that have nothing to do with whether the inventory is stale.
 
 And it never says "unused". It says: no static reference was observed by this analyzer at this commit.
+
+### The four states behind every field
+
+Every per-file field — summary, authentication, authorization, tables read, tables written — carries a `state` in `index.json`, and the state is never inferred by a reader from an empty-looking value:
+
+| `state` in `index.json` | what it means | how the field looks |
+|---|---|---|
+| `out_of_scope` | the field is outside the declared capabilities of the adapter that handled the file. Not a missing value. | `{"state": "out_of_scope"}` — no `value` key at all |
+| `none_observed` | the adapter declares this capability and looked, and found nothing at this commit. Never "unused". | `{"state": "none_observed", "value": []}` |
+| `value` | an ordinary result, including an empty list the adapter is confident is complete. | `{"state": "value", "value": [...]}` |
+| *(not a field state)* | the file itself could not be analyzed at all. `fields` is `{}`, `status` is `"unknown"`, and `unknown_reason` says why. Every such file is counted under `coverage.unknown` and the run exits non-zero unless `fail_on_unknown` says otherwise. | top-level `"status": "unknown"` on the file record |
+
+This table used to be spelled out in prose at the top of the generated `index.md`. It moved here when that document was removed: the four states themselves were never Markdown-only — they are `FieldState` values (`omitnix/model.py`) present in `index.json` on every run — only the words explaining them lived in the file that got deleted.
 
 ## Example
 
@@ -62,7 +85,7 @@ authentication_functions:
 schema_snapshot: schema.json
 ```
 
-A generated table looks like this (fictional schema):
+The tool itself writes `index.json`; the same facts read as a table like this (fictional schema, and this table is not a file `omitnix` produces — it is here for a human reading this README):
 
 | file | summary | authn | authz | reads | writes | status |
 |---|---|---|---|---|---|---|
@@ -73,8 +96,8 @@ A generated table looks like this (fictional schema):
 ## Usage
 
 ```
-omitnix                       # full run; writes .omitnix/index.json and .omitnix/index.md
-omitnix --check               # write nothing; fail if the generated documents are stale
+omitnix                       # full run; writes .omitnix/index.json
+omitnix --check               # write nothing; fail if the generated document is stale
 omitnix --files a.php b.php   # analyze an explicit list, as a pre-commit hook passes it
 omitnix --gate --files a.php  # check only the newly added files among them
 omitnix --gate --since main   # check what this branch added; the form CI can use
@@ -91,7 +114,7 @@ files takes far longer. Measured on this project itself, 2026-09-08: 57 files in
 `--files` reports on that subset and, by default, writes nothing: a partial run must not
 overwrite the full index with a slice of it. Pass `--write` if that is what you want.
 
-`--check` compares the inventory, not the provenance header, so it does not fail merely
+`--check` compares the inventory, not the `generated` block (commit, dirty flag), so it does not fail merely
 because the commit moved on.
 
 ### Exit codes
@@ -101,7 +124,7 @@ because the commit moved on.
 | 0 | the run finished; anything unreadable was reported rather than hidden |
 | 1 | a discovered file is `unknown` **and** `fail_on_unknown` is set |
 | 2 | usage, configuration, or adapter-contract error |
-| 3 | `--check` found the generated documents out of date |
+| 3 | `--check` found the generated document out of date |
 | 4 | `--gate` refused a newly added file |
 
 `--workspace` reuses the same codes across many repositories: 1 when any repository that
