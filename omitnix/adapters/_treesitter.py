@@ -135,7 +135,12 @@ def _query_source(name: str) -> str:
 
 @cache
 def load_grammar(
-    name: str, module_name: str, symbol: str, query_name: str | None = None
+    name: str,
+    module_name: str,
+    symbol: str,
+    query_name: str | None = None,
+    *,
+    extra: str,
 ) -> Grammar:
     """Load the grammar for ``name`` and compile ``omitnix/queries/<name>.scm``.
 
@@ -149,13 +154,21 @@ def load_grammar(
     compiled separately against each :class:`Language` even when the source text is
     identical. Without this the choice is three copies of one query file that must be
     edited in lockstep, which is how a pattern gets fixed in two of them.
+
+    ``extra`` names the packaging extra that installs everything this call needs, and is
+    keyword-only and required so that no call site can leave it out. It is what the
+    reasons below tell the reader to install. Naming the missing distribution instead --
+    ``tree-sitter``, then ``tree-sitter-python`` -- is accurate twice and useless once:
+    the reader installs the first, runs again, and is told about the second. The extra
+    installs the binding, the grammar and sqlglot together, so following the reason once
+    is enough.
     """
     try:
         from tree_sitter import Language, Query
     except ImportError as exc:  # pragma: no cover - depends on the environment
         raise GrammarUnavailable(
             "the tree-sitter Python binding is not installed "
-            f"({exc}). Install it with: pip install tree-sitter"
+            f'({exc}). Install it with: pip install "omitnix[{extra}]"'
         ) from exc
 
     try:
@@ -163,7 +176,7 @@ def load_grammar(
     except ImportError as exc:
         raise GrammarUnavailable(
             f"the {name} grammar is not installed ({exc}). "
-            f"Install it with: pip install {module_name.replace('_', '-')}"
+            f'Install it with: pip install "omitnix[{extra}]"'
         ) from exc
 
     entry = getattr(grammar_module, symbol, None)

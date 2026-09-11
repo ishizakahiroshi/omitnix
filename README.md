@@ -429,6 +429,14 @@ an authorization call and found to have none.
 | `html` | `.html` `.htm` | `omitnix[html]` |
 | `css` `rust` `shell` `powershell` `vue` | `.css` `.rs` `.sh` `.ps1` `.vue` | nothing to install |
 
+The install column is also what a run tells you when the dependency is absent. A file whose
+adapter cannot load its grammar is `unknown` with a reason naming **the extra**, not the
+distribution that failed to import — `pip install "omitnix[python]"` rather than
+`pip install tree-sitter`. The two are not the same advice: the extra installs the binding,
+the grammar and sqlglot together, and the distribution installs one of the three, so a reader
+following the second is told about the next missing piece on the next run, and the one after
+that on the run after. Accurate every time, and three runs to read one file.
+
 `tsjs` reports one column the others do not: **screen → API**, the addresses a file requests
 through `fetch` or `axios`. `html` reports the same column from form actions, script sources
 and the scripts inside the page. That is the direction an inventory is usually read in — *which
@@ -436,7 +444,7 @@ screen calls this endpoint* — and it is why HTML is worth an adapter that repo
 
 The minimal tier exists because **an extension a repository contains is not free to ignore**.
 A language with no adapter is `unclaimed`: counted, and nothing said about a single one of its
-files. `.sh` appears in 37 of the 52 repositories this was measured against and `.ps1` in 30 —
+files. `.sh` appears in 37 of the 55 repositories this was measured against and `.ps1` in 30 —
 that is a lot of a codebase to have nothing to say about, and three files here are cheaper
 than that silence in thirty repositories.
 

@@ -47,6 +47,8 @@ from ._sql import (
 from ._treesitter import GrammarUnavailable, Parsed, load_grammar, text_of
 from .base import Adapter, AnalysisRequest, AnalysisResult
 
+# See omitnix/adapters/go.py for why the extra and the adapter name are one string.
+EXTRA = "php"
 GRAMMAR_NAME = "php"
 GRAMMAR_MODULE = "tree_sitter_php"
 GRAMMAR_SYMBOL = "language_php"
@@ -371,7 +373,7 @@ def _parse_file(path: Path, grammar: Any) -> Parsed | None:
 class PhpAdapter(Adapter):
     """PHP, parsed with tree-sitter; SQL read with sqlglot."""
 
-    name = "php"
+    name = EXTRA
     #: ``.inc`` is deliberately not claimed: it belongs to no language in particular, and
     #: a repository that uses it for PHP says so under ``adapters:`` in .omitnix.yaml.
     extensions = (".php", ".phtml")
@@ -387,7 +389,9 @@ class PhpAdapter(Adapter):
 
     def analyze(self, request: AnalysisRequest) -> AnalysisResult:
         try:
-            grammar = load_grammar(GRAMMAR_NAME, GRAMMAR_MODULE, GRAMMAR_SYMBOL)
+            grammar = load_grammar(
+                GRAMMAR_NAME, GRAMMAR_MODULE, GRAMMAR_SYMBOL, extra=EXTRA
+            )
         except GrammarUnavailable as exc:
             # An unknown record, not a silent skip: the file is still counted and the
             # run still exits non-zero.

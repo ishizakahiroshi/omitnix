@@ -35,6 +35,8 @@ from ._sql import FORMAT_SPEC
 from ._treesitter import GrammarUnavailable, Parsed, load_grammar, text_of
 from .base import Adapter, AnalysisRequest, AnalysisResult
 
+# See omitnix/adapters/go.py for why the extra and the adapter name are one string.
+EXTRA = "python"
 GRAMMAR_NAME = "python"
 GRAMMAR_MODULE = "tree_sitter_python"
 GRAMMAR_SYMBOL = "language"
@@ -122,7 +124,7 @@ def _summary(parsed: Parsed) -> str:
 class PythonAdapter(Adapter):
     """Python, parsed with tree-sitter; SQL read with sqlglot."""
 
-    name = "python"
+    name = EXTRA
     #: ``.pyi`` is Python syntax and parses with the same grammar. A stub has no SQL and
     #: no checks, and reporting that honestly -- observed none -- is better than leaving
     #: the extension unclaimed, which would fail every run that meets one.
@@ -139,7 +141,9 @@ class PythonAdapter(Adapter):
 
     def analyze(self, request: AnalysisRequest) -> AnalysisResult:
         try:
-            grammar = load_grammar(GRAMMAR_NAME, GRAMMAR_MODULE, GRAMMAR_SYMBOL)
+            grammar = load_grammar(
+                GRAMMAR_NAME, GRAMMAR_MODULE, GRAMMAR_SYMBOL, extra=EXTRA
+            )
         except GrammarUnavailable as exc:
             # An unknown record, not a silent skip: the file is still counted and the run
             # still exits non-zero.

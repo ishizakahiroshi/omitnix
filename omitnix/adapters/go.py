@@ -27,6 +27,10 @@ from ._extract import (
 from ._treesitter import GrammarUnavailable, load_grammar, text_of
 from .base import Adapter, AnalysisRequest, AnalysisResult
 
+# The packaging extra that installs this adapter's dependencies, and the name the
+# adapter registers under. One string, so a reason cannot name an extra that is not
+# the adapter's own.
+EXTRA = "go"
 GRAMMAR_NAME = "go"
 GRAMMAR_MODULE = "tree_sitter_go"
 GRAMMAR_SYMBOL = "language"
@@ -61,7 +65,7 @@ _HEADER_TYPES = frozenset({"comment"})
 class GoAdapter(Adapter):
     """Go, parsed with tree-sitter; SQL read with sqlglot."""
 
-    name = "go"
+    name = EXTRA
     extensions = (".go",)
     capabilities = frozenset(
         {
@@ -75,7 +79,9 @@ class GoAdapter(Adapter):
 
     def analyze(self, request: AnalysisRequest) -> AnalysisResult:
         try:
-            grammar = load_grammar(GRAMMAR_NAME, GRAMMAR_MODULE, GRAMMAR_SYMBOL)
+            grammar = load_grammar(
+                GRAMMAR_NAME, GRAMMAR_MODULE, GRAMMAR_SYMBOL, extra=EXTRA
+            )
         except GrammarUnavailable as exc:
             # An unknown record, not a silent skip: the file is still counted and the run
             # still exits non-zero.

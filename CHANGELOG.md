@@ -3,6 +3,18 @@
 Notable changes to `omitnix`. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.1 — 2026-09-11
+
+### Changed
+
+- A reason for a dependency that is not installed now names the packaging extra rather
+  than the distribution that failed to import: `pip install "omitnix[python]"` instead of
+  `pip install tree-sitter`. Both were accurate, but the distribution name only fixes one
+  of the three things the extra installs, so a reader who followed it was told about the
+  next missing piece on the next run. The hint an HTML file gives names `omitnix[html]`
+  even when the part that could not be read was an inline script, because that is the
+  extra that makes the file the reader ran on readable.
+
 ## 0.1.0 — 2026-09-11
 
 First published release. Everything below is what the initial version does, not what

@@ -54,6 +54,8 @@ GRAMMARS: dict[str, tuple[str, str, str]] = {
     ".cjs": ("javascript", "tree_sitter_javascript", "language"),
 }
 
+# See omitnix/adapters/go.py for why the extra and the adapter name are one string.
+EXTRA = "tsjs"
 JAVASCRIPT = GRAMMARS[".js"]
 
 #: Never matches. Unlike PHP, Go and Python, this language family does not build SQL with
@@ -126,16 +128,20 @@ def _harvest_endpoints(parsed: Parsed, findings: Findings) -> None:
             _record_endpoint(row["endpoint.arguments"], findings)
 
 
-def scan_javascript(source: str, findings: Findings) -> str:
+def scan_javascript(source: str, findings: Findings, *, extra: str = EXTRA) -> str:
     """Add the request addresses in a fragment of JavaScript to ``findings``.
 
     Exists for the HTML adapter, whose ``<script>`` blocks are JavaScript held inside
     another language. Returns an empty string on success, or the reason the fragment could
     not be read -- which the caller records rather than swallowing, because a script that
     was not read is not a script that requests nothing.
+
+    ``extra`` is the caller's, not this module's: an HTML file whose script could not be
+    read is fixed by installing ``omitnix[html]``, and telling its reader to install
+    ``omitnix[tsjs]`` would send them to an extra that does not cover the file they ran on.
     """
     try:
-        grammar = load_grammar(*JAVASCRIPT, QUERY_NAME)
+        grammar = load_grammar(*JAVASCRIPT, QUERY_NAME, extra=extra)
     except GrammarUnavailable as exc:
         return str(exc)
 
@@ -149,7 +155,7 @@ def scan_javascript(source: str, findings: Findings) -> str:
 class TsJsAdapter(Adapter):
     """TypeScript, TSX and JavaScript, parsed with tree-sitter; SQL read with sqlglot."""
 
-    name = "tsjs"
+    name = EXTRA
     extensions = (".ts", ".tsx", ".js", ".mjs", ".cjs")
     capabilities = frozenset(
         {
@@ -166,7 +172,7 @@ class TsJsAdapter(Adapter):
         extension = request.path.rsplit(".", 1)[-1].lower()
         grammar_spec = GRAMMARS.get(f".{extension}", JAVASCRIPT)
         try:
-            grammar = load_grammar(*grammar_spec, QUERY_NAME)
+            grammar = load_grammar(*grammar_spec, QUERY_NAME, extra=EXTRA)
         except GrammarUnavailable as exc:
             # An unknown record, not a silent skip: the file is still counted and the run
             # still exits non-zero.

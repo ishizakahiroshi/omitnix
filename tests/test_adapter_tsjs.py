@@ -181,7 +181,7 @@ def test_a_file_that_does_not_parse_is_unknown_rather_than_partially_reported() 
 def test_a_missing_grammar_becomes_an_unknown_record_not_a_crash(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    def unavailable(*_args: str) -> None:
+    def unavailable(*_args: str, **_kwargs: str) -> None:
         raise GrammarUnavailable("the javascript grammar is not installed")
 
     monkeypatch.setattr("omitnix.adapters.tsjs.load_grammar", unavailable)

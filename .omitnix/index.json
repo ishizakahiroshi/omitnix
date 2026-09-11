@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "f3a3e411408ce60536ce94d747c84d1dbd4bfa6b",
+    "commit": "7c17fe14e6904842181c7a96fa57710eebb2f306",
     "dirty": true,
-    "tool": "omitnix 0.1.0",
+    "tool": "omitnix 0.1.1",
     "partial": false,
     "adapters": [
       {
@@ -134,9 +134,9 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 79,
+    "discovered": 80,
     "analyzed": 58,
-    "unresolved": 1,
+    "unresolved": 2,
     "unknown": 0,
     "unclaimed": 20,
     "skipped_by_config": 0
@@ -1872,6 +1872,40 @@
       "unresolved": []
     },
     {
+      "path": "tests/test_install_hints.py",
+      "adapter": "python",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "What a run tells the reader to install when a dependency is missing."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: SELECT id FROM orders;\\n"
+        }
+      ]
+    },
+    {
       "path": "tests/test_php_adapter.py",
       "adapter": "python",
       "status": "unresolved",
@@ -2054,9 +2088,10 @@
   ],
   "table_gaps": {
     "files": [
+      "tests/test_install_hints.py",
       "tests/test_php_adapter.py"
     ],
-    "unresolved_count": 2,
-    "note": "2 statements in 1 file could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+    "unresolved_count": 3,
+    "note": "3 statements in 2 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
   }
 }

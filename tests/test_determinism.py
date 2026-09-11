@@ -64,7 +64,9 @@ def test_captures_come_back_in_document_order() -> None:
     """The property the fix guarantees, checked directly rather than through a diff."""
     treesitter = pytest.importorskip("omitnix.adapters._treesitter")
     try:
-        grammar = treesitter.load_grammar("php", "tree_sitter_php", "language_php")
+        grammar = treesitter.load_grammar(
+            "php", "tree_sitter_php", "language_php", extra="php"
+        )
     except treesitter.GrammarUnavailable:  # pragma: no cover - grammar not installed
         pytest.skip("the PHP grammar is not installed")
 

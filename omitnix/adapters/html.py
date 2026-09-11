@@ -42,6 +42,10 @@ from ._treesitter import GrammarUnavailable, Parsed, load_grammar, text_of
 from .base import Adapter, AnalysisRequest, AnalysisResult
 from .tsjs import scan_javascript
 
+# See omitnix/adapters/go.py for why the extra and the adapter name are one string.
+# The html extra carries the JavaScript grammar too, because this adapter reads
+# inline <script> blocks with it.
+EXTRA = "html"
 GRAMMAR_NAME = "html"
 GRAMMAR_MODULE = "tree_sitter_html"
 GRAMMAR_SYMBOL = "language"
@@ -232,7 +236,7 @@ def _record_script_endpoints(parsed: Parsed, findings: Findings) -> None:
         source = text_of(node)
         if not source.strip():
             continue
-        why_not = scan_javascript(source, findings)
+        why_not = scan_javascript(source, findings, extra=EXTRA)
         if why_not:
             findings.note(SCRIPT_UNREADABLE, why_not)
 
@@ -240,13 +244,15 @@ def _record_script_endpoints(parsed: Parsed, findings: Findings) -> None:
 class HtmlAdapter(Adapter):
     """HTML, parsed with tree-sitter. Inline scripts go through the JavaScript grammar."""
 
-    name = "html"
+    name = EXTRA
     extensions = (".html", ".htm")
     capabilities = frozenset({Capability.SUMMARY, Capability.SCREEN_TO_API})
 
     def analyze(self, request: AnalysisRequest) -> AnalysisResult:
         try:
-            grammar = load_grammar(GRAMMAR_NAME, GRAMMAR_MODULE, GRAMMAR_SYMBOL)
+            grammar = load_grammar(
+                GRAMMAR_NAME, GRAMMAR_MODULE, GRAMMAR_SYMBOL, extra=EXTRA
+            )
         except GrammarUnavailable as exc:
             return AnalysisResult.unknown(str(exc))
 

@@ -167,7 +167,7 @@ def test_a_bare_less_than_in_text_is_still_refused() -> None:
 def test_a_missing_grammar_becomes_an_unknown_record_not_a_crash(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    def unavailable(*_args: str) -> None:
+    def unavailable(*_args: str, **_kwargs: str) -> None:
         raise GrammarUnavailable("the html grammar is not installed")
 
     monkeypatch.setattr("omitnix.adapters.html.load_grammar", unavailable)
@@ -182,7 +182,7 @@ def test_an_unreadable_inline_script_is_reported_rather_than_passed_over(
     """A script that was not read is not a script that requests nothing."""
     monkeypatch.setattr(
         "omitnix.adapters.html.scan_javascript",
-        lambda _source, _findings: "the javascript grammar is not installed",
+        lambda _source, _findings, **_kwargs: "the javascript grammar is not installed",
     )
     result = analyze("orders.html")
     assert "script_unreadable" in codes(result)

@@ -339,7 +339,7 @@ def test_a_missing_grammar_becomes_an_unknown_record_not_a_crash(
     """A missing parser must still leave the file counted and the run failing. Skipping
     it quietly is the one outcome this tool exists to prevent."""
 
-    def unavailable(*_args: str) -> None:
+    def unavailable(*_args: str, **_kwargs: str) -> None:
         raise GrammarUnavailable("the php grammar is not installed")
 
     monkeypatch.setattr("omitnix.adapters.php.load_grammar", unavailable)

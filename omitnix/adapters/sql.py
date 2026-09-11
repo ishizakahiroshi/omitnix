@@ -42,6 +42,9 @@ from ._extract import (
 from ._sql import read_sql
 from .base import Adapter, AnalysisRequest, AnalysisResult
 
+# See omitnix/adapters/go.py for why the extra and the adapter name are one string.
+EXTRA = "sql"
+
 #: Comments, so that a chunk containing only a comment is not reported as a statement
 #: sqlglot refused. Applied to a *copy* used for the emptiness test only -- the text
 #: handed to sqlglot is always the original.
@@ -101,7 +104,7 @@ def _absorb(reading, source: str, findings: Findings) -> None:
 class SqlAdapter(Adapter):
     """SQL files, read with sqlglot. No tree-sitter grammar is used."""
 
-    name = "sql"
+    name = EXTRA
     extensions = (".sql",)
     capabilities = frozenset({Capability.READS, Capability.WRITES})
 
@@ -114,7 +117,8 @@ class SqlAdapter(Adapter):
         except ImportError as exc:
             # Same contract as a missing grammar: counted, and the run still fails.
             return AnalysisResult.unknown(
-                f"sqlglot is not installed ({exc}). Install it with: pip install sqlglot"
+                f'sqlglot is not installed ({exc}). '
+                f'Install it with: pip install "omitnix[{EXTRA}]"'
             )
 
         check_against_schema(request, findings)
