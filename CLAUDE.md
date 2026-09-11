@@ -98,6 +98,7 @@ path and do not silently fall back to `docs/local` when the entry is missing.
 
 | 項目 | パス |
 |---|---|
+| **ファイル単位の索引とテーブル逆引き**（何がどのテーブルを触るかを聞かれたら、探す前にここ） | `.omitnix/index.json`。**読めなかったファイルも名前と理由付きで載っている**ので、「載っていない」と「読めなかった」を区別できる。`generated.commit` が HEAD と違うときは古い（`omitnix` で作り直す） |
 | ユーザー向け README | `README.md` |
 | Codex/他 AI 用入口 | `AGENTS.md` |
 | ローカル作業ノート（非公開） | `docs/local/`（存在する場合） |
