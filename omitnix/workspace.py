@@ -38,13 +38,14 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
-from .analyze import TOOL, analyze_file, assemble_report
+from .analyze import TOOL, analyze_file, assemble_report, build_report
 from .config import Config, load_config
 from .errors import OmitnixError
+from .gitmeta import last_commit_date_for, main_worktree_of
 from .globs import glob_match, normalize
 from .model import Coverage, FileRecord, Report
 from .registry import AdapterSet, build_adapter_set
-from .render import render_json
+from .render import payload_for_check, render_json, to_payload
 from .scan import RepoDiscovery, discover_repository_files
 from .schema import load_schema_tables
 
@@ -845,3 +846,183 @@ def write_workspace_documents(result: WorkspaceResult, out_dir: Path) -> tuple[P
     json_path = out_dir / "workspace.json"
     json_path.write_text(render_workspace_json(result), encoding="utf-8", newline="\n")
     return (json_path,)
+
+
+# --- Deployment survey -------------------------------------------------------
+#
+# A different question from "analyze these repositories": **where is this tool actually
+# deployed, and has what it produced gone stale.** A committed index that nobody
+# regenerates is worse than no index, because a reader takes it for the current state.
+#
+# This is deliberately part of omitnix rather than a separate script. The answer has to
+# be available wherever the tool is installed -- a shell script for one operating system
+# would simply not exist for everyone else who runs it.
+
+
+@dataclass(frozen=True, slots=True)
+class DeploymentStatus:
+    """What one repository looks like from the point of view of this tool's output."""
+
+    repo: str
+    root: Path
+    #: ``absent`` / ``current`` / ``stale`` / ``unreadable``
+    state: str
+    #: Date (YYYY-MM-DD) of the last commit that touched the index, when it is committed.
+    applied: str | None = None
+    #: Which of CLAUDE.md / AGENTS.md name the index. An index nobody is told to read is
+    #: found by luck, and luck is not a property worth reporting as coverage.
+    pointed_at_by: tuple[str, ...] = ()
+    #: Set when this working tree is a linked worktree; the path of the main one.
+    main_worktree: Path | None = None
+    coverage: Coverage | None = None
+    detail: str = ""
+
+    @property
+    def has_index(self) -> bool:
+        return self.state != "absent"
+
+    @property
+    def is_worktree(self) -> bool:
+        return self.main_worktree is not None
+
+
+_POINTER_FILES = ("CLAUDE.md", "AGENTS.md")
+_POINTER_NEEDLE = "omitnix/index.json"
+
+
+def _pointer_files(repo_root: Path) -> tuple[str, ...]:
+    found: list[str] = []
+    for name in _POINTER_FILES:
+        path = repo_root / name
+        try:
+            if path.is_file() and _POINTER_NEEDLE in path.read_text(
+                encoding="utf-8", errors="replace"
+            ):
+                found.append(name)
+        except OSError:
+            continue
+    return tuple(found)
+
+
+def survey_repository(
+    repo: str,
+    repo_root: Path,
+    *,
+    tracked_only: bool = True,
+) -> DeploymentStatus:
+    """Report one repository's deployment state without writing anything.
+
+    A repository with no committed index is reported as ``absent`` and is **not**
+    analyzed: this survey answers where the tool is deployed, and running it everywhere
+    to discover that it is not deployed would cost the whole workspace to learn nothing.
+
+    **The comparison is made as a single-repository run, never with the workspace
+    exclusions applied.** The committed index was produced by running the tool inside
+    that repository, so anything else is a comparison against a document nobody ever
+    generated -- and it reports every repository as out of date, which is the one answer
+    a freshness survey must not get wrong. (Measured 2026-09-11: with the workspace
+    exclusions on, three repositories whose ``--check`` exits 0 were all reported stale.)
+    """
+    main_tree = main_worktree_of(repo_root)
+    pointers = _pointer_files(repo_root)
+
+    try:
+        config = repository_config(
+            repo_root,
+            apply_workspace_excludes=False,
+            out_dir=None,
+        )
+    except OmitnixError as exc:
+        return DeploymentStatus(
+            repo=repo,
+            root=repo_root,
+            state="unreadable",
+            pointed_at_by=pointers,
+            main_worktree=main_tree,
+            detail=str(exc),
+        )
+
+    json_path = config.json_path
+    if not json_path.is_file():
+        return DeploymentStatus(
+            repo=repo,
+            root=repo_root,
+            state="absent",
+            pointed_at_by=pointers,
+            main_worktree=main_tree,
+        )
+
+    applied = last_commit_date_for(repo_root, ".omitnix/index.json")
+
+    # build_report, not run_repository. The workspace runner caches adapter sets and
+    # can be handed a different adapter search path, so reusing it compares the stored
+    # document against a run that is *nearly* the single-repository one -- and "nearly"
+    # shows up as a false "out of date". Calling what a single run calls makes the two
+    # identical by construction rather than by coincidence.
+    try:
+        report = build_report(config, tracked_only=tracked_only)
+    except OmitnixError as exc:
+        return DeploymentStatus(
+            repo=repo,
+            root=repo_root,
+            state="unreadable",
+            applied=applied,
+            pointed_at_by=pointers,
+            main_worktree=main_tree,
+            detail=str(exc),
+        )
+
+    # The only honest staleness test is the one --check performs: generate afresh and
+    # compare. The index records the commit it was generated at, and comparing that to
+    # HEAD looks tempting and is wrong -- the document is written before it is committed,
+    # so a correctly maintained index always names the previous commit.
+    try:
+        stored = json.loads(json_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return DeploymentStatus(
+            repo=repo,
+            root=repo_root,
+            state="unreadable",
+            applied=applied,
+            pointed_at_by=pointers,
+            main_worktree=main_tree,
+            coverage=report.coverage,
+            detail=f"{json_path.name} could not be read: {exc}",
+        )
+
+    fresh = payload_for_check(to_payload(report))
+    state = "current" if payload_for_check(stored) == fresh else "stale"
+    return DeploymentStatus(
+        repo=repo,
+        root=repo_root,
+        state=state,
+        applied=applied,
+        pointed_at_by=pointers,
+        main_worktree=main_tree,
+        coverage=report.coverage,
+    )
+
+
+def survey_workspace(
+    root: Path,
+    *,
+    exclude_repos: tuple[str, ...] = (),
+    tracked_only: bool = True,
+    progress=None,
+) -> tuple[DeploymentStatus, ...]:
+    """Survey every repository under ``root``. Writes nothing, anywhere."""
+    root = root.resolve()
+    discovery = discover_repositories(root, exclude_repos)
+    statuses: list[DeploymentStatus] = []
+    total = len(discovery.repositories)
+    for position, repo in enumerate(discovery.repositories, start=1):
+        if progress is not None:
+            progress(position, total, repo)
+        statuses.append(
+            survey_repository(
+                repo,
+                root / repo,
+                tracked_only=tracked_only,
+            )
+        )
+    return tuple(statuses)

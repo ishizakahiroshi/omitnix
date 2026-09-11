@@ -340,6 +340,49 @@ binary assets, and keys and certificates. A repository that disagrees writes its
 `.omitnix.yaml`; one that says `exclude_defaults: false` is walked exactly as written and
 the workspace adds nothing to it.
 
+### Where is it deployed, and has it gone stale
+
+```
+omitnix --workspace ~/code --status
+```
+
+A different question from analyzing the code: **which repositories carry a committed
+index, when it was last committed, and whether it still matches the source.** Writes
+nothing, anywhere.
+
+```
+repository                             index       applied     analyzed    pointed at by
+----------------------------------------------------------------------------------------
+alpha                                  current     2026-09-11  49/74       CLAUDE.md+AGENTS.md
+beta                                   -           -           -           -
+gamma (worktree)                       STALE       2026-09-02  314/737     -
+```
+
+Exits 3 when any committed index is out of date, for the same reason `--check` does: a
+stale generated document is read as the current state by whoever finds it.
+
+Three things the report is careful about.
+
+**A repository with no index is listed, not omitted.** "We surveyed 30 and 9 carry it"
+and "there were 9" are different statements. Only repositories that do carry one are
+analyzed, so surveying a large tree costs the repositories it is actually deployed in.
+
+**The comparison is the single-repository run**, never the workspace one. The committed
+index was produced by running the tool inside that repository; comparing against a
+narrower run reports every repository as out of date, which is the one answer a freshness
+survey must not get wrong. It also does not compare `generated.commit` against `HEAD` —
+the document is written before it is committed, so a correctly maintained index always
+names the previous commit, and that test calls everything stale.
+
+**A linked worktree is said to be one.** It is not a separate repository: it shares the
+config, the hooks and the object store with the tree it was created from, and only the
+checked-out branch differs. Telling somebody to regenerate the index there points the fix
+at a branch whose contents usually arrive by merge, so the report names the main working
+tree instead of offering a command.
+
+The last column is `CLAUDE.md` / `AGENTS.md` when those files name `.omitnix/index.json`.
+An index no instruction file mentions is found by luck, and luck is not coverage.
+
 "The files git tracks" is not a workspace-only rule — a single-repository run (no
 `--workspace` at all) uses the same default; see [What a full run discovers, and why the
 default changed](#what-a-full-run-discovers-and-why-the-default-changed). Only the extra

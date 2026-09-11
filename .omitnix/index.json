@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "14dbbd93d19f577b7d4ac31cb681cdbf924dd034",
+    "commit": "55285d00a98c0e1ffe8267bda724513f2094ef0b",
     "dirty": true,
     "tool": "omitnix 0.1.1",
     "partial": false,
@@ -134,8 +134,8 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 81,
-    "analyzed": 58,
+    "discovered": 82,
+    "analyzed": 59,
     "unresolved": 2,
     "unknown": 0,
     "unclaimed": 21,
@@ -2048,6 +2048,35 @@
         "summary": {
           "state": "value",
           "value": "Workspace mode: many repositories in one run."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "tests/test_workspace_status.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "The deployment survey: where is this tool actually installed, and has it gone stale."
         },
         "authentication": {
           "state": "not_configured"

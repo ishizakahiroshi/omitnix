@@ -214,3 +214,36 @@ def added_files_since(root: Path, ref: str) -> frozenset[str] | None:
         return None
 
     return frozenset(_relative_to_root(top, root, [entry for entry in raw.split("\0") if entry]))
+
+
+def last_commit_date_for(root: Path, path: str) -> str | None:
+    """The date (YYYY-MM-DD) of the last commit that touched ``path``, or None.
+
+    "When was this generated document last committed" is not the same question as
+    "when was it last written". A document regenerated but never committed is not the
+    one anybody else receives, so the committed date is the one a survey should report.
+    """
+    value = _git(root, "log", "-1", "--format=%ad", "--date=short", "--", path)
+    return value or None
+
+
+def main_worktree_of(root: Path) -> Path | None:
+    """The main working tree when ``root`` is a linked worktree, else None.
+
+    A linked worktree is not a separate repository. It shares the config, the hooks and
+    the object store with the tree it was created from; only the checked-out branch
+    differs. Reporting one as an independent repository double-counts the settings, and
+    worse, points a "regenerate it here" instruction at a branch whose contents usually
+    arrive by merge rather than by direct commit.
+    """
+    git_dir = _git(root, "rev-parse", "--git-dir")
+    common = _git(root, "rev-parse", "--git-common-dir")
+    if not git_dir or not common or git_dir == common:
+        return None
+
+    # --git-common-dir is the main tree's .git; its parent is that tree.
+    common_path = Path(common)
+    if not common_path.is_absolute():
+        common_path = (root / common_path).resolve()
+    parent = common_path.parent
+    return parent if parent.exists() else None

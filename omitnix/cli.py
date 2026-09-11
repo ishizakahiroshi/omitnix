@@ -49,9 +49,11 @@ from .scan import discover_files
 from .schema import load_schema_tables
 from .workspace import (
     WORKSPACE_OUTPUT_DIR,
+    DeploymentStatus,
     default_jobs,
     discover_repositories,
     run_workspace,
+    survey_workspace,
     write_workspace_documents,
 )
 
@@ -199,7 +201,104 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="with --workspace, list the repositories that would be analyzed and stop",
     )
+    workspace.add_argument(
+        "--status",
+        action="store_true",
+        help=(
+            "with --workspace, report where this tool is deployed and whether what it "
+            "generated has gone stale, instead of analyzing everything. Writes nothing. "
+            "A repository with no committed index is reported as such and is not "
+            "analyzed."
+        ),
+    )
     return parser
+
+
+
+def _status_line(status: DeploymentStatus) -> str:
+    """One repository as one line. Absent is a state, not a blank."""
+    state = {
+        "current": "current",
+        "stale": "STALE",
+        "absent": "-",
+        "unreadable": "UNREADABLE",
+    }[status.state]
+    applied = status.applied or "-"
+    if status.state == "absent":
+        applied = "-"
+    pointers = "+".join(status.pointed_at_by) if status.pointed_at_by else "-"
+    if not status.has_index:
+        pointers = "-"
+    coverage = "-"
+    if status.coverage is not None:
+        coverage = f"{status.coverage.analyzed}/{status.coverage.discovered}"
+    mark = " (worktree)" if status.is_worktree else ""
+    return f"{status.repo + mark:<38} {state:<11} {applied:<11} {coverage:<11} {pointers}"
+
+
+def _run_workspace_status(args, root: Path, exclude_repos, out, err) -> int:
+    """Report the deployment, rather than analyzing the code.
+
+    Exits 3 when any committed index is out of date, for the same reason --check does:
+    a stale generated document is read as the current state by whoever finds it.
+    """
+
+    def progress(position: int, total: int, repo: str) -> None:
+        print(f"omitnix: [{position}/{total}] {repo}", file=err)
+
+    statuses = survey_workspace(
+        root,
+        exclude_repos=exclude_repos,
+        tracked_only=not args.all_files,
+        progress=progress,
+    )
+
+    header = f"{'repository':<38} {'index':<11} {'applied':<11} {'analyzed':<11} pointed at by"
+    print(header, file=out)
+    print("-" * len(header), file=out)
+    for status in statuses:
+        print(_status_line(status), file=out)
+
+    deployed = [s for s in statuses if s.has_index]
+    stale = [s for s in deployed if s.state == "stale"]
+    unreadable = [s for s in deployed if s.state == "unreadable"]
+    unpointed = [s for s in deployed if s.state != "absent" and not s.pointed_at_by]
+
+    print("", file=out)
+    print(
+        f"omitnix: {len(statuses)} repositor(y/ies) surveyed, {len(deployed)} with a "
+        f"committed index, {len(stale)} out of date. Nothing was written.",
+        file=out,
+    )
+
+    for status in stale:
+        print(f"omitnix: out of date: {status.repo}", file=err)
+        if status.is_worktree:
+            # Telling somebody to regenerate here would point the fix at a branch whose
+            # contents usually arrive by merge. Say where the tree actually comes from.
+            print(
+                f"  this is a linked worktree of {status.main_worktree}; regenerating "
+                "here commits to whatever branch it has checked out",
+                file=err,
+            )
+        else:
+            print(f"  regenerate with: omitnix --root {status.root}", file=err)
+
+    for status in unreadable:
+        print(f"omitnix: could not be surveyed: {status.repo}: {status.detail}", file=err)
+
+    for status in unpointed:
+        # An index that no instruction file names is found by luck. Saying so is the
+        # whole point of reporting coverage rather than a file count.
+        print(
+            f"omitnix: {status.repo} has an index that neither CLAUDE.md nor AGENTS.md "
+            "names, so a reader is not told to look at it",
+            file=err,
+        )
+
+    if stale or unreadable:
+        return EXIT_STALE
+    return EXIT_OK
 
 
 def _run_print(args: argparse.Namespace, out, err) -> int:
@@ -342,6 +441,9 @@ def _run_workspace(args: argparse.Namespace, out, err) -> int:
         for entry in discovery.unreadable_directories:
             print(f"omitnix: could not list: {entry}", file=err)
         return EXIT_OK
+
+    if args.status:
+        return _run_workspace_status(args, root, exclude_repos, out, err)
 
     out_dir = (args.out or Path.cwd() / WORKSPACE_OUTPUT_DIR).resolve()
     jobs = args.jobs if args.jobs is not None else default_jobs()
