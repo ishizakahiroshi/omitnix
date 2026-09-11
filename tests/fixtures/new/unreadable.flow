@@ -1,0 +1,2 @@
+unparsable: yes
+summary: Never reached, because the adapter gives up before reading this line.

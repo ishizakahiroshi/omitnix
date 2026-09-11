@@ -12,10 +12,11 @@ changed since a previous one.
 
 - A per-file index and a table reverse index, written to `.omitnix/index.json`, carrying
   the commit they were generated from and the coverage of the run.
-- The completeness invariant `discovered == analyzed + unresolved + unknown`, checked on
-  every run. A file no adapter can classify is counted as `unknown` and named by path;
-  anything the analyzer could not follow is recorded as `unresolved` with a reason rather
-  than left blank.
+- The completeness invariant `discovered == analyzed + unresolved + unknown + unclaimed`,
+  checked on every run. A file an adapter claims and cannot read is `unknown` and named by
+  path; a file no adapter claims is `unclaimed` and counted by extension; anything the
+  analyzer could not follow is recorded as `unresolved` with a reason rather than left
+  blank. All four are counted, and every file is in the document by name.
 - Eleven language adapters in three tiers: `php`, `python`, `go`, `tsjs` and `sql` report
   summary, authentication, authorization and the tables read and written; `html` reports
   the addresses a page requests; `css`, `rust`, `shell`, `powershell` and `vue` report
@@ -31,7 +32,8 @@ changed since a previous one.
 
 ### Notes
 
-- Whether an `unknown` fails the run is opt-in (`fail_on_unknown`). The new-file gate is
-  strict either way.
+- Whether an `unknown` fails the run is opt-in (`fail_on_unknown`); an `unclaimed` file
+  never fails one. The new-file gate refuses an `unknown` either way, and notes an
+  `unclaimed` file without refusing it.
 - The tool never connects to a database. Schema information, where used, is read from a
   JSON snapshot produced by another tool.

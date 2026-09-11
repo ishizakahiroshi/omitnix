@@ -3,9 +3,10 @@
 Static code inventory that **never lets "not analyzed" look like "nothing there"**.
 
 > Status: early development. Eleven language adapters ship (`pip install omitnix[all]`; see
-> [Languages](#languages)). A file type none of them claims is reported as `unknown` and named
-> in the generated document; whether that also fails the run is opt-in
-> (`fail_on_unknown`). This is a personal hobby project; **no support is provided.**
+> [Languages](#languages)). A file type none of them claims is `unclaimed`: counted, reported by
+> extension, and written into the generated document by name. A file one of them claims and
+> cannot read is `unknown`, named individually, and fails the run only where the repository
+> asked it to (`fail_on_unknown`). This is a personal hobby project; **no support is provided.**
 
 ## What it is
 
@@ -27,25 +28,35 @@ The moment a file is added that the parser does not understand, most tools silen
 So `omitnix` treats completeness as the product:
 
 ```
-discovered == analyzed + unresolved + unknown
+discovered == analyzed + unresolved + unknown + unclaimed
 ```
 
-If a discovered file cannot be classified, it is counted as `unknown` and **named, in the coverage line and by path**. Anything the analyzer could not follow (dynamically built SQL, indirect calls beyond one hop) is recorded as `unresolved` with a reason — never as a blank cell.
+Anything the analyzer could not follow (dynamically built SQL, indirect calls beyond one hop) is recorded as `unresolved` with a reason — never as a blank cell. A file that was not analyzed at all is one of the last two, and the difference between them is the difference between a defect and an ordinary Tuesday:
 
-Whether an `unknown` also **fails** the run is a separate question, and the answer is off by default (`fail_on_unknown: true` turns it on). Making it unconditional was a mistake worth naming: it turned every gap into homework. A repository could only go green by writing, into its configuration, a sentence explaining each thing no adapter claims — and measured on one real repository, 36 of its 52 exclusion entries existed for no other reason. "PNG files are not program source" is not a decision anybody made; it is paperwork the tool demanded. Worse, some gaps are not the repository's to close at all: a grammar that cannot read valid source of a language its own adapter claims is *this tool's* defect, and failing the build over it offers a choice between editing correct code and writing a false reason.
+- **`unknown`** — an adapter claims this extension and could not produce a record: unreadable bytes, not UTF-8, a grammar that refused valid source, a crash in the adapter. Something went wrong, so every one of these is **named, by path, with its reason**.
+- **`unclaimed`** — no adapter claims the extension, so nothing tried. Prose, configuration, images, archives, and any language whose adapter is not written yet. Nothing went wrong, so these are **counted by extension** rather than listed:
 
-What keeps a gap from hiding is that the document says so. That always holds. Failing the run is a policy on top, and it earns its place only where the person reading the failure has something they can do — which is why the [new-file gate](#the-new-file-gate) stays strict either way.
+```
+omitnix: 20 discovered file(s) are claimed by no adapter, so nothing tried to read them.
+  .md x5, .scm x5, .yml x4, (no extension) x3, .yaml x2, .toml x1
+```
+
+They were one status until 2026-09-11, and on a real repository that meant 192 files printed one by one — 95 `.md`, 45 `.json`, 7 `.png` — with any genuine failure somewhere in the middle of the list. What did **not** change is that both are counted, and that both appear in `index.json` by name. A file nobody looked at is still a file this repository holds, and a tool that quietly drops it from its own totals is telling the lie it was built to prevent.
+
+Whether an `unknown` also **fails** the run is a separate question, and the answer is off by default (`fail_on_unknown: true` turns it on). `unclaimed` never fails one — there is no defect in it to report, and nothing anyone could fix. Making failure unconditional was a mistake worth naming: it turned every gap into homework. A repository could only go green by writing, into its configuration, a sentence explaining each thing no adapter claims — and measured on one real repository, 36 of its 52 exclusion entries existed for no other reason. "PNG files are not program source" is not a decision anybody made; it is paperwork the tool demanded. This repository's own configuration lost sixteen such lines the day the two statuses were separated. Worse, some gaps are not the repository's to close at all: a grammar that cannot read valid source of a language its own adapter claims is *this tool's* defect, and failing the build over it offers a choice between editing correct code and writing a false reason.
+
+What keeps a gap from hiding is that the document says so. That always holds. Failing the run is a policy on top, and it earns its place only where the person reading the failure has something they can do — which is why the [new-file gate](#the-new-file-gate) stays strict about what it can act on.
 
 Every run prints the same coverage line, and `index.json` carries the same numbers plus the commit it was generated from:
 
 ```
-Coverage: 202/210 analyzed, 8 unresolved, 0 unknown
+Coverage: 202/255 analyzed, 8 unresolved, 0 unknown, 45 unclaimed
 ```
 
 ```json
 {
   "generated": { "commit": "0123456", "dirty": false, "tool": "omitnix", "partial": false, "tracked_only": true },
-  "coverage": { "discovered": 210, "analyzed": 202, "unresolved": 8, "unknown": 0 }
+  "coverage": { "discovered": 255, "analyzed": 202, "unresolved": 8, "unknown": 0, "unclaimed": 45 }
 }
 ```
 
@@ -53,18 +64,38 @@ Most of `generated` is excluded when `--check` compares two runs — see [Usage]
 
 And it never says "unused". It says: no static reference was observed by this analyzer at this commit.
 
-### The four states behind every field
+### What the reverse index cannot see
+
+A table's `read_by` and `written_by` are what was *legible*, not what the repository does. Two things follow, and both are written into `index.json` rather than left for a reader to work out:
+
+- A file that touches a table and also holds a statement the analyzer could not read is named in that table's **`unresolved_in`**. Its entry is a floor, not a total — go and look at the named file.
+- A table whose *only* mention is a statement nobody could read has no row at all, so no mark can be attached to it. That case is counted once for the whole run, beside the list it qualifies:
+
+```json
+"table_gaps": {
+  "files": ["api/orders_export.php"],
+  "unresolved_count": 1,
+  "note": "1 statement in 1 file could not be read, so the table list may be incomplete: ..."
+}
+```
+
+`note` is empty and `unresolved_count` is `0` on a run where every statement was read. The same sentence is printed on stderr, because the table list is the half of the output people quote without opening the file records. This was found by pointing the tool at a real repository on 2026-09-11: a single full-text search clause sqlglot could not parse was the only place one table was read, and the reverse index said nothing read it.
+
+### The five states behind every field
 
 Every per-file field — summary, authentication, authorization, tables read, tables written — carries a `state` in `index.json`, and the state is never inferred by a reader from an empty-looking value:
 
 | `state` in `index.json` | what it means | how the field looks |
 |---|---|---|
 | `out_of_scope` | the field is outside the declared capabilities of the adapter that handled the file. Not a missing value. | `{"state": "out_of_scope"}` — no `value` key at all |
+| `not_configured` | the adapter declares this capability, and the repository never said what to look for, so nothing was searched for. Applies to `authentication` and `authorization`, whose subjects are the function names in `.omitnix.yaml`. | `{"state": "not_configured"}` — no `value` key, same as `out_of_scope` |
 | `none_observed` | the adapter declares this capability and looked, and found nothing at this commit. Never "unused". | `{"state": "none_observed", "value": []}` |
 | `value` | an ordinary result, including an empty list the adapter is confident is complete. | `{"state": "value", "value": [...]}` |
-| *(not a field state)* | the file itself could not be analyzed at all. `fields` is `{}`, `status` is `"unknown"`, and `unknown_reason` says why. Every such file is counted under `coverage.unknown` and named on stderr; the run still exits 0 unless the repository set `fail_on_unknown`. | top-level `"status": "unknown"` on the file record |
+| *(not a field state)* | the file itself was not analyzed. `fields` is `{}` and `reason` says why. `status` is `"unknown"` (an adapter claimed it and could not read it — counted under `coverage.unknown`, named on stderr, and the only one `fail_on_unknown` acts on) or `"unclaimed"` (no adapter claims the extension — counted under `coverage.unclaimed` and reported by extension). | top-level `"status"` on the file record, plus `"reason"` |
 
-This table used to be spelled out in prose at the top of the generated `index.md`. It moved here when that document was removed: the four states themselves were never Markdown-only — they are `FieldState` values (`omitnix/model.py`) present in `index.json` on every run — only the words explaining them lived in the file that got deleted.
+`not_configured` is the newest of them and exists because the tool got this wrong about itself. Pointed at a repository with no `.omitnix.yaml` on 2026-09-11, it reported `authorization: none_observed` for all 618 of its files — which reads as "618 files were checked and not one holds an authorization call". Nothing had been checked: `authorization_functions` was empty, so the search was for nothing. An empty list searched for nothing is not a finding, and it now says so. The gate has always made the same distinction, and skips a check the repository never defined rather than refusing the file.
+
+This table used to be spelled out in prose at the top of the generated `index.md`. It moved here when that document was removed: the states themselves were never Markdown-only — they are `FieldState` values (`omitnix/model.py`) present in `index.json` on every run — only the words explaining them lived in the file that got deleted.
 
 ## Example
 
@@ -154,6 +185,9 @@ gate keeps seeing an untracked file that a full run no longer does.
 | 3 | `--check` found the generated document out of date |
 | 4 | `--gate` refused a newly added file |
 
+`unclaimed` files never produce 1, whatever `fail_on_unknown` says: nothing tried to read
+them, so there is no failure to report. They are still counted, and still in the document.
+
 `--workspace` reuses the same codes across many repositories: 1 when any repository that
 ran holds an unknown file, and 2 when a repository could not be run at all. The second
 wins when both happen, because a repository nothing could run is a hole of unknown size.
@@ -170,9 +204,10 @@ it enters the index as a hole on the day it is written.
 
 ```
 $ omitnix --gate
+omitnix: noted: theme.unmapped: unclaimed (no adapter claims '.unmapped')
 omitnix: gate refused 3 files newly added in the working tree
   orders_purge.flow: no authorization call (adapter 'flow' observed no call to any authorization function listed in authorization_functions)
-  theme.unmapped: unknown (no adapter claims '.unmapped')
+  broken.flow: unknown (adapter 'flow' raised SyntaxError: unexpected token)
   undocumented.flow: no summary (adapter 'flow' reports summaries and found none here)
 ```
 
@@ -213,19 +248,29 @@ is what stops the day a stylesheet adapter is added from being the day every new
 fails the gate for missing a check it could never have had. Only capabilities whose absence
 is a defect are required at all: a file that reads no tables is ordinary, not deficient.
 
-`unknown` is the exception, and nothing softens it. A file nothing could classify has no
-capability declaration to consult, and admitting it silently is the failure this tool exists
-to prevent.
+`unknown` is the exception, and nothing softens it. An adapter claims the file and could not
+read it, so there is no capability declaration to consult, and admitting it silently is the
+failure this tool exists to prevent.
 
-`unresolved` is the opposite case and does **not** refuse the file. It says the analyzer read
-the file and could not follow part of it — SQL assembled at run time, a call past one hop —
-which is a limit of this tool rather than a defect its author can fix. Refusing on it would
-block work nobody can unblock by editing the file, and a gate that cannot be satisfied is a
-gate that gets switched off. It is printed as a notice on every run, passing or not:
+Two other things are **noted and not refused**, printed on every run whether it passes or
+fails, because a gate that passes in silence says more than it checked:
 
 ```
-omitnix: not followed: batch/reindex.php: unresolved (dynamic_sql) (the table name is built at run time)
+omitnix: noted: batch/reindex.php: unresolved (dynamic_sql) (the table name is built at run time)
+omitnix: noted: docs/release.md: unclaimed (no adapter claims '.md')
 ```
+
+`unresolved` says the analyzer read the file and could not follow part of it — SQL assembled
+at run time, a call past one hop — which is a limit of this tool rather than a defect its
+author can fix. Refusing on it would block work nobody can unblock by editing the file, and a
+gate that cannot be satisfied is a gate that gets switched off.
+
+`unclaimed` used to refuse, back when it was the same status as `unknown`. Keeping that after
+they were separated would mean a repository that stopped excluding its own prose — which it
+now can, because prose no longer fails a run — has every new `.md` file refused by its
+pre-commit hook. A gate that fires on adding a README is the same gate that gets switched
+off. What a new unclaimed file needs is to be seen, and it is: here, in the coverage line,
+and in `index.json` by name.
 
 ### Exemptions
 
@@ -390,11 +435,15 @@ and the scripts inside the page. That is the direction an inventory is usually r
 screen calls this endpoint* — and it is why HTML is worth an adapter that reports nothing else.
 
 The minimal tier exists because **an extension a repository contains is not free to ignore**.
-Every discovered file must be analyzed or explicitly excluded, so a language with no adapter
-fails every run until an exclusion is written for it in every repository that has one. `.sh`
-appears in 37 of the 52 repositories this was measured against and `.ps1` in 30. Three files
-here are cheaper than an exclusion in thirty configurations — and unlike an exclusion, they
-leave the file counted.
+A language with no adapter is `unclaimed`: counted, and nothing said about a single one of its
+files. `.sh` appears in 37 of the 52 repositories this was measured against and `.ps1` in 30 —
+that is a lot of a codebase to have nothing to say about, and three files here are cheaper
+than that silence in thirty repositories.
+
+Until 2026-09-11 the argument was stronger and worse: an unclaimed extension failed every run
+until somebody wrote an exclusion for it in every repository that had one, so the alternative
+to an adapter was paperwork. That end is fixed now, which is why the tier has to earn its
+place by what it reports instead.
 
 They also stop where the evidence stops. Rust is minimal because none of the measured Rust
 repositories declares a database crate: an extractor for tables would have had nothing to be

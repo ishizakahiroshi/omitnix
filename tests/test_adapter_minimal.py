@@ -208,13 +208,15 @@ def test_a_stylesheet_row_reads_as_out_of_scope_rather_than_as_a_missing_check(
     assert all(field == {"state": "out_of_scope"} for field in payload.values())
 
 
-# --- an extension nobody claims still fails ---------------------------------------
+# --- an extension nobody claims is still counted ------------------------------------
 
 
-def test_an_unclaimed_extension_is_still_unknown_and_still_fails(tmp_path: Path) -> None:
-    """The minimal tier decides the extensions it names. It must not soften the rule for
-    the ones it does not."""
+def test_an_extension_nobody_claims_is_counted_as_unclaimed(tmp_path: Path) -> None:
+    """The minimal tier decides the extensions it names. The ones it does not name are
+    somebody's files all the same, and they stay in the count."""
     (tmp_path / "notes.zzz").write_text("nothing in particular\n", encoding="utf-8")
     report = build_report(load_config(tmp_path), adapter_set=build_adapter_set())
-    assert report.coverage.unknown == 1
-    assert report.files[0].status is Status.UNKNOWN
+    assert report.coverage.unclaimed == 1
+    assert report.coverage.discovered == 1
+    assert report.files[0].status is Status.UNCLAIMED
+    assert report.unclaimed_extensions == {".zzz": 1}

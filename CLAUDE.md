@@ -13,7 +13,7 @@ fresh public clone でも有効な内容に保つこと。 -->
 
 コードベースを静的に走査し、ファイル単位の索引（機能概要・認証・認可・読み書きするテーブル）と、テーブルからの逆引きを生成する Python 製の CLI。DB へは接続せず、スキーマは別ツールが出力した JSON を読む。
 
-**一覧を作ることが目的ではない。「発見した対象を全部解析できたか」を保証することが目的。** 解析できないファイルが 1 つでもあれば `unknown` として数え、非ゼロで終了する。追えなかった箇所は空欄ではなく `unresolved` に理由付きで残す。生成物には必ず生成元 commit とカバレッジを刻み、参照 0 件を「未使用」と書かない。
+**一覧を作ることが目的ではない。「発見した対象を全部解析できたか」を保証することが目的。** アダプタが claim したのに読めなかったファイルは `unknown` として 1 件ずつ名指しし、どのアダプタも claim していない拡張子は `unclaimed` として拡張子ごとに数える（どちらも必ず数に入れる。落とすのは失敗ではなく嘘）。非ゼロで終了するかは `fail_on_unknown` 次第で、対象は `unknown` のみ。追えなかった箇所は空欄ではなく `unresolved` に理由付きで残す。生成物には必ず生成元 commit とカバレッジを刻み、参照 0 件を「未使用」と書かない。
 
 ## やらないこと（スコープ外）
 
@@ -59,7 +59,7 @@ fresh public clone でも有効な内容に保つこと。 -->
 
 | ルール | 正本（本文はここ） | 機械検査 |
 |---|---|---|
-| 発見した対象を全部解析できたかを検査し、できなければ非ゼロで終了する。ただし文法が厳しすぎるだけのものを壊れたファイルと同じに扱わない（実測で正当化した範囲だけ例外にする） | `omitnix/analyze.py`（`build_report` の不変条件）/ `omitnix/adapters/html.py`（`TEXT_LEVEL_CHARACTERS`） | `tests/test_analyze.py` / `tests/test_cli.py` / `tests/test_adapter_html.py` |
+| 発見数と 4 区分の合計が一致しなければ実行を落とす。解析できなかったものは `unknown`（claim したのに読めなかった・1 件ずつ名指し・非ゼロ終了の対象）と `unclaimed`（誰も claim していない・拡張子ごとに集計）に分けるが、**どちらも数から消さない**。文法が厳しすぎるだけのものを壊れたファイルと同じに扱わない（実測で正当化した範囲だけ例外にする） | `omitnix/model.py`（`Status` / `Coverage.holds`）/ `omitnix/analyze.py`（`assemble_report` の不変条件）/ `omitnix/adapters/html.py`（`TEXT_LEVEL_CHARACTERS`） | `tests/test_analyze.py` / `tests/test_cli.py` / `tests/test_workspace.py` / `tests/test_adapter_html.py` |
 | 追えなかったものを空欄にせず理由付きで `unresolved` に残す | `omitnix/adapters/base.py`（`AnalysisResult.add_unresolved`） | `tests/test_analyze.py` |
 | 能力の外の項目を「欠落」「0 件」と同じ表現にしない | `omitnix/render.py`（`n/a` / `none observed` / `not analyzed`） | `tests/test_render.py` |
 | 新規ファイルの必須項目は能力宣言から決める（能力の外の欠落で落とさない） | `omitnix/gate.py` | `tests/test_gate.py` |

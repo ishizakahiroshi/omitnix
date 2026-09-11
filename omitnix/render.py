@@ -31,6 +31,10 @@ def to_payload(report: Report) -> dict[str, Any]:
         "coverage": report.coverage.to_json(),
         "files": [record.to_json() for record in report.files],
         "tables": [table.to_json() for table in report.tables],
+        # Next to the list it qualifies, deliberately. A reader who takes the table list
+        # for the set of tables this repository has needs the sentence that says it is
+        # only the set that could be read, and they will not go looking for it elsewhere.
+        "table_gaps": report.table_gaps.to_json(),
     }
 
 

@@ -11,10 +11,12 @@ of in whichever one the fix was written for.
 Adapter discovery skips modules whose name begins with an underscore, so this sits beside
 the adapters without being mistaken for one.
 
-The reason codes below repeat the strings in ``omitnix/adapters/php.py`` rather than
-importing them. Both files are the definition of the same vocabulary, and the reverse
-index is only coherent because the strings agree; unifying them means editing php.py,
-which is deliberately left alone here. It is written down in the C6 plan as a follow-up.
+The reason codes are re-exported from :mod:`omitnix.reasons` rather than spelled out
+here. They used to be spelled out in this file *and* in ``omitnix/adapters/php.py``, each
+copy holding a code the other lacked; they moved to the core in 2026-09 when the reverse
+index started reading them, because a judgement written against one of two copies ignores
+everything the other emits. Adapters keep importing them from here, where they are next
+to the code that raises them.
 """
 
 from __future__ import annotations
@@ -25,6 +27,15 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from ..model import Capability
+from ..reasons import (
+    DYNAMIC_ENDPOINT,
+    DYNAMIC_SQL,
+    DYNAMIC_TABLE_NAME,
+    SELECT_STAR,
+    SQL_UNREADABLE,
+    SQL_UNSUPPORTED,
+    TABLE_NOT_IN_SCHEMA,
+)
 from ._sql import (
     FORMAT_SPEC,
     PLACEHOLDER,
@@ -60,20 +71,8 @@ __all__ = [
 ]
 
 # --- reason codes -----------------------------------------------------------------
-#: SQL assembled at run time: what is written here is a fragment, not the statement.
-DYNAMIC_SQL = "dynamic_sql"
-#: The statement parsed, but the table name itself was a run-time value.
-DYNAMIC_TABLE_NAME = "dynamic_table_name"
-#: A request was made to an address assembled at run time.
-DYNAMIC_ENDPOINT = "dynamic_endpoint"
-#: The tables are known; the columns are not.
-SELECT_STAR = "select_star"
-#: It opened like SQL and sqlglot could not read it.
-SQL_UNREADABLE = "sql_unreadable"
-#: sqlglot accepted the statement only as an opaque command, so its tables are lost.
-SQL_UNSUPPORTED = "sql_unsupported"
-#: A table this file touches is absent from the configured schema snapshot.
-TABLE_NOT_IN_SCHEMA = "table_not_in_schema"
+# Defined in omitnix/reasons.py and imported above; listed in __all__ so that the
+# adapters can keep asking this module for them.
 
 #: Why a file that does not parse becomes ``unknown`` rather than partially reported.
 #: tree-sitter recovers from errors and will happily hand back a partial tree; a table

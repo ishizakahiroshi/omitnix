@@ -28,6 +28,14 @@ from pathlib import Path
 from typing import Any
 
 from ..model import Capability
+from ..reasons import (
+    DYNAMIC_SQL,
+    DYNAMIC_TABLE_NAME,
+    INDIRECT_CALL_DEPTH,
+    SELECT_STAR,
+    SQL_UNREADABLE,
+    TABLE_NOT_IN_SCHEMA,
+)
 from ._sql import (
     FORMAT_SPEC,
     PLACEHOLDER,
@@ -44,18 +52,9 @@ GRAMMAR_MODULE = "tree_sitter_php"
 GRAMMAR_SYMBOL = "language_php"
 
 # --- reason codes -----------------------------------------------------------------
-#: SQL assembled at run time: what is written here is a fragment, not the statement.
-DYNAMIC_SQL = "dynamic_sql"
-#: The statement parsed, but the table name itself was a run-time value.
-DYNAMIC_TABLE_NAME = "dynamic_table_name"
-#: A hop the adapter refuses to take, or an include it could not resolve.
-INDIRECT_CALL_DEPTH = "indirect_call_depth"
-#: The tables are known; the columns are not.
-SELECT_STAR = "select_star"
-#: It opened like SQL and sqlglot could not read it.
-SQL_UNREADABLE = "sql_unreadable"
-#: A table this file touches is absent from the configured schema snapshot.
-TABLE_NOT_IN_SCHEMA = "table_not_in_schema"
+# Imported from omitnix/reasons.py above. This file used to define its own copy of the
+# strings, which is how it came to have ``indirect_call_depth`` while the copy in
+# ``_extract.py`` had two codes this one lacked.
 
 # --- node vocabulary --------------------------------------------------------------
 #: Nodes whose text is literal source characters.

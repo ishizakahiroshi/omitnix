@@ -17,7 +17,7 @@ from typing import Any
 import yaml
 
 from .errors import ConfigError
-from .model import GATE_REQUIRED_CAPABILITIES, Capability
+from .model import CONFIGURED_BY, GATE_REQUIRED_CAPABILITIES, Capability
 
 CONFIG_FILENAMES = (".omitnix.yaml", ".omitnix.yml")
 
@@ -111,6 +111,22 @@ class Config:
     @property
     def json_path(self) -> Path:
         return self.root / self.output_dir / "index.json"
+
+
+def unconfigured_capabilities(config: Config) -> frozenset[Capability]:
+    """The capabilities this repository never said what to look for.
+
+    Both callers of :data:`omitnix.model.CONFIGURED_BY` come through here rather than
+    reading the table themselves, so that "the repository configured this" has exactly one
+    definition: the gate decides from it whether a check can be made at all, and the
+    analyzer decides from it whether an empty field means "looked and found nothing" or
+    "nothing was looked for". Those two answers have to agree.
+    """
+    return frozenset(
+        capability
+        for capability, attribute in CONFIGURED_BY.items()
+        if not getattr(config, attribute)
+    )
 
 
 def _as_str_tuple(value: Any, key: str) -> tuple[str, ...]:

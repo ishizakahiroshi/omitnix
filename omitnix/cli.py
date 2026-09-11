@@ -10,6 +10,11 @@ Exit codes are the interface a hook or CI job actually consumes:
 4    ``--gate`` refused a newly added file
 ===  ==========================================================================
 
+1 answers for ``unknown`` only -- a file whose extension an adapter claims and could not
+read. A file no adapter claims is ``unclaimed``: counted, reported by extension, and never
+a reason to fail, because there is nothing there to have gone wrong. A repository full of
+prose and configuration is not a repository with a problem.
+
 1 is opt-in (``fail_on_unknown`` in the configuration, off by default) and 4 is not.
 That asymmetry is the point. A refused new file is being added right now by the person
 reading the message, who can supply what is missing. A file this tool cannot read is
@@ -248,10 +253,11 @@ def _run_gate(args: argparse.Namespace, config: Config, out, err) -> int:
 
     for exemption in result.exemptions:
         print(f"omitnix: exemption applied: {exemption.line()}", file=err)
-    # Printed whether or not the gate passes: these are things the analyzer could not
-    # follow, and they have to stay visible without deciding the outcome.
+    # Printed whether or not the gate passes: a statement the analyzer could not follow,
+    # or a file no adapter claims. Neither decides the outcome, and both have to stay
+    # visible -- a gate that passes in silence says more than it checked.
     for notice in result.notices:
-        print(f"omitnix: not followed: {notice.line()}", file=err)
+        print(f"omitnix: noted: {notice.line()}", file=err)
     # A check that applied but could not be made. Said out loud rather than passed over,
     # so that "we did not look" is never mistaken for "we looked and it was fine".
     for capability in result.unconfigured:
@@ -388,30 +394,68 @@ def _run_workspace(args: argparse.Namespace, out, err) -> int:
     for entry in result.unreadable_directories:
         print(f"omitnix: could not list: {entry}", file=err)
 
+    if coverage.unclaimed:
+        # Printed whatever the outcome. The number is the whole point of counting them,
+        # and it is not a failure: nothing tried to read these files.
+        print(
+            f"omitnix: {coverage.unclaimed} discovered file(s) are claimed by no adapter. "
+            f"Each repository's entry in {documents[0]} counts them by extension.",
+            file=err,
+        )
+
     if result.failed:
         return EXIT_ERROR
     if coverage.unknown:
         print(
-            f"omitnix: {coverage.unknown} discovered file(s) could not be analyzed. "
-            f"Each repository's entry in {documents[0]} lists them by extension.",
+            f"omitnix: {coverage.unknown} discovered file(s) have an adapter that could "
+            f"not read them. Each repository's entry in {documents[0]} names them.",
             file=err,
         )
         return EXIT_UNKNOWN
     return EXIT_OK
 
 
+def _report_not_analyzed(report, config: Config, err) -> None:
+    """Say what was not analyzed, in the two forms the two facts deserve.
+
+    A failure is named: an adapter claims the extension and could not read the file, so
+    there is one file to go and look at. An unclaimed extension is counted: nothing tried,
+    the extension is the entire fact, and printing it once per file is how the one real
+    failure ends up buried in ninety-five lines about Markdown.
+    """
+    _report_unknown(report, config, err)
+    _report_unclaimed(report, err)
+
+
 def _report_unknown(report, config: Config, err) -> None:
-    """Name the files nothing could analyze. Truncated, but never silently."""
+    """Name the files an adapter claimed and could not read. Truncated, never silently."""
+    unknown = report.unknown_files
+    if not unknown:
+        return
     print(
-        f"omitnix: {report.coverage.unknown} discovered file(s) could not be analyzed. "
-        "Give the extension an adapter, or exclude it explicitly in .omitnix.yaml.",
+        f"omitnix: {len(unknown)} discovered file(s) have an adapter that could not read "
+        "them. Each one is a defect in this tool or in the file itself.",
         file=err,
     )
-    unknown = [record for record in report.files if record.status is Status.UNKNOWN]
     for record in unknown[:20]:
-        print(f"  {record.path}: {record.unknown_reason}", file=err)
+        print(f"  {record.path}: {record.reason}", file=err)
     if len(unknown) > 20:
         print(f"  ... {len(unknown) - 20} more (see {config.json_path})", file=err)
+
+
+def _report_unclaimed(report, err) -> None:
+    """Count the files no adapter claims, by extension. Never one line per file."""
+    counts = report.unclaimed_extensions
+    if not counts:
+        return
+    listed = ", ".join(f"{extension} x{count}" for extension, count in counts.items())
+    print(
+        f"omitnix: {report.coverage.unclaimed} discovered file(s) are claimed by no "
+        "adapter, so nothing tried to read them. They are counted, and each one is in "
+        "the generated document by name:",
+        file=err,
+    )
+    print(f"  {listed}", file=err)
 
 
 def _run_check(report, config, out, err) -> int:
@@ -438,18 +482,17 @@ def _run_check(report, config, out, err) -> int:
         print("  regenerate with: omitnix", file=err)
         return EXIT_STALE
 
-    # Being current is not the same as being complete, so an unknown file is still named
-    # here even when the document matches. Whether it also fails the run is the
-    # repository's call: see Config.fail_on_unknown for why that is not this tool's to
-    # decide by default.
+    # Being current is not the same as being complete, so whatever was not analyzed is
+    # still said here even when the document matches. Whether an unreadable file also
+    # fails the run is the repository's call: see Config.fail_on_unknown for why that is
+    # not this tool's to decide by default.
     if report.coverage.unknown:
         print(f"omitnix: up to date, but {report.coverage.headline()}", file=out)
-        _report_unknown(report, config, err)
-        if config.fail_on_unknown:
-            return EXIT_UNKNOWN
-
     else:
         print(f"omitnix: up to date. {report.coverage.headline()}", file=out)
+    _report_not_analyzed(report, config, err)
+    if report.coverage.unknown and config.fail_on_unknown:
+        return EXIT_UNKNOWN
     return EXIT_OK
 
 
@@ -540,6 +583,12 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
         # alike to whoever reads the run.
         print(f"omitnix: {report.generated.discovery_note}", file=err)
 
+    if report.table_gaps.note:
+        # Said on the run, not only written into the document. The table list is the half
+        # of the output people read without opening the file records, and "nothing reads
+        # this table" is exactly the sentence it must not be allowed to imply.
+        print(f"omitnix: {report.table_gaps.note}", file=err)
+
     if args.files:
         selection_note = report.coverage.skipped_by_config
         if selection_note:
@@ -570,10 +619,9 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
     for path in wrote:
         print(f"wrote {path}", file=out)
 
-    if report.coverage.unknown:
-        _report_unknown(report, config, err)
-        if config.fail_on_unknown:
-            return EXIT_UNKNOWN
+    _report_not_analyzed(report, config, err)
+    if report.coverage.unknown and config.fail_on_unknown:
+        return EXIT_UNKNOWN
 
     return EXIT_OK
 

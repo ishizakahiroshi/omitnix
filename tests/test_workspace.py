@@ -221,6 +221,32 @@ def test_the_same_table_name_in_two_repositories_is_not_one_row(
     assert tables["beta"][0]["written_by"] == ["beta/write.flow"]
 
 
+def test_a_table_whose_file_could_not_be_read_in_full_is_marked_here_too(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The rollup is where a table list is read for fifty repositories at once.
+
+    Its rows are qualified by repository, so the mark and the run-wide count have to be
+    qualified the same way -- a bare path in a document that spans repositories names
+    nothing in particular.
+    """
+    make_repo(tmp_path, "alpha", {"read.flow": HANDLER_FLOW})
+    make_repo(
+        tmp_path,
+        "beta",
+        {"write.flow": "summary: Refresh\nwrites: orders\nunresolved: dynamic_sql / built later\n"},
+    )
+
+    payload = workspace_payload(run(tmp_path))
+    by_repo = {entry["repo"]: entry for entry in payload["repos"]}
+
+    assert by_repo["alpha"]["tables"][0]["unresolved_in"] == []
+    assert by_repo["alpha"]["table_gaps"]["unresolved_count"] == 0
+    assert by_repo["beta"]["tables"][0]["unresolved_in"] == ["beta/write.flow"]
+    assert by_repo["beta"]["table_gaps"]["files"] == ["beta/write.flow"]
+    assert "may be incomplete" in by_repo["beta"]["table_gaps"]["note"]
+
+
 # --------------------------------------------------------------------------------------
 # Counting
 # --------------------------------------------------------------------------------------
@@ -229,14 +255,44 @@ def test_the_same_table_name_in_two_repositories_is_not_one_row(
 def test_the_counting_invariant_holds_across_the_workspace(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
+    """The same four buckets, summed, and they still have to add up.
+
+    One repository contributes a file its adapter could not read and another contributes
+    an extension nothing claims, so both halves of "not analyzed" cross a repository
+    boundary here. A workspace total that dropped either would be the same lie as a
+    single-repository total that dropped it, multiplied by the number of repositories.
+    """
     make_repo(tmp_path, "alpha", {"a.flow": ORDERS_FLOW, "b.flow": REINDEX_FLOW})
     make_repo(tmp_path, "beta", {"c.flow": ORDERS_FLOW, "d.unmapped": "?"})
+    make_repo(tmp_path, "gamma", {"e.flow": "unparsable: yes\n"})
 
     coverage = run(tmp_path).coverage
 
-    assert coverage.discovered == 4
+    assert coverage.discovered == 5
     assert coverage.holds
+    assert coverage.analyzed == 3
     assert coverage.unknown == 1
+    assert coverage.unclaimed == 1
+
+
+def test_each_repository_reports_its_own_two_halves_of_not_analyzed(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Named where a name is the only way to find it, counted where the count is the fact.
+
+    Both are keyed by the workspace path: a bare ``e.flow`` in a document spanning fifty
+    repositories names nothing in particular.
+    """
+    make_repo(tmp_path, "beta", {"d.unmapped": "?", "d2.unmapped": "?"})
+    make_repo(tmp_path, "gamma", {"e.flow": "unparsable: yes\n"})
+
+    by_repo = {entry["repo"]: entry for entry in workspace_payload(run(tmp_path))["repos"]}
+
+    assert by_repo["beta"]["unclaimed_extensions"] == {".unmapped": 2}
+    assert by_repo["beta"]["unknown_files"] == []
+    assert by_repo["gamma"]["unclaimed_extensions"] == {}
+    assert [entry["id"] for entry in by_repo["gamma"]["unknown_files"]] == ["gamma/e.flow"]
+    assert by_repo["gamma"]["unknown_files"][0]["reason"]
 
 
 def test_a_repository_that_cannot_be_run_is_counted_and_stops_nothing(
@@ -255,11 +311,11 @@ def test_a_repository_that_cannot_be_run_is_counted_and_stops_nothing(
     assert result.coverage.discovered == 2
 
 
-def test_an_unknown_file_anywhere_fails_the_workspace_run(
+def test_a_file_an_adapter_could_not_read_anywhere_fails_the_workspace_run(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
     make_repo(tmp_path, "alpha", {"a.flow": ORDERS_FLOW})
-    make_repo(tmp_path, "beta", {"theme.unmapped": "?"})
+    make_repo(tmp_path, "beta", {"broken.flow": "unparsable: yes\n"})
 
     code, out, err = cli(
         "--workspace", str(tmp_path), "--out", str(tmp_path / "artifacts"), "--jobs", "1"
@@ -267,13 +323,34 @@ def test_an_unknown_file_anywhere_fails_the_workspace_run(
 
     assert code == EXIT_UNKNOWN
     assert "1 unknown" in out
-    assert "could not be analyzed" in err
+    assert "could not read them" in err
+
+
+def test_a_workspace_of_files_no_adapter_claims_is_counted_and_succeeds(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Fifty repositories of prose are not fifty failures.
+
+    Every one of these files is still discovered, still counted, and still written into
+    the document -- the run just does not pretend something went wrong.
+    """
+    make_repo(tmp_path, "alpha", {"a.flow": ORDERS_FLOW})
+    make_repo(tmp_path, "beta", {"theme.unmapped": "?", "other.unmapped": "?"})
+
+    code, out, err = cli(
+        "--workspace", str(tmp_path), "--out", str(tmp_path / "artifacts"), "--jobs", "1"
+    )
+
+    assert code == EXIT_OK
+    assert "2 unclaimed" in out
+    assert "claimed by no adapter" in err
+    assert "theme.unmapped" not in err
 
 
 def test_a_repository_that_could_not_be_run_takes_precedence_over_unknown(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
-    make_repo(tmp_path, "alpha", {"theme.unmapped": "?"})
+    make_repo(tmp_path, "alpha", {"theme.flow": "unparsable: yes\n"})
     make_repo(tmp_path, "broken", {".omitnix.yaml": "not_a_key: 1\n"})
 
     code, _out, err = cli(

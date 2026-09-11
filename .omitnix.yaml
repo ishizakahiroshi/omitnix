@@ -12,14 +12,22 @@ fail_on_unknown: true
 # a path is not the tool's business. That makes this file the honest part of the run: an
 # exclusion is a decision on the record, not a way to turn a red run green.
 #
-# Every exclusion below belongs to exactly one of four reasons. They are kept in separate
-# blocks on purpose, because the fourth is temporary and the first three are not, and
-# letting a temporary gap sit among permanent ones is how it becomes permanent.
+# Every exclusion below belongs to exactly one of three reasons. They are kept in separate
+# blocks on purpose, because the last is temporary and the others are not, and letting a
+# temporary gap sit among permanent ones is how it becomes permanent.
 #
 #   A  not produced here      caches, tool state, and links to stores outside this repo
-#   B  not program source     prose and declarative data; there is nothing to inventory
 #   C  deliberately abnormal  test inputs whose whole point is to be unanalyzable
 #   D  no adapter yet         real program source that MUST come back in scope
+#
+# B is missing, and that is the point rather than an editing slip. It said "not program
+# source" and held sixteen lines of prose and declarative data -- `*.md`, `*.json`,
+# `*.yaml`, `LICENSE` -- written for no reason except that the tool used to count every
+# one of them as a file it had failed to analyze, and to fail this repository's run over
+# it. As of 2026-09-11 a file no adapter claims is `unclaimed`: counted, reported by
+# extension, and not a failure. None of those sixteen lines was a decision anybody made,
+# so none of them is here now. The letters of the surviving blocks are left alone so that
+# a reader of an older commit finds the same block under the same name.
 #
 # `include` is left at its default (`**/*`). Discovery stays blunt on purpose: a narrow
 # include list would also narrow `--gate`, which filters new files through these same
@@ -40,24 +48,6 @@ exclude:
   # A link to a knowledge store that lives outside this repository. Walking it would
   # inventory someone else's tree and report it as this project's content.
   - "docs/obsidian/**"
-
-  # --- B. Not program source ------------------------------------------------------
-  # This tool inventories programs: what a file does, whether it checks who is calling,
-  # and which tables it touches. Prose and declarative data have none of those, and an
-  # adapter for them would have nothing to report but a title.
-  - "**/*.md"
-  - "**/*.mdc"
-  - "**/*.txt"
-  - "LICENSE"
-  - "**/.gitignore"
-  - "**/.gitattributes"
-  - "**/*.yaml"
-  - "**/*.yml"
-  - "**/*.toml"
-  - "**/*.json"
-  - "**/*.tag"
-  # tree-sitter query files. They are data read by an adapter, not code that runs.
-  - "**/*.scm"
 
   # --- C. Deliberately abnormal test input ----------------------------------------
   # Fixtures exist to be fed to the analyzer under conditions the shipped tool never

@@ -20,9 +20,17 @@ Two rules keep it from becoming noise:
   :data:`omitnix.model.GATE_REQUIRED_CAPABILITIES`. Reading no tables is a fact about a
   file, not an omission.
 
-``unknown`` is the exception to the first rule and is not softened by anything: a file
-nothing could classify has no capability declaration to consult, and silently admitting
-it is the precise failure this tool exists to prevent.
+``unknown`` is the exception to the first rule and is not softened by anything: an adapter
+claims this file's extension and could not read it, so there is no capability declaration
+to consult, and silently admitting it is the precise failure this tool exists to prevent.
+
+``unclaimed`` -- no adapter claims the extension at all -- is reported as a notice and does
+not refuse. It used to refuse, because it used to be the same status. Separating them made
+the old behaviour untenable: a repository that stops excluding its own prose and
+configuration (which it now can, since those no longer fail a run) would have every new
+``.md`` file refused by the gate, and a gate that fires on adding a README is a gate that
+gets switched off. What a new unclaimed file needs is to be seen, and the notice is on
+every run, in the coverage line, and in the generated document by name.
 
 ``unresolved`` is deliberately *not* a refusal. It says the analyzer read the file and
 could not follow part of it -- dynamically built SQL, an indirect call past one hop --
@@ -37,7 +45,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .config import Config
+from .config import Config, unconfigured_capabilities
 from .errors import GateError
 from .gitmeta import added_files_since, newly_added_files
 from .globs import matches_any
@@ -67,16 +75,6 @@ _MISSING_LABEL: dict[Capability, str] = {
     Capability.SUMMARY: "no summary",
     Capability.AUTHENTICATION: "no authentication call",
     Capability.AUTHORIZATION: "no authorization call",
-}
-
-#: Checks that only mean something once the repository has said what to look for. With
-#: the list empty the tool has no definition of the call, so its absence is not evidence
-#: of anything -- "not configured" is a different answer from "not called", and refusing
-#: a file on the first one would make the gate unusable in every repository that has no
-#: session layer at all.
-_CONFIGURED_BY: dict[Capability, str] = {
-    Capability.AUTHENTICATION: "authentication_functions",
-    Capability.AUTHORIZATION: "authorization_functions",
 }
 
 _MISSING_DETAIL: dict[Capability, str] = {
@@ -220,30 +218,39 @@ def _exemption_for(
     return None
 
 
-def _unconfigured_checks(config: Config) -> frozenset[Capability]:
-    return frozenset(
-        capability
-        for capability, attribute in _CONFIGURED_BY.items()
-        if not getattr(config, attribute)
-    )
-
-
 def _check_record(
     record: FileRecord, config: Config, unconfigured: frozenset[Capability] = frozenset()
 ) -> tuple[list[GateFinding], list[AppliedExemption], list[GateNotice], set[Capability]]:
     if record.status is Status.UNKNOWN:
-        # No adapter classified it, so there is no capability declaration to consult and
-        # nothing to exempt. This is the one check no configuration can switch off.
+        # An adapter claims it and could not read it, so there is no capability
+        # declaration to consult and nothing to exempt. This is the one check no
+        # configuration can switch off.
         return (
             [
                 GateFinding(
                     path=record.path,
                     item="unknown",
-                    detail=record.unknown_reason or "no adapter could classify this file",
+                    detail=record.reason or "the adapter that claims this file could not read it",
                 )
             ],
             [],
             [],
+            set(),
+        )
+
+    if record.status is Status.UNCLAIMED:
+        # Seen, not refused. Nothing tried to read this file, which is ordinary for prose
+        # and configuration and is the honest answer for a language with no adapter yet.
+        return (
+            [],
+            [],
+            [
+                GateNotice(
+                    path=record.path,
+                    item="unclaimed",
+                    detail=record.reason or "no adapter claims this extension",
+                )
+            ],
             set(),
         )
 
@@ -274,6 +281,8 @@ def _check_record(
             # The adapter could report this, and reported nothing -- but the repository
             # never said which call counts, so nothing was looked for. Recorded so the
             # run can say the check did not happen, rather than passing in silence.
+            # Refusing the file instead would make the gate unusable in every repository
+            # that has no session layer at all.
             skipped_unconfigured.add(capability)
             continue
 
@@ -299,7 +308,9 @@ def run_gate(report: Report, config: Config) -> GateReport:
     exemptions: list[AppliedExemption] = []
     notices: list[GateNotice] = []
     unconfigured_seen: set[Capability] = set()
-    unconfigured = _unconfigured_checks(config)
+    # The same set the analyzer used to give these fields their state, read from the same
+    # table: a check the report calls "not configured" has to be one the gate does not make.
+    unconfigured = unconfigured_capabilities(config)
 
     for record in report.files:
         record_findings, record_exemptions, record_notices, record_unconfigured = _check_record(

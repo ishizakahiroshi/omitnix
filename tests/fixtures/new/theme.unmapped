@@ -1,2 +1,3 @@
 A file whose extension no adapter in this test run claims.
-It exists to prove the gate refuses it instead of skipping it.
+It exists to prove the gate says so out loud instead of skipping it in silence,
+and that it does not refuse the file: nothing tried to read it, so nothing failed.

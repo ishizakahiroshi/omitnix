@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "82144dcd006816c8b9c992e5f8097088bc0428b3",
+    "commit": "f3a3e411408ce60536ce94d747c84d1dbd4bfa6b",
     "dirty": true,
     "tool": "omitnix 0.1.0",
     "partial": false,
@@ -134,13 +134,70 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 57,
-    "analyzed": 56,
+    "discovered": 79,
+    "analyzed": 58,
     "unresolved": 1,
     "unknown": 0,
+    "unclaimed": 20,
     "skipped_by_config": 0
   },
   "files": [
+    {
+      "path": ".gitattributes",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '(no extension)'"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.yml'"
+    },
+    {
+      "path": ".github/workflows/publish.yml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.yml'"
+    },
+    {
+      "path": ".github/workflows/secrets-scan.yml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.yml'"
+    },
+    {
+      "path": ".gitignore",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '(no extension)'"
+    },
+    {
+      "path": ".omitnix.yaml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.yaml'"
+    },
+    {
+      "path": ".semgrep/README.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
     {
       "path": ".semgrep/examples/orders_export.php",
       "adapter": "php",
@@ -151,12 +208,10 @@
           "value": "Fictional example: every rule in this directory should fire somewhere in this file."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "value",
@@ -185,12 +240,10 @@
           "value": "Fictional example: a listing endpoint that satisfies every rule in this directory."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "value",
@@ -209,6 +262,54 @@
       "unresolved": []
     },
     {
+      "path": ".semgrep/omitnix-contract.yaml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.yaml'"
+    },
+    {
+      "path": "AGENTS.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "CLAUDE.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "LICENSE",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '(no extension)'"
+    },
+    {
+      "path": "README.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
       "path": "conftest.py",
       "adapter": "python",
       "status": "analyzed",
@@ -218,12 +319,10 @@
           "value": "Present so that pytest puts the repository root on sys.path and `import omitnix` works"
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -240,6 +339,14 @@
       "unresolved": []
     },
     {
+      "path": "lefthook.yml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.yml'"
+    },
+    {
       "path": "omitnix/__init__.py",
       "adapter": "python",
       "status": "analyzed",
@@ -249,12 +356,10 @@
           "value": "omitnix: a static code inventory whose product is completeness, not coverage of rows."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -280,12 +385,10 @@
           "value": "Entry point for ``python -m omitnix``, equivalent to the installed ``omitnix`` script."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -311,12 +414,10 @@
           "value": "Language adapters."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -342,12 +443,10 @@
           "value": "Extraction that belongs to no single language."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -373,12 +472,10 @@
           "value": "The minimal tier: a language that is present, and nothing more."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -404,12 +501,10 @@
           "value": "Reading table names out of a SQL string."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -435,12 +530,10 @@
           "value": "Shared tree-sitter plumbing for language adapters."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -466,12 +559,10 @@
           "value": "The adapter contract."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -497,12 +588,10 @@
           "value": "Stylesheets."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -528,12 +617,10 @@
           "value": "The Go adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -559,12 +646,10 @@
           "value": "The HTML adapter -- the reverse-lookup tier."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -590,12 +675,10 @@
           "value": "The PHP adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -621,12 +704,10 @@
           "value": "PowerShell scripts, at the minimal tier."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -652,12 +733,10 @@
           "value": "The Python adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -683,12 +762,10 @@
           "value": "Rust, at the minimal tier."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -714,12 +791,10 @@
           "value": "Shell scripts, at the minimal tier."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -745,12 +820,10 @@
           "value": "The SQL adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -776,12 +849,10 @@
           "value": "The TypeScript / JavaScript adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -807,12 +878,10 @@
           "value": "Vue single-file components, at the minimal tier."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -838,12 +907,10 @@
           "value": "The core run: discover, analyze, count, and refuse to lie about the result."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -869,12 +936,10 @@
           "value": "Command line interface."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -900,12 +965,10 @@
           "value": "Configuration."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -931,12 +994,10 @@
           "value": "Error types shared by the core."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -962,12 +1023,10 @@
           "value": "The new-file gate."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -993,12 +1052,10 @@
           "value": "Commit provenance for the generated documents, and what git considers new."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1024,12 +1081,10 @@
           "value": "Glob matching for include and exclude patterns."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1055,12 +1110,79 @@
           "value": "The data model."
         },
         "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
           "state": "none_observed",
           "value": []
         },
-        "authorization": {
+        "writes": {
           "state": "none_observed",
           "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "omitnix/queries/go.scm",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.scm'"
+    },
+    {
+      "path": "omitnix/queries/html.scm",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.scm'"
+    },
+    {
+      "path": "omitnix/queries/php.scm",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.scm'"
+    },
+    {
+      "path": "omitnix/queries/python.scm",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.scm'"
+    },
+    {
+      "path": "omitnix/queries/tsjs.scm",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.scm'"
+    },
+    {
+      "path": "omitnix/reasons.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "The vocabulary of reasons the analyzer could not follow something."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1086,12 +1208,10 @@
           "value": "Adapter discovery."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1117,12 +1237,10 @@
           "value": "Rendering the report to JSON, the tool's only generated document."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1148,12 +1266,10 @@
           "value": "Finding the files to analyze."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1179,12 +1295,10 @@
           "value": "Schema snapshot input."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1210,12 +1324,10 @@
           "value": "Running across many repositories at once."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1232,6 +1344,14 @@
       "unresolved": []
     },
     {
+      "path": "pyproject.toml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.toml'"
+    },
+    {
       "path": "scripts/check-claude-md.mjs",
       "adapter": "tsjs",
       "status": "analyzed",
@@ -1241,12 +1361,10 @@
           "value": "CLAUDE.md が再び太らないようにするための検査。"
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1327,12 +1445,10 @@
           "value": "kb-driven secrets-scan — unified scanner for layer 2 (husky) / layer 3 (CI) / layer 4 (release) / sweep"
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1359,12 +1475,10 @@
           "value": "Makes the test modules a package so they can share helpers from conftest.py."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1390,12 +1504,10 @@
           "value": "Shared test helpers."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1421,12 +1533,10 @@
           "value": "The Go adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1452,12 +1562,10 @@
           "value": "The HTML adapter -- the reverse-lookup tier."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1483,12 +1591,10 @@
           "value": "The minimal tier: css, rust, shell, powershell and vue."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1514,12 +1620,10 @@
           "value": "The Python adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1545,12 +1649,10 @@
           "value": "The SQL adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1576,12 +1678,10 @@
           "value": "The TypeScript / JavaScript adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1604,15 +1704,13 @@
       "fields": {
         "summary": {
           "state": "value",
-          "value": "The counting invariant and the three field states, checked on a synthetic repository."
+          "value": "The counting invariant and the four field states, checked on a synthetic repository."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1638,12 +1736,10 @@
           "value": "The command line contract: what each flag does, and what each exit code means."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1669,12 +1765,10 @@
           "value": "Reading `.omitnix.yaml`, and refusing to read it wrongly."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1700,12 +1794,10 @@
           "value": "The same source must produce the same document, every time."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1731,12 +1823,10 @@
           "value": "Tests for the new-file gate."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1762,12 +1852,10 @@
           "value": "Include and exclude pattern matching, including when a directory may be skipped."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1793,12 +1881,10 @@
           "value": "The PHP adapter."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "value",
@@ -1826,6 +1912,35 @@
       ]
     },
     {
+      "path": "tests/test_reasons.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "The reason vocabulary: one definition, and every code in it classified."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
       "path": "tests/test_registry.py",
       "adapter": "python",
       "status": "analyzed",
@@ -1835,12 +1950,10 @@
           "value": "Adapter discovery: adding a language must mean adding a file and nothing else."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1866,12 +1979,10 @@
           "value": "What the generated document says, and what it must never say."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1897,12 +2008,10 @@
           "value": "Workspace mode: many repositories in one run."
         },
         "authentication": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "authorization": {
-          "state": "none_observed",
-          "value": []
+          "state": "not_configured"
         },
         "reads": {
           "state": "none_observed",
@@ -1926,7 +2035,8 @@
         ".semgrep/examples/orders_export.php"
       ],
       "written_by": [],
-      "in_schema_snapshot": false
+      "in_schema_snapshot": false,
+      "unresolved_in": []
     },
     {
       "name": "orders",
@@ -1936,7 +2046,17 @@
         "tests/test_php_adapter.py"
       ],
       "written_by": [],
-      "in_schema_snapshot": false
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "tests/test_php_adapter.py"
+      ]
     }
-  ]
+  ],
+  "table_gaps": {
+    "files": [
+      "tests/test_php_adapter.py"
+    ],
+    "unresolved_count": 2,
+    "note": "2 statements in 1 file could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+  }
 }

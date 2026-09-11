@@ -2,9 +2,13 @@
 
 The exit codes are the part other tools consume, so they are asserted directly rather
 than through the text of a message: 3 for a generated document that is out of date, 2 for
-a configuration this tool refuses to guess at, and 1 for a file that could not be analyzed
-*in a repository that asked to fail on that* -- which is why several tests below appear in
-pairs, one for the default and one for ``fail_on_unknown: true``.
+a configuration this tool refuses to guess at, and 1 for a file an adapter claimed and
+could not read *in a repository that asked to fail on that* -- which is why several tests
+below appear in pairs, one for the default and one for ``fail_on_unknown: true``.
+
+A file no adapter claims is the other half of "not analyzed" and never reaches 1. It is
+counted by extension instead, which is asserted here too: the number has to survive, and
+the 95 lines naming Markdown files one by one do not.
 """
 
 from __future__ import annotations
@@ -19,7 +23,7 @@ import pytest
 
 from omitnix.cli import EXIT_ERROR, EXIT_OK, EXIT_STALE, EXIT_UNKNOWN, main
 
-from .conftest import ORDERS_FLOW, PLAIN_NOTE, REINDEX_FLOW, write_repo
+from .conftest import EXPORT_FLOW, ORDERS_FLOW, PLAIN_NOTE, REINDEX_FLOW, write_repo
 
 CONFIG_YAML = """
 include:
@@ -82,41 +86,122 @@ def test_full_run_writes_only_the_json_index(tmp_path: Path, with_test_adapters:
     assert "Coverage: 3/3 analyzed" in out
 
 
+def test_a_run_says_out_loud_that_the_table_list_may_be_short(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Printed as well as written.
+
+    The reverse index is the half of the output people quote without opening the file
+    records, and the sentence it must never be allowed to imply is "nothing touches this
+    table". A run that could not read a statement says so where the run is read.
+    """
+    root = clean_repo(tmp_path)
+    write_repo(root, {"api/orders_export.flow": EXPORT_FLOW})
+    code, _, err = run(["--root", str(root)])
+    assert code == EXIT_OK
+    assert "the table list may be incomplete" in err
+
+
+def test_a_run_that_read_everything_says_nothing_about_the_table_list(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The control. A notice on every run is a notice nobody reads."""
+    code, _, err = run(["--root", str(clean_repo(tmp_path))])
+    assert code == EXIT_OK
+    assert "table list" not in err
+
+
 WIDE_INCLUDE = "include:\n  - '**/*.flow'\n  - '**/*.unheardof'\n"
 
+#: A file the ``.flow`` adapter claims and cannot read. The failure half of "not
+#: analyzed", as opposed to an extension no adapter claims at all.
+UNREADABLE_FLOW = "unparsable: yes\n"
 
-def test_an_unanalyzable_file_is_named_but_does_not_fail_the_run(
+
+def test_a_file_its_own_adapter_could_not_read_is_named_but_does_not_fail_the_run(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
     """Reported, not punished.
 
     The file is named and counted; the run still succeeds. Failing by default made every
-    repository owe its configuration a written excuse for each thing no adapter claims,
-    and some of those gaps -- a grammar that cannot read valid source of a language its
-    own adapter claims -- have no fix the repository could apply. What keeps a gap from
-    hiding is that it is printed and written into the documents, and that happens
-    whatever the exit code is.
+    repository owe its configuration a written excuse for each unreadable thing, and some
+    of those gaps -- a grammar that cannot read valid source of a language its own adapter
+    claims -- have no fix the repository could apply. What keeps a gap from hiding is that
+    it is printed and written into the documents, and that happens whatever the exit code.
     """
     root = clean_repo(tmp_path)
-    (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
-    # Widen the include patterns so the new extension is discovered rather than filtered.
-    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE})
+    write_repo(root, {"api/weird.flow": UNREADABLE_FLOW})
     code, _, err = run(["--root", str(root)])
     assert code == EXIT_OK
-    assert "could not be analyzed" in err
-    assert "api/helper.unheardof" in err
+    assert "could not read them" in err
+    assert "api/weird.flow" in err
 
 
-def test_a_repository_can_ask_to_fail_on_what_could_not_be_analyzed(
+def test_files_no_adapter_claims_are_counted_by_extension_and_never_named(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The noise this split exists to remove, and the number it must not remove with it.
+
+    Measured on a real repository: 192 files named one by one, 95 of them ``.md``. The
+    extension is the whole fact and repeating it per file buries the one real failure. So
+    they are counted by extension on stderr -- and still counted in the coverage line, and
+    still in the document by name, because a file nobody looked at is still a file here.
+    """
+    root = clean_repo(tmp_path)
+    for name in ("a.unheardof", "b.unheardof", "c.unheardof"):
+        (root / "api" / name).write_text("x", encoding="utf-8")
+    # Widen the include patterns so the new extension is discovered rather than filtered.
+    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE})
+
+    code, out, err = run(["--root", str(root)])
+
+    assert code == EXIT_OK
+    assert "3 unclaimed" in out
+    assert "claimed by no adapter" in err
+    assert ".unheardof x3" in err
+    assert "api/a.unheardof" not in err
+    index = json.loads((root / ".omitnix" / "index.json").read_text(encoding="utf-8"))
+    assert index["coverage"]["unclaimed"] == 3
+    assert "api/a.unheardof" in [record["path"] for record in index["files"]]
+
+
+def test_a_repository_can_ask_to_fail_on_what_its_adapters_could_not_read(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
     """Strictness stays available to whoever will carry it, and is imposed on nobody."""
     root = clean_repo(tmp_path)
-    (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
-    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE + "fail_on_unknown: true\n"})
+    write_repo(
+        root,
+        {
+            ".omitnix.yaml": CONFIG_YAML + "fail_on_unknown: true\n",
+            "api/weird.flow": UNREADABLE_FLOW,
+        },
+    )
     code, _, err = run(["--root", str(root)])
     assert code == EXIT_UNKNOWN
-    assert "api/helper.unheardof" in err
+    assert "api/weird.flow" in err
+
+
+def test_fail_on_unknown_does_not_fail_a_repository_that_only_has_unclaimed_files(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The strictest setting there is, and prose still does not break the build.
+
+    ``fail_on_unknown`` asks to fail on what this tool could not read. A file no adapter
+    claims was not read *and nothing went wrong*: there is no defect for anybody to fix,
+    and no configuration to write. Failing here is what turned the strict mode into a
+    chore that gets switched off -- and it would fire on this repository's own README.
+    """
+    root = clean_repo(tmp_path)
+    for name in ("a.unheardof", "b.unheardof"):
+        (root / "api" / name).write_text("x", encoding="utf-8")
+    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE + "fail_on_unknown: true\n"})
+
+    code, out, err = run(["--root", str(root)])
+
+    assert code == EXIT_OK
+    assert "2 unclaimed" in out
+    assert "claimed by no adapter" in err
 
 
 def test_generated_document_uses_lf_on_every_platform(
@@ -152,25 +237,30 @@ def test_check_fails_when_the_source_moved_on(tmp_path: Path, with_test_adapters
     assert "api/orders_delete.flow" in err
 
 
-def test_check_fails_on_an_unknown_file_even_when_the_documents_are_current(
+def test_check_fails_on_an_unreadable_file_even_when_the_documents_are_current(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
     """Current and complete are different claims, and --check states both.
 
-    A document that records an unanalyzable file faithfully is still a document with a
-    hole in it, so --check names the hole even when nothing is stale. Whether that also
-    fails the job is the repository's call; this is the repository that made it.
+    A document that records an unreadable file faithfully is still a document with a hole
+    in it, so --check names the hole even when nothing is stale. Whether that also fails
+    the job is the repository's call; this is the repository that made it.
     """
     root = clean_repo(tmp_path)
-    (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
-    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE + "fail_on_unknown: true\n"})
+    write_repo(
+        root,
+        {
+            ".omitnix.yaml": CONFIG_YAML + "fail_on_unknown: true\n",
+            "api/weird.flow": UNREADABLE_FLOW,
+        },
+    )
 
     assert run(["--root", str(root)])[0] == EXIT_UNKNOWN  # generated, and it says so
 
     code, out, err = run(["--root", str(root), "--check"])
     assert code == EXIT_UNKNOWN
     assert "up to date" in out
-    assert "api/helper.unheardof" in err
+    assert "api/weird.flow" in err
 
 
 def test_check_fails_when_nothing_was_generated_yet(
@@ -198,15 +288,31 @@ def test_print_says_unknown_in_the_record_whatever_the_exit_code(
 ) -> None:
     """The record is the answer; the exit code only follows the repository's policy."""
     root = clean_repo(tmp_path)
-    (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
-    code, out, _ = run(["--root", str(root), "--print", "api/helper.unheardof"])
+    write_repo(root, {"api/weird.flow": UNREADABLE_FLOW})
+    code, out, _ = run(["--root", str(root), "--print", "api/weird.flow"])
     assert code == EXIT_OK
     assert json.loads(out)["status"] == "unknown"
 
-    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE + "fail_on_unknown: true\n"})
-    code, out, _ = run(["--root", str(root), "--print", "api/helper.unheardof"])
+    write_repo(root, {".omitnix.yaml": CONFIG_YAML + "fail_on_unknown: true\n"})
+    code, out, _ = run(["--root", str(root), "--print", "api/weird.flow"])
     assert code == EXIT_UNKNOWN
     assert json.loads(out)["status"] == "unknown"
+
+
+def test_print_on_an_unclaimed_file_says_so_and_exits_zero(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Even under ``fail_on_unknown``: nothing tried to read it, so nothing failed."""
+    root = clean_repo(tmp_path)
+    (root / "api" / "helper.unheardof").write_text("x", encoding="utf-8")
+    write_repo(root, {".omitnix.yaml": WIDE_INCLUDE + "fail_on_unknown: true\n"})
+
+    code, out, _ = run(["--root", str(root), "--print", "api/helper.unheardof"])
+
+    assert code == EXIT_OK
+    record = json.loads(out)
+    assert record["status"] == "unclaimed"
+    assert ".unheardof" in record["reason"]
 
 
 def test_print_on_a_missing_file_is_a_usage_error(

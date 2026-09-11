@@ -2,12 +2,19 @@
 
 The counting invariant is the product::
 
-    discovered == analyzed + unresolved + unknown
+    discovered == analyzed + unresolved + unknown + unclaimed
+
+``unknown`` and ``unclaimed`` are kept apart because only one of them is a failure: an
+adapter claimed the extension and could not read the file, against no adapter claiming the
+extension at all. They are kept in the same total because both are files the repository
+contains, and a count that quietly drops the second is the silence this module exists to
+refuse.
 
 Nothing here knows about a language. Files are routed to adapters by extension, adapters
 declare what they can produce, and this module turns their answers into records whose
-every field states whether it holds a value, holds nothing that was observed, or lies
-outside the adapter's capabilities.
+every field states whether it holds a value, holds nothing that was observed, lies
+outside the adapter's capabilities, or was never looked for because the repository did
+not say what to look for.
 """
 
 from __future__ import annotations
@@ -16,7 +23,7 @@ from pathlib import Path
 
 from . import __version__
 from .adapters.base import Adapter, AnalysisRequest, AnalysisResult
-from .config import Config
+from .config import Config, unconfigured_capabilities
 from .errors import AdapterContractError, CompletenessError
 from .gitmeta import commit_of, working_tree_is_dirty
 from .model import (
@@ -30,10 +37,13 @@ from .model import (
     GeneratedMeta,
     Report,
     Status,
+    TableGaps,
     TableRecord,
     Unresolved,
     ValueKind,
+    extension_of,
 )
+from .reasons import hides_a_table_reference
 from .registry import AdapterSet, build_adapter_set
 from .scan import SelectionResult, discover_repository_files, select_files
 from .schema import load_schema_tables
@@ -55,8 +65,24 @@ def _read_text(path: Path) -> tuple[str | None, str | None]:
         return None, "file is not valid UTF-8 text"
 
 
+def _empty_state(capability: Capability, unconfigured: frozenset[Capability]) -> FieldState:
+    """What an empty value means for this capability.
+
+    ``none_observed`` is a claim: the adapter was given something to look for and did not
+    find it. It is only true where there *was* something to look for, which for
+    authentication and authorization is a list the repository writes. With the list empty
+    nothing was searched for, and saying "observed none" there turns an unasked question
+    into an answer -- for every file at once, which is how it reads as a finding about the
+    repository rather than about its configuration.
+    """
+    return FieldState.NOT_CONFIGURED if capability in unconfigured else FieldState.NONE_OBSERVED
+
+
 def _normalize_values(
-    adapter: Adapter, values: dict[Capability, object], path: str
+    adapter: Adapter,
+    values: dict[Capability, object],
+    path: str,
+    unconfigured: frozenset[Capability] = frozenset(),
 ) -> dict[Capability, Field]:
     undeclared = sorted(str(cap) for cap in set(values) - set(adapter.capabilities))
     if undeclared:
@@ -81,14 +107,14 @@ def _normalize_values(
                 )
             else:
                 items = tuple(sorted({str(item).strip() for item in raw if str(item).strip()}))
-            state = FieldState.VALUE if items else FieldState.NONE_OBSERVED
+            state = FieldState.VALUE if items else _empty_state(capability, unconfigured)
             fields[capability] = Field(state, list(items))
         else:
             text = "" if raw is None else str(raw).strip()
             if text:
                 fields[capability] = Field(FieldState.VALUE, text)
             else:
-                fields[capability] = Field(FieldState.NONE_OBSERVED, None)
+                fields[capability] = Field(_empty_state(capability, unconfigured), None)
     return fields
 
 
@@ -102,19 +128,20 @@ def analyze_file(
     """Analyze one file. Never raises for a file it cannot handle -- it reports it."""
     adapter = adapter_set.for_path(rel)
     if adapter is None:
-        extension = Path(rel).suffix.lower() or "(no extension)"
+        # Not a failure: nothing was attempted. Counted all the same, and the reason is
+        # kept on the record so that one file printed on its own still explains itself.
         return FileRecord(
             path=rel,
             adapter=None,
-            status=Status.UNKNOWN,
-            unknown_reason=f"no adapter claims '{extension}'",
+            status=Status.UNCLAIMED,
+            reason=f"no adapter claims '{extension_of(rel)}'",
         )
 
     absolute = config.root / rel
     text, failure = _read_text(absolute)
     if text is None:
         return FileRecord(
-            path=rel, adapter=adapter.name, status=Status.UNKNOWN, unknown_reason=failure
+            path=rel, adapter=adapter.name, status=Status.UNKNOWN, reason=failure
         )
 
     request = AnalysisRequest(
@@ -135,7 +162,7 @@ def analyze_file(
             path=rel,
             adapter=adapter.name,
             status=Status.UNKNOWN,
-            unknown_reason=f"adapter '{adapter.name}' raised {type(exc).__name__}: {exc}",
+            reason=f"adapter '{adapter.name}' raised {type(exc).__name__}: {exc}",
         )
 
     if not isinstance(result, AnalysisResult):
@@ -149,7 +176,7 @@ def analyze_file(
             path=rel,
             adapter=adapter.name,
             status=Status.UNKNOWN,
-            unknown_reason=result.unknown_reason,
+            reason=result.unknown_reason,
         )
 
     unresolved = tuple(
@@ -160,13 +187,48 @@ def analyze_file(
         path=rel,
         adapter=adapter.name,
         status=Status.UNRESOLVED if unresolved else Status.ANALYZED,
-        fields=_normalize_values(adapter, result.values, rel),
+        fields=_normalize_values(
+            adapter, result.values, rel, unconfigured_capabilities(config)
+        ),
         unresolved=unresolved,
     )
 
 
+def _reports_tables(record: FileRecord) -> bool:
+    """Whether this record could have contributed to the reverse index at all.
+
+    An adapter that does not declare ``reads`` or ``writes`` never puts a table anywhere,
+    so nothing it failed to follow can be hiding one. Without this, an HTML page with a
+    script the grammar could not read would mark tables it has no relationship with, and
+    a mark that appears everywhere is a mark nobody acts on.
+    """
+    return any(
+        (entry := record.fields.get(capability)) is not None
+        and entry.state is not FieldState.OUT_OF_SCOPE
+        for capability in (Capability.READS, Capability.WRITES)
+    )
+
+
+def _table_evidence_gaps(records: tuple[FileRecord, ...]) -> TableGaps:
+    """The files holding a statement that could be touching a table nobody can see.
+
+    Counted per file as well as named, because the two facts are needed in two places:
+    the names mark the tables those files *were* observed to touch, and the total is the
+    only place a table missing from the index entirely can be accounted for at all.
+    """
+    per_file = {
+        record.path: count
+        for record in records
+        if _reports_tables(record)
+        and (count := sum(1 for item in record.unresolved if hides_a_table_reference(item.code)))
+    }
+    return TableGaps(files=tuple(sorted(per_file)), unresolved_count=sum(per_file.values()))
+
+
 def _table_index(
-    records: tuple[FileRecord, ...], schema_tables: frozenset[str]
+    records: tuple[FileRecord, ...],
+    schema_tables: frozenset[str],
+    gap_files: frozenset[str] = frozenset(),
 ) -> tuple[TableRecord, ...]:
     read_by: dict[str, set[str]] = {}
     written_by: dict[str, set[str]] = {}
@@ -184,13 +246,26 @@ def _table_index(
 
     names = sorted(set(read_by) | set(written_by) | set(schema_tables))
     return tuple(
-        TableRecord(
-            name=name,
-            read_by=tuple(sorted(read_by.get(name, ()))),
-            written_by=tuple(sorted(written_by.get(name, ()))),
-            in_schema_snapshot=name in schema_tables,
-        )
-        for name in names
+        _table_record(name, read_by, written_by, schema_tables, gap_files) for name in names
+    )
+
+
+def _table_record(
+    name: str,
+    read_by: dict[str, set[str]],
+    written_by: dict[str, set[str]],
+    schema_tables: frozenset[str],
+    gap_files: frozenset[str],
+) -> TableRecord:
+    touched_by = read_by.get(name, set()) | written_by.get(name, set())
+    return TableRecord(
+        name=name,
+        read_by=tuple(sorted(read_by.get(name, ()))),
+        written_by=tuple(sorted(written_by.get(name, ()))),
+        in_schema_snapshot=name in schema_tables,
+        # A file that touches this table and could not be read in full. Its two entries
+        # above are what was legible, not what the file does.
+        unresolved_in=tuple(sorted(touched_by & gap_files)),
     )
 
 
@@ -277,21 +352,31 @@ def assemble_report(
     """
     ordered = tuple(sorted(records, key=lambda record: record.path))
 
-    counts = {status: 0 for status in Status}
+    # Counted by asking for each of the four statuses by name, and totalled against the
+    # number of records rather than against the sum of what was asked for. A record whose
+    # status is none of the four is then missing from the total, which is exactly what the
+    # invariant below is for. Pre-filling a slot for every member of ``Status`` would make
+    # the check unfailable -- a test of an assertion that cannot fire proves nothing, and
+    # the day a fifth status is added it would be the count, not the check, that decided
+    # whether the file was accounted for.
+    counts: dict[object, int] = {}
     for record in ordered:
-        counts[record.status] += 1
+        counts[record.status] = counts.get(record.status, 0) + 1
     coverage = Coverage(
         discovered=len(ordered),
-        analyzed=counts[Status.ANALYZED],
-        unresolved=counts[Status.UNRESOLVED],
-        unknown=counts[Status.UNKNOWN],
+        analyzed=counts.get(Status.ANALYZED, 0),
+        unresolved=counts.get(Status.UNRESOLVED, 0),
+        unknown=counts.get(Status.UNKNOWN, 0),
+        unclaimed=counts.get(Status.UNCLAIMED, 0),
         skipped_by_config=skipped,
     )
     if not coverage.holds:
+        seen = ", ".join(f"{status}={count}" for status, count in sorted(counts.items(), key=str))
         raise CompletenessError(
             f"counting invariant broke: discovered={coverage.discovered} but "
             f"analyzed={coverage.analyzed} + unresolved={coverage.unresolved} + "
-            f"unknown={coverage.unknown}"
+            f"unknown={coverage.unknown} + unclaimed={coverage.unclaimed}. "
+            f"Statuses found: {seen}"
         )
 
     generated = GeneratedMeta(
@@ -303,9 +388,11 @@ def assemble_report(
         tracked_only=tracked_only,
         discovery_note=discovery_note,
     )
+    table_gaps = _table_evidence_gaps(ordered)
     return Report(
         generated=generated,
         coverage=coverage,
         files=ordered,
-        tables=_table_index(ordered, schema_tables),
+        tables=_table_index(ordered, schema_tables, frozenset(table_gaps.files)),
+        table_gaps=table_gaps,
     )

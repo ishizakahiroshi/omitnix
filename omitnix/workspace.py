@@ -42,7 +42,7 @@ from .analyze import TOOL, analyze_file, assemble_report
 from .config import Config, load_config
 from .errors import OmitnixError
 from .globs import glob_match, normalize
-from .model import Coverage, FileRecord, Report, Status
+from .model import Coverage, FileRecord, Report
 from .registry import AdapterSet, build_adapter_set
 from .render import render_json
 from .scan import RepoDiscovery, discover_repository_files
@@ -77,6 +77,13 @@ WORKSPACE_OUTPUT_DIR = ".omitnix-workspace"
 #: The other blocks are file types that are not program source. That is a weaker claim
 #: than "unimportant", and it is why every one of these is counted and reported: a
 #: workspace run says how many paths its defaults removed, per repository.
+#:
+#: Since 2026-09-11 they are kept for size, not to keep a run green: a file no adapter
+#: claims is ``unclaimed`` and fails nothing, so a repository is free to delete the
+#: equivalent lines from its own configuration -- this repository did. What does not
+#: survive deletion here is the scale. Discovering the other 96,926 files across 52
+#: repositories would put a record for each of them in the workspace document, which is a
+#: different kind of unusable from the one the exclusions were written for.
 #:
 #: A repository that disagrees writes its own ``.omitnix.yaml``; one that says
 #: ``exclude_defaults: false`` is walked exactly as it asked, with none of this added.
@@ -416,6 +423,7 @@ class WorkspaceResult:
             analyzed=sum(run.coverage.analyzed for run in self.succeeded),
             unresolved=sum(run.coverage.unresolved for run in self.succeeded),
             unknown=sum(run.coverage.unknown for run in self.succeeded),
+            unclaimed=sum(run.coverage.unclaimed for run in self.succeeded),
         )
 
     @property
@@ -733,21 +741,17 @@ def run_workspace(
 # --------------------------------------------------------------------------------------
 
 
-def _extension_of(path: str) -> str:
-    name = path.rsplit("/", 1)[-1]
-    dot = name.rfind(".")
-    return name[dot:].lower() if dot > 0 else "(no extension)"
+def unclaimed_extensions(run: RepositoryRun) -> dict[str, int]:
+    """How many files no adapter claims in this repository, by extension.
 
-
-def unknown_extensions(run: RepositoryRun) -> dict[str, int]:
-    counts: dict[str, int] = {}
+    Delegates to :attr:`omitnix.model.Report.unclaimed_extensions` rather than counting
+    again here: a workspace run must group files exactly the way the single-repository run
+    it wraps does, or the same repository reports two different shapes depending on which
+    command was typed.
+    """
     if run.report is None:
-        return counts
-    for record in run.report.files:
-        if record.status is Status.UNKNOWN:
-            extension = _extension_of(record.path)
-            counts[extension] = counts.get(extension, 0) + 1
-    return dict(sorted(counts.items(), key=lambda item: (-item[1], item[0])))
+        return {}
+    return run.report.unclaimed_extensions
 
 
 def _repo_payload(run: RepositoryRun) -> dict[str, Any]:
@@ -775,7 +779,13 @@ def _repo_payload(run: RepositoryRun) -> dict[str, Any]:
         "pruned_directories": run.pruned_directories,
         "tracked_but_absent": run.tracked_but_absent,
     }
-    payload["unknown_extensions"] = unknown_extensions(run)
+    # The two halves of "not analyzed", in the two forms they are acted on: an extension
+    # nothing claims is a count, a file an adapter could not read is a name and a reason.
+    payload["unclaimed_extensions"] = unclaimed_extensions(run)
+    payload["unknown_files"] = [
+        {"id": record_id(run.repo, record.path), "reason": record.reason}
+        for record in run.report.unknown_files
+    ]
     # Qualified on both sides: the table belongs to this repository and nowhere else, and
     # the files that touch it are named by their workspace key.
     payload["tables"] = [
@@ -784,9 +794,15 @@ def _repo_payload(run: RepositoryRun) -> dict[str, Any]:
             "read_by": [record_id(run.repo, path) for path in table.read_by],
             "written_by": [record_id(run.repo, path) for path in table.written_by],
             "in_schema_snapshot": table.in_schema_snapshot,
+            "unresolved_in": [record_id(run.repo, path) for path in table.unresolved_in],
         }
         for table in run.report.tables
     ]
+    payload["table_gaps"] = {
+        "files": [record_id(run.repo, path) for path in run.report.table_gaps.files],
+        "unresolved_count": run.report.table_gaps.unresolved_count,
+        "note": run.report.table_gaps.note,
+    }
     payload["documents"] = [str(path) for path in run.documents]
     return payload
 

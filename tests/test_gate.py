@@ -16,7 +16,10 @@ from pathlib import Path
 import pytest
 import yaml
 
+from omitnix import gate as gate_module
 from omitnix.cli import EXIT_ERROR, EXIT_GATE, EXIT_OK, main
+from omitnix.config import unconfigured_capabilities
+from omitnix.model import CONFIGURED_BY, Capability
 
 from .conftest import FIXTURES, write_repo
 
@@ -95,15 +98,42 @@ def test_a_new_file_without_a_summary_is_refused(
     assert "undocumented.flow: no summary" in err
 
 
-def test_a_new_file_no_adapter_understands_is_refused_not_skipped(
+def test_a_new_file_an_adapter_claims_and_cannot_read_is_refused(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
+    """The one refusal nothing softens.
+
+    An adapter claims ``.flow`` and could not produce a record from this file, so there is
+    no capability declaration to check it against. Admitting it would put a hole in the
+    index on the day the file is written, which is the failure this tool exists to prevent.
+    """
     root = baseline(tmp_path)
-    (root / "theme.unmapped").write_text(fixture("theme.unmapped"), encoding="utf-8")
+    (root / "unreadable.flow").write_text(fixture("unreadable.flow"), encoding="utf-8")
 
     code, _, err = gate(root)
     assert code == EXIT_GATE
-    assert "theme.unmapped: unknown" in err
+    assert "unreadable.flow: unknown" in err
+
+
+def test_a_new_file_no_adapter_claims_is_noted_not_refused(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Seen, and not a verdict.
+
+    It used to be refused, back when "no adapter claims this" and "the adapter could not
+    read this" were the same status. Keeping that after the split would mean a repository
+    that stopped excluding its own prose -- which it now can, because prose no longer
+    fails a run -- has every new ``.md`` file refused by its pre-commit hook. A gate that
+    fires on adding a README is a gate that gets switched off, so this one says so and
+    lets it through.
+    """
+    root = baseline(tmp_path)
+    (root / "theme.unmapped").write_text(fixture("theme.unmapped"), encoding="utf-8")
+
+    code, out, err = gate(root)
+    assert code == EXIT_OK
+    assert "gate passed" in out
+    assert "noted: theme.unmapped: unclaimed" in err
     assert ".unmapped" in err  # the reason names the extension nothing claimed
 
 
@@ -122,7 +152,7 @@ def test_a_new_file_the_analyzer_could_not_follow_is_reported_not_refused(
     code, out, err = gate(root)
     assert code == EXIT_OK
     assert "gate passed" in out
-    assert "not followed: reindex.flow: unresolved (dynamic_sql)" in err
+    assert "noted: reindex.flow: unresolved (dynamic_sql)" in err
 
 
 def test_gate_still_sees_an_untracked_file_a_default_full_run_no_longer_discovers(
@@ -171,6 +201,19 @@ def test_a_repository_that_never_said_what_authorization_is_cannot_fail_on_it(
     assert "authentication not checked" in err
 
 
+def test_the_gate_and_the_document_agree_on_which_checks_were_never_made() -> None:
+    """One table, one function, one answer.
+
+    The gate reads "the repository never said what to look for" to decide whether a check
+    can be made; the analyzer reads the same thing to decide whether an empty field means
+    ``none_observed`` or ``not_configured``. A second copy of either would let the
+    document report a check the gate knows did not happen.
+    """
+    assert gate_module.unconfigured_capabilities is unconfigured_capabilities
+    assert set(CONFIGURED_BY) == {Capability.AUTHENTICATION, Capability.AUTHORIZATION}
+    assert not any(name.endswith("CONFIGURED_BY") for name in vars(gate_module))
+
+
 def test_unresolved_does_not_rescue_a_file_that_is_missing_a_check(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
@@ -186,7 +229,7 @@ def test_unresolved_does_not_rescue_a_file_that_is_missing_a_check(
     code, _, err = gate(root)
     assert code == EXIT_GATE
     assert "leaky.flow: no authorization call" in err
-    assert "not followed: leaky.flow: unresolved (dynamic_sql)" in err
+    assert "noted: leaky.flow: unresolved (dynamic_sql)" in err
 
 
 def test_every_missing_item_gets_its_own_line(
@@ -484,7 +527,7 @@ def test_an_exemption_cannot_switch_off_a_check_the_gate_never_makes(
     assert "cannot skip reads" in err
 
 
-def test_an_exemption_cannot_admit_an_unanalyzable_file(
+def test_an_exemption_cannot_admit_an_unreadable_file(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
     """``unknown`` is the one refusal no configuration can turn off."""
@@ -494,11 +537,11 @@ def test_an_exemption_cannot_admit_an_unanalyzable_file(
         "authorization]\n    reason: Everything is exempt, which must still not help here.\n"
     )
     root = baseline(tmp_path, config=config)
-    (root / "theme.unmapped").write_text(fixture("theme.unmapped"), encoding="utf-8")
+    (root / "unreadable.flow").write_text(fixture("unreadable.flow"), encoding="utf-8")
 
     code, _, err = gate(root)
     assert code == EXIT_GATE
-    assert "theme.unmapped: unknown" in err
+    assert "unreadable.flow: unknown" in err
 
 
 def test_an_exemption_does_not_reach_a_file_outside_the_paths_it_names(
