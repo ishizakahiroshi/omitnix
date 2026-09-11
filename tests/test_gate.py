@@ -501,6 +501,26 @@ def test_an_exemption_cannot_admit_an_unanalyzable_file(
     assert "theme.unmapped: unknown" in err
 
 
+def test_an_exemption_does_not_reach_a_file_outside_the_paths_it_names(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """Both halves of an exemption have to match, not either one.
+
+    ``EXEMPTION_YAML`` waives authentication and authorization for one named file. A
+    different file missing the same call is still refused. Written because the two
+    conditions are joined by an ``and`` that nothing else here holds to: with an ``or``
+    in its place, naming a capability in any one exemption would stop the gate checking
+    it anywhere in the repository, and every other test in this file still passed.
+    """
+    root = baseline(tmp_path, config=EXEMPTION_YAML)
+    (root / "orders_purge.flow").write_text(fixture("orders_purge.flow"), encoding="utf-8")
+
+    code, _, err = gate(root)
+    assert code == EXIT_GATE
+    assert "orders_purge.flow: no authorization call" in err
+    assert "exemption applied" not in err
+
+
 # --------------------------------------------------------------------------------------
 # The shipped semgrep rules
 # --------------------------------------------------------------------------------------

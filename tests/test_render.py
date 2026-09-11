@@ -119,6 +119,51 @@ def test_an_unanalyzable_file_carries_no_field_states_at_all(
     assert to_payload(report)["files"][0]["fields"] == {}
 
 
+def test_the_reason_a_file_is_unknown_reaches_the_document(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The reason is only worth recording if it survives into what is read.
+
+    Written because the record object was asserted and the document was not: dropping
+    ``unknown_reason`` from the JSON -- or attaching it, null, to every analyzed file
+    instead -- left the whole suite green. Either would hand a reader a file that could
+    not be analyzed and no reason, which is the failure this tool exists to prevent.
+    """
+    write_repo(tmp_path, {"api/helper.unheardof": "x", "docs/RELEASE.note": PLAIN_NOTE})
+    report = build_report(load_config(tmp_path))
+    files = {record["path"]: record for record in to_payload(report)["files"]}
+
+    unknown = files["api/helper.unheardof"]
+    assert unknown["status"] == "unknown"
+    assert ".unheardof" in unknown["unknown_reason"]
+
+    # Absent, not present and null: a reader must not have to tell an empty reason from
+    # a file that had nothing to explain.
+    analyzed = files["docs/RELEASE.note"]
+    assert analyzed["status"] == "analyzed"
+    assert "unknown_reason" not in analyzed
+
+
+def test_the_document_is_written_the_same_way_every_time(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The bytes are the product, so the three arguments that shape them are pinned.
+
+    A repository commits this document and compares it on every run. Changing the indent,
+    escaping non-ASCII, or sorting the keys would rewrite every committed index in every
+    repository at once, while the facts inside stayed identical -- and none of the three
+    failed a test before this one existed.
+    """
+    write_repo(tmp_path, {"api/orders_list.flow": "summary: Résumé of nightly totals\n"})
+    text = render_json(build_report(load_config(tmp_path)))
+
+    assert text.endswith("\n")
+    assert text.startswith('{\n  "schema_version": 1,')  # two spaces, not three
+    assert "Résumé" in text and "\\u00e9" not in text  # written, not escaped to ASCII
+    # Insertion order, not alphabetical: sorting would put "coverage" first.
+    assert text.index('"schema_version"') < text.index('"coverage"')
+
+
 def test_tables_with_no_reference_are_reported_never_as_unused(
     tmp_path: Path, with_test_adapters: None
 ) -> None:
