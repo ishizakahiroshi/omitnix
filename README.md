@@ -1,5 +1,7 @@
 # omitnix
 
+**English** · [日本語](README.ja.md)
+
 Static code inventory that **never lets "not analyzed" look like "nothing there"**.
 
 > Status: early development. Eleven language adapters ship (`pip install omitnix[all]`; see
@@ -7,6 +9,17 @@ Static code inventory that **never lets "not analyzed" look like "nothing there"
 > extension, and written into the generated document by name. A file one of them claims and
 > cannot read is `unknown`, named individually, and fails the run only where the repository
 > asked it to (`fail_on_unknown`). This is a personal hobby project; **no support is provided.**
+
+```
+pip install "omitnix[all]"
+omitnix                                # writes .omitnix/index.json
+omitnix --version                      # which version is installed
+pip install --upgrade "omitnix[all]"   # later, to update
+```
+
+[Install and first run, walked through](https://ishizakahiroshi.com/articles/omitnix/usage.html)
+· [PyPI](https://pypi.org/project/omitnix/)
+· [Changelog](CHANGELOG.md)
 
 ## What it is
 
@@ -18,6 +31,45 @@ Static code inventory that **never lets "not analyzed" look like "nothing there"
 It never connects to a database. Schema information, when used, is read from a JSON snapshot produced by another tool.
 
 There used to be a second, human-readable rendering of the same facts, `.omitnix/index.md`. It was removed (2026-09) once a second tool ([OpenWiki](https://github.com/langchain-ai/openwiki)) started reading `index.json` and writing the readable document itself: two renderers of one set of facts drift out of sync, and on a real repository the flat Markdown table had grown to 3,538 rows that nobody opened. `omitnix` now writes the evidence; the document a person reads is somebody else's job.
+
+## Why not a language server, or a search tool behind MCP
+
+Both of those answer questions. This answers a question *about the answer*, and that is the
+only difference worth the install.
+
+Ask "which files write to `orders`" and get nothing back. From a **language server**, "no
+references" means no *symbol* reference was found — a table named inside `"UPDATE orders
+..."` was never in scope — and however many files the server failed to parse, that count
+does not travel with the answer. It is a per-file diagnostic, and nothing adds it up. From
+a **search tool behind an MCP server**, "nothing found" does not say how much was
+searched, and a model reading that cannot tell *there is none* from *nobody looked*.
+
+`omitnix` answers with the same zero, and with it: the files it could not read, by name and
+reason; the extensions no adapter claims, by count; and, where a statement could not be
+parsed, the sentence saying this table list may be incomplete.
+
+That is a narrow difference, and the trade runs both ways. A language server does
+type-aware definition, reference and rename across files; this does none of that and stops
+at one hop of indirection on purpose. An MCP server answers free-form questions in
+conversation; this has no question interface at all. It writes one file.
+
+| | language server / MCP tool | `omitnix` |
+|---|---|---|
+| the answer | ephemeral, per session | a committed file, stamped with the commit it came from, diffable, reviewable |
+| what it needs | a server per language, usually resolved dependencies | Python 3.11 and `pip`; no build, no database, no daemon |
+| the unit | one file, one symbol, one project | a repository, or every repository under a directory (measured on 52) |
+
+They are not competitors, and this sits under them rather than beside them. `omitnix`
+writes the facts *and their limits* into `index.json`; serving that to a model is an MCP
+server's job, and turning it into a document a person reads is somebody else's — OpenWiki
+already reads it. Nothing here answers questions. It makes the thing being searched say
+how far it goes.
+
+**If "is this list complete?" is not already costing you time, there is nothing here for
+you.** Where it does earn its place: an index an AI assistant reads (told nothing about the
+gaps, it reads a missing row as "none"), a machine check that stops new code arriving
+without the thing its own language can report, and more repositories than anyone can hold
+in their head.
 
 ## Why it exists
 

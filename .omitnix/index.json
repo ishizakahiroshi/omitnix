@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "d0204f80e59937475c6fbeff62f265a9ce1c2530",
+    "commit": "38578340113651a9f3d3268f2e82afb57293e64f",
     "dirty": true,
     "tool": "omitnix 0.1.3",
     "partial": false,
@@ -134,11 +134,11 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 82,
+    "discovered": 83,
     "analyzed": 59,
     "unresolved": 2,
     "unknown": 0,
-    "unclaimed": 21,
+    "unclaimed": 22,
     "skipped_by_config": 0
   },
   "files": [
@@ -300,6 +300,14 @@
       "fields": {},
       "unresolved": [],
       "reason": "no adapter claims '(no extension)'"
+    },
+    {
+      "path": "README.ja.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
     },
     {
       "path": "README.md",
