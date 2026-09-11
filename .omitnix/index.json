@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "7c17fe14e6904842181c7a96fa57710eebb2f306",
+    "commit": "14dbbd93d19f577b7d4ac31cb681cdbf924dd034",
     "dirty": true,
     "tool": "omitnix 0.1.1",
     "partial": false,
@@ -134,11 +134,11 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 80,
+    "discovered": 81,
     "analyzed": 58,
     "unresolved": 2,
     "unknown": 0,
-    "unclaimed": 20,
+    "unclaimed": 21,
     "skipped_by_config": 0
   },
   "files": [
@@ -1342,6 +1342,14 @@
         }
       },
       "unresolved": []
+    },
+    {
+      "path": "portfolio.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
     },
     {
       "path": "pyproject.toml",
