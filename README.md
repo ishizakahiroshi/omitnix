@@ -359,9 +359,30 @@ gamma (worktree)                       STALE       2026-09-02  314/737     -
 ```
 
 Exits 3 when any committed index is out of date, for the same reason `--check` does: a
-stale generated document is read as the current state by whoever finds it.
+stale generated document is read as the current state by whoever finds it. It exits 3 for
+an index this run was not equipped to check as well — "I could not check" and "I checked
+and it is fine" are the same exit code only in a survey nobody should wire into anything.
 
-Three things the report is careful about.
+Four things the report is careful about.
+
+**A run that cannot read the sources says so, instead of calling the index stale.** A
+bare `pip install omitnix` has no language grammars, so every source file comes back
+unknown and every document compares unequal. Reported as out of date, that is advice to
+replace a good index with a nearly empty one:
+
+```
+repository                             index       applied     analyzed    pointed at by
+----------------------------------------------------------------------------------------
+alpha                                  UNVERIFIED  2026-09-11  2/74        CLAUDE.md+AGENTS.md
+
+omitnix: could not be checked: alpha
+  this run could not read 49 file(s) the committed index has an answer for, so a
+  difference would say more about this machine than about the index.
+  Install what it needs with: pip install "omitnix[go,html,python,tsjs]"
+```
+
+The advice names every extra the repository turned out to need, in one command, rather
+than the first one met and then the next one on the run after that.
 
 **A repository with no index is listed, not omitted.** "We surveyed 30 and 9 carry it"
 and "there were 9" are different statements. Only repositories that do carry one are

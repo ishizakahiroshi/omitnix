@@ -3,6 +3,27 @@
 Notable changes to `omitnix`. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed
+
+- `--workspace --status` reported every deployed repository as **out of date** when the
+  run had no language grammars, and told the reader to regenerate. Measured against the
+  published 0.1.2 on a bare `pip install omitnix`: nine of nine deployed repositories
+  came back `STALE`, and following the advice would have replaced nine good indexes with
+  nearly empty ones. Nothing about any index had changed; the run was not equipped to
+  reproduce it.
+
+  A run that cannot read a file the committed index has an answer for now reports the
+  repository as `unverified` rather than `stale`, and says so in its own sentence —
+  "could not be checked", not "out of date", with no offer to regenerate. The exit code
+  stays 3, because "I could not check" and "I checked and it is fine" must not be the
+  same answer.
+
+  The advice names **every** extra the repository turned out to need in one command
+  (`pip install "omitnix[go,html,python,tsjs]"`) rather than the first one met, which
+  would have restored the round trip 0.1.1 removed for a single file.
+
 ## 0.1.2 — 2026-09-11
 
 ### Added

@@ -10,9 +10,11 @@ ignored too.
 
 from __future__ import annotations
 
+import importlib
 import io
 from pathlib import Path
 
+from omitnix.adapters.base import AnalysisResult
 from omitnix.cli import EXIT_OK, EXIT_STALE, main
 from omitnix.workspace import survey_repository, survey_workspace
 
@@ -212,3 +214,115 @@ def test_repositories_without_an_index_are_still_listed(tmp_path: Path) -> None:
     # "We surveyed 2 and 1 has it" and "there was 1" are different statements.
     assert "alpha" in out
     assert "2 repositor(y/ies) surveyed, 1 with a committed index" in out
+
+
+# --------------------------------------------------------------------------------------
+# A machine that cannot read what the index was made with
+# --------------------------------------------------------------------------------------
+
+
+MISSING_GRAMMAR = (
+    "the flow grammar is not installed (No module named 'tree_sitter_flow'). "
+    'Install it with: pip install "omitnix[flow]"'
+)
+
+
+def _make_this_run_blind(monkeypatch) -> None:
+    """Take away the adapter's ability to read, leaving every file on disk untouched.
+
+    This is what a bare ``pip install omitnix`` is: the same repository, the same
+    committed index, and a run that has no grammar to read the sources with.
+    """
+    module = importlib.import_module("omitnix.adapters.flow")
+
+    def blind(self, request):  # noqa: ANN001, ANN202 - matches the adapter contract
+        return AnalysisResult.unknown(MISSING_GRAMMAR)
+
+    monkeypatch.setattr(module.FlowAdapter, "analyze", blind)
+
+
+def test_a_run_that_cannot_read_the_sources_does_not_call_the_index_stale(
+    tmp_path: Path, with_test_adapters, monkeypatch
+) -> None:
+    """Measured 2026-09-11 against the published 0.1.2: a bare install reported all nine
+    deployed repositories as out of date and told the reader to regenerate them, which
+    would have replaced nine good indexes with nearly empty ones.
+
+    Nothing about the index had changed. The run had no grammars.
+    """
+    repo = make_repo(tmp_path, "alpha", {"a.flow": ORDERS_FLOW})
+    generate(repo)
+    assert survey_repository("alpha", repo, tracked_only=False).state == "current"
+
+    _make_this_run_blind(monkeypatch)
+    status = survey_repository("alpha", repo, tracked_only=False)
+
+    assert status.state == "unverified"
+    # The reader has to be able to act on it, and the action is not "regenerate".
+    assert 'pip install "omitnix[flow]"' in status.detail
+
+
+def test_a_file_the_index_also_gave_up_on_is_not_a_lost_answer(
+    tmp_path: Path, with_test_adapters
+) -> None:
+    """Both runs refused the same file, so this run is no worse. The comparison stands."""
+    repo = make_repo(
+        tmp_path,
+        "alpha",
+        {"a.flow": ORDERS_FLOW, "refused.flow": "unparsable: on purpose\n"},
+    )
+    generate(repo)
+
+    status = survey_repository("alpha", repo, tracked_only=False)
+
+    assert status.state == "current"
+    assert status.coverage is not None
+    assert status.coverage.unknown == 1
+
+
+def test_an_index_that_could_not_be_checked_is_not_reported_as_out_of_date(
+    tmp_path: Path, with_test_adapters, monkeypatch
+) -> None:
+    repo = make_repo(tmp_path, "alpha", {"a.flow": ORDERS_FLOW})
+    generate(repo)
+    _make_this_run_blind(monkeypatch)
+
+    code, out, err = cli("--workspace", str(tmp_path), "--status", "--all-files")
+
+    # Not a pass: "I could not check" and "I checked and it is fine" must not share an
+    # exit code. But the word on the line, and the advice, are the other ones.
+    assert code == EXIT_STALE
+    assert "UNVERIFIED" in out
+    assert "0 out of date, 1 could not be checked here" in out
+    assert "could not be checked: alpha" in err
+    assert "out of date: alpha" not in err
+    assert "regenerate with" not in err
+
+
+def test_the_advice_names_every_extra_this_repository_turned_out_to_need(
+    tmp_path: Path, with_test_adapters, monkeypatch
+) -> None:
+    """0.1.1 removed the loop where each run named only the next missing piece. A survey
+    meets several languages at once, so quoting the first reason would put the loop back.
+    """
+    repo = make_repo(
+        tmp_path, "alpha", {"a.flow": ORDERS_FLOW, "b.flow": ORDERS_FLOW}
+    )
+    generate(repo)
+
+    module = importlib.import_module("omitnix.adapters.flow")
+    extras = {"a.flow": "html", "b.flow": "python"}
+
+    def blind(self, request):  # noqa: ANN001, ANN202 - matches the adapter contract
+        extra = extras[request.path]
+        return AnalysisResult.unknown(
+            f"the {extra} grammar is not installed (No module named 'x'). "
+            f'Install it with: pip install "omitnix[{extra}]"'
+        )
+
+    monkeypatch.setattr(module.FlowAdapter, "analyze", blind)
+    status = survey_repository("alpha", repo, tracked_only=False)
+
+    assert status.state == "unverified"
+    # One command, both extras, sorted so two runs say the same thing.
+    assert 'pip install "omitnix[html,python]"' in status.detail

@@ -32,7 +32,9 @@ from __future__ import annotations
 import importlib
 import json
 import os
+import re
 import time
+from collections.abc import Iterable
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -43,7 +45,7 @@ from .config import Config, load_config
 from .errors import OmitnixError
 from .gitmeta import last_commit_date_for, main_worktree_of
 from .globs import glob_match, normalize
-from .model import Coverage, FileRecord, Report
+from .model import Coverage, FileRecord, Report, Status
 from .registry import AdapterSet, build_adapter_set
 from .render import payload_for_check, render_json, to_payload
 from .scan import RepoDiscovery, discover_repository_files
@@ -865,7 +867,7 @@ class DeploymentStatus:
 
     repo: str
     root: Path
-    #: ``absent`` / ``current`` / ``stale`` / ``unreadable``
+    #: ``absent`` / ``current`` / ``stale`` / ``unverified`` / ``unreadable``
     state: str
     #: Date (YYYY-MM-DD) of the last commit that touched the index, when it is committed.
     applied: str | None = None
@@ -888,6 +890,62 @@ class DeploymentStatus:
 
 _POINTER_FILES = ("CLAUDE.md", "AGENTS.md")
 _POINTER_NEEDLE = "omitnix/index.json"
+
+
+_EXTRA_IN_HINT = re.compile(r'omitnix\[([a-z0-9_,\-]+)\]')
+
+
+def _install_hint(reasons: Iterable[str]) -> str:
+    """One command that installs everything this repository turned out to need.
+
+    The reasons each carry their own ``pip install "omitnix[x]"``, and quoting the first
+    one sends the reader round the loop that 0.1.1 removed for a single file: install
+    what it said, run again, be told about the next missing piece. A survey meets several
+    languages at once, so it can name them all in one command instead.
+    """
+    extras: list[str] = []
+    for reason in reasons:
+        for match in _EXTRA_IN_HINT.finditer(reason or ""):
+            for extra in match.group(1).split(","):
+                if extra and extra not in extras:
+                    extras.append(extra)
+    if not extras:
+        return ""
+    return f'Install what it needs with: pip install "omitnix[{",".join(sorted(extras))}]"'
+
+
+def _answers_this_run_lost(
+    stored: dict[str, Any], report: Report
+) -> tuple[tuple[str, str], ...]:
+    """Files the committed document has an answer for, which this run could not read.
+
+    This is how the survey tells *the index is out of date* apart from *this machine is
+    missing what the index was made with*. Both make the fresh document differ from the
+    stored one, and only the first is the reader's problem.
+
+    Measured 2026-09-11, against the published 0.1.2: a bare ``pip install omitnix`` has
+    no language grammars, so every source file came back unknown, every one of nine
+    repositories compared unequal, and all nine were reported ``STALE`` with the advice
+    to regenerate. Regenerating would have replaced nine good indexes with nearly empty
+    ones. That is the false "out of date" this mode exists to avoid, reached from the
+    other direction: not by comparing against a run nobody made, but by comparing against
+    a run this machine is not equipped to make.
+
+    Returns one ``(path, reason)`` pair per lost answer, in the document's order. A file
+    the stored document also gave up on is not a loss: this run is no worse there.
+    """
+    refused = {
+        record.path: (record.reason or "")
+        for record in report.files
+        if record.status is Status.UNKNOWN
+    }
+    if not refused:
+        return ()
+    return tuple(
+        (entry["path"], refused[entry["path"]])
+        for entry in stored.get("files", ())
+        if entry.get("status") != "unknown" and entry.get("path") in refused
+    )
 
 
 def _pointer_files(repo_root: Path) -> tuple[str, ...]:
@@ -988,6 +1046,28 @@ def survey_repository(
             main_worktree=main_tree,
             coverage=report.coverage,
             detail=f"{json_path.name} could not be read: {exc}",
+        )
+
+    # Before the comparison is allowed to mean anything, ask whether this run was
+    # equipped to make it. A run that cannot read what the recorded run read produces a
+    # different document for a reason that has nothing to do with the index.
+    lost = _answers_this_run_lost(stored, report)
+    if lost:
+        hint = _install_hint(reason for _, reason in lost)
+        detail = (
+            f"this run could not read {len(lost)} file(s) the committed index has an "
+            "answer for, so a difference would say more about this machine than about "
+            "the index"
+        )
+        return DeploymentStatus(
+            repo=repo,
+            root=repo_root,
+            state="unverified",
+            applied=applied,
+            pointed_at_by=pointers,
+            main_worktree=main_tree,
+            coverage=report.coverage,
+            detail=f"{detail}. {hint}" if hint else detail,
         )
 
     fresh = payload_for_check(to_payload(report))

@@ -220,6 +220,7 @@ def _status_line(status: DeploymentStatus) -> str:
     state = {
         "current": "current",
         "stale": "STALE",
+        "unverified": "UNVERIFIED",
         "absent": "-",
         "unreadable": "UNREADABLE",
     }[status.state]
@@ -240,7 +241,9 @@ def _run_workspace_status(args, root: Path, exclude_repos, out, err) -> int:
     """Report the deployment, rather than analyzing the code.
 
     Exits 3 when any committed index is out of date, for the same reason --check does:
-    a stale generated document is read as the current state by whoever finds it.
+    a stale generated document is read as the current state by whoever finds it. It
+    exits 3 for an index this run was not equipped to check as well, which is a different
+    sentence on stderr and the same refusal to call it fine.
     """
 
     def progress(position: int, total: int, repo: str) -> None:
@@ -261,13 +264,20 @@ def _run_workspace_status(args, root: Path, exclude_repos, out, err) -> int:
 
     deployed = [s for s in statuses if s.has_index]
     stale = [s for s in deployed if s.state == "stale"]
+    unverified = [s for s in deployed if s.state == "unverified"]
     unreadable = [s for s in deployed if s.state == "unreadable"]
     unpointed = [s for s in deployed if s.state != "absent" and not s.pointed_at_by]
 
+    # "Could not be checked" belongs in the same sentence as "out of date", not in a
+    # footnote. A summary that says only "0 out of date" while nine repositories were
+    # never compared reads as an all-clear.
+    unchecked = (
+        f", {len(unverified)} could not be checked here" if unverified else ""
+    )
     print("", file=out)
     print(
         f"omitnix: {len(statuses)} repositor(y/ies) surveyed, {len(deployed)} with a "
-        f"committed index, {len(stale)} out of date. Nothing was written.",
+        f"committed index, {len(stale)} out of date{unchecked}. Nothing was written.",
         file=out,
     )
 
@@ -284,6 +294,12 @@ def _run_workspace_status(args, root: Path, exclude_repos, out, err) -> int:
         else:
             print(f"  regenerate with: omitnix --root {status.root}", file=err)
 
+    for status in unverified:
+        # Deliberately not "regenerate": following that advice here would replace a good
+        # index with the near-empty one this machine is able to produce.
+        print(f"omitnix: could not be checked: {status.repo}", file=err)
+        print(f"  {status.detail}", file=err)
+
     for status in unreadable:
         print(f"omitnix: could not be surveyed: {status.repo}: {status.detail}", file=err)
 
@@ -296,7 +312,9 @@ def _run_workspace_status(args, root: Path, exclude_repos, out, err) -> int:
             file=err,
         )
 
-    if stale or unreadable:
+    # Unverified is not a pass. "I could not check" and "I checked and it is fine" are
+    # the same exit code only in a survey nobody should wire into anything.
+    if stale or unverified or unreadable:
         return EXIT_STALE
     return EXIT_OK
 
