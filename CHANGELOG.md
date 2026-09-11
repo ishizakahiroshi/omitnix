@@ -3,7 +3,7 @@
 Notable changes to `omitnix`. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 0.1.3 — 2026-09-12
 
 ### Fixed
 
