@@ -1,0 +1,123 @@
+name: publish
+
+# Tag-driven publication to PyPI through Trusted Publishing (OIDC).
+#
+# There is no API token anywhere in this file and none should be added. PyPI is told,
+# once, which repository and which workflow file may publish this project; the token the
+# upload uses is minted for that one run and expires with it. Nothing here can be leaked
+# from a log or a fork, because nothing here is a secret.
+#
+# To release: set the version in pyproject.toml and omitnix/__init__.py, push the commit,
+# then push the tag `vX.Y.Z`. The version guard below refuses the run if the three
+# disagree -- a published version number can never be reused, so a mismatched tag has to
+# fail before the upload, not after.
+#
+# The test job is not a formality either. `ci.yml` runs on pushes to main and on pull
+# requests; a tag push triggers neither, so without this the only thing standing between
+# an untested tree and PyPI would be remembering to look.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: verify the tag and the tree
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      # The tag is the only one of the three that cannot be corrected after the fact.
+      - name: Refuse a tag that disagrees with the package version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pyproject="$(python -c "import tomllib,pathlib;print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")"
+          package="$(python -c "import pathlib,re;print(re.search(r'__version__ = \"([^\"]+)\"', pathlib.Path('omitnix/__init__.py').read_text()).group(1))")"
+          echo "tag=$tag pyproject=$pyproject package=$package"
+          if [ "$tag" != "$pyproject" ] || [ "$tag" != "$package" ]; then
+            echo "::error::the tag, pyproject.toml and omitnix/__init__.py must name the same version"
+            exit 1
+          fi
+
+      # Every parser, so that the adapters are exercised rather than reporting unknown.
+      - name: Install the package with every extra
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Tests
+        run: python -m pytest -q
+
+      - name: The tool against its own repository
+        run: python -m omitnix --check
+
+  build:
+    name: build sdist and wheel
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install build tooling
+        run: python -m pip install --upgrade build
+
+      - name: Build distributions
+        run: python -m build
+
+      # hatchling selects files by what git tracks, so an untracked query file would be
+      # missing from the wheel while the build stayed green. The adapter that needs it
+      # then raises AdapterContractError on the user's machine and nowhere else.
+      - name: Refuse a wheel that is missing a query file
+        run: |
+          python - <<'PY'
+          import pathlib, zipfile, sys
+
+          wheel = next(pathlib.Path("dist").glob("*.whl"))
+          shipped = {n for n in zipfile.ZipFile(wheel).namelist() if n.endswith(".scm")}
+          expected = {f"omitnix/queries/{p.name}" for p in pathlib.Path("omitnix/queries").glob("*.scm")}
+          missing = sorted(expected - shipped)
+          if missing:
+              sys.exit(f"{wheel.name} is missing: {', '.join(missing)}")
+          print(f"{wheel.name} ships {len(shipped)} query files")
+          PY
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    name: publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write # the OIDC token Trusted Publishing exchanges for an upload
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish via Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
