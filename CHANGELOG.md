@@ -3,6 +3,39 @@
 Notable changes to `omitnix`. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.2 — 2026-09-11
+
+### Added
+
+- `omitnix --workspace <dir> --status` answers a question the tool could not answer about
+  itself: **which repositories under a directory carry a committed index, and has any of
+  them gone stale.** It reads what is there and writes nothing. Each repository is
+  reported as `current`, `stale`, `unreadable`, or `absent`, together with the date of
+  the commit that last touched the index, the coverage the document claims, and which
+  instruction files (`CLAUDE.md`, `AGENTS.md`) actually name `omitnix/index.json` — an
+  index nobody is told to read is a different problem from one that is out of date. The
+  command exits 3 when any index is stale or could not be read.
+  - A repository with no index is **listed as absent**, not omitted. A survey that leaves
+    it out reads as "not looked at" rather than "nothing there".
+  - A linked worktree is named as one, with the main worktree it belongs to, so the same
+    repository checked out twice is not counted as two deployments.
+  - The comparison reproduces the **single-repository run** that produced the committed
+    document, not a wider workspace run. Applying the workspace exclusions to the
+    comparison reported three repositories as out of date whose `--check` exits 0; a
+    survey that calls a current index stale teaches the reader to ignore it, and then the
+    one real staleness is ignored too.
+
+### Fixed
+
+- The guard on the HTML adapter's cost took one reading of each page size, and one
+  reading on a shared runner is an upper bound of unknown looseness rather than a
+  measurement. Measured over twelve attempts on one machine, the ratio of the two sizes
+  landed anywhere between 1.6 and 2.8 against a limit of 3, and a macOS runner read 3.1
+  and failed while the adapter was untouched. Each size is now the fastest of several
+  runs. This does not weaken the guard: a query whose cost grows with the square of the
+  page is slower in every attempt, not in an unlucky one, and a control that really is
+  quadratic still reads 3.6 and fails.
+
 ## 0.1.1 — 2026-09-11
 
 ### Changed
