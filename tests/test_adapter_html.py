@@ -241,11 +241,21 @@ def _generated_page(rows: int) -> str:
     return f"<!doctype html>\n<html><body>\n{body}\n</body></html>\n"
 
 
-def _seconds_to_analyze(text: str) -> float:
+def _seconds_to_analyze(text: str, *, attempts: int = 5) -> float:
+    """The fastest of several runs, which is the honest estimate of what the work costs.
+
+    Interference on a shared runner only ever adds time, so a single reading is an
+    upper bound of unknown looseness rather than a measurement. Taking the smallest
+    reading removes the noise without weakening the guard: a query that costs the
+    square of the page is slower in every attempt, not in an unlucky one.
+    """
     request = AnalysisRequest(path="generated.html", absolute_path=None, text=text)
-    start = time.perf_counter()
-    ADAPTER.analyze(request)
-    return time.perf_counter() - start
+    best = float("inf")
+    for _ in range(attempts):
+        start = time.perf_counter()
+        ADAPTER.analyze(request)
+        best = min(best, time.perf_counter() - start)
+    return best
 
 
 def test_cost_grows_with_the_page_rather_than_with_its_square() -> None:
@@ -256,6 +266,11 @@ def test_cost_grows_with_the_page_rather_than_with_its_square() -> None:
     seconds and was 44% of a whole 52-repository run. The query now captures whole nodes
     and the adapter walks their children, which is linear. A wall-clock budget would say
     more about the runner than about the code, so this compares one size against another.
+
+    Measured 2026-09-11 over 12 attempts on one machine: a single reading of each size
+    put the ratio anywhere between 1.6 and 2.8, and the same test on a macOS runner read
+    3.1 and failed while the adapter was untouched. The comparison is sound; one reading
+    of each side was not enough to make it.
     """
     small = _seconds_to_analyze(_generated_page(3000))
     large = _seconds_to_analyze(_generated_page(6000))
