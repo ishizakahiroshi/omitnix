@@ -565,6 +565,86 @@ def test_an_exemption_does_not_reach_a_file_outside_the_paths_it_names(
 
 
 # --------------------------------------------------------------------------------------
+# The gate follows a reference as far as the index does
+# --------------------------------------------------------------------------------------
+
+PHP_GATE_YAML = """
+include:
+  - '**/*.php'
+authentication_functions:
+  - require_session
+"""
+
+#: Committed before the new file arrives, and makes the authentication call itself.
+SESSION_GUARD_PHP = """<?php
+/**
+ * Start the session for every endpoint that requires this file.
+ */
+
+require_session();
+"""
+
+ORDERS_CANCEL_PHP = """<?php
+/**
+ * Cancel one order for the signed-in customer.
+ */
+
+require __DIR__ . '/../auth/session_guard.php';
+
+$order_id = (int) $_POST['order_id'];
+"""
+
+ORDERS_CANCEL_UNGUARDED_PHP = """<?php
+/**
+ * Cancel one order for the signed-in customer.
+ */
+
+$order_id = (int) $_POST['order_id'];
+"""
+
+
+def _php_gate_repo(root: Path, entry: str) -> Path:
+    pytest.importorskip("tree_sitter", reason="the PHP adapter needs the tree-sitter binding")
+    pytest.importorskip("tree_sitter_php", reason="the PHP adapter needs the PHP grammar")
+    pytest.importorskip("sqlglot", reason="the PHP adapter reads SQL with sqlglot")
+    baseline(root, {"auth/session_guard.php": SESSION_GUARD_PHP}, config=PHP_GATE_YAML)
+    write_repo(root, {"api/orders_cancel.php": entry})
+    return root
+
+
+@pytest.mark.parametrize("extra", [(), ("--files", "api/orders_cancel.php")])
+def test_a_new_file_whose_required_file_makes_the_authentication_call_passes(
+    tmp_path: Path, extra: tuple[str, ...]
+) -> None:
+    """The gate reaches a required file exactly as far as the index does.
+
+    Measured on 2026-09-17: a new endpoint that requires the file making its
+    authentication call was refused for having none, while the index built from the same
+    tree recorded the call. The gate analyzed the new file with only the new file in
+    scope, so every require target was "outside this scan" and was never read.
+    """
+    root = _php_gate_repo(tmp_path, ORDERS_CANCEL_PHP)
+
+    code, out, err = gate(root, *extra)
+    assert code == EXIT_OK, err
+    assert "no authentication call" not in err
+    assert "outside this scan" not in err
+    assert "checked 1 file" in out
+
+
+@pytest.mark.parametrize("extra", [(), ("--files", "api/orders_cancel.php")])
+def test_a_new_file_that_requires_nothing_is_still_refused_for_authentication(
+    tmp_path: Path, extra: tuple[str, ...]
+) -> None:
+    """Widening the scope must not admit a file that reaches no authentication call."""
+    root = _php_gate_repo(tmp_path, ORDERS_CANCEL_UNGUARDED_PHP)
+
+    code, _, err = gate(root, *extra)
+    assert code == EXIT_GATE
+    assert "api/orders_cancel.php: no authentication call" in err
+
+
+# --------------------------------------------------------------------------------------
 # The shipped semgrep rules
 # --------------------------------------------------------------------------------------
 

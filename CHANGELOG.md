@@ -3,6 +3,20 @@
 Notable changes to `omitnix`. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed
+
+- `--gate` and `--files` refused or under-reported a file whose facts live one `require`
+  away, while the full index recorded them. A partial run held its adapters to the listed
+  files only, so every required file was "outside this scan" and never read. Measured on
+  a PHP repository: a new endpoint that requires the file making its authentication call
+  was refused for "no authentication call", and the index built from the same tree had
+  the call. A partial run now reports only the listed files but lets their references
+  reach what the full run would (discovery under the same `tracked_only`, plus the listed
+  files themselves), which is what `--print` already did. A file that reaches no
+  authentication call is still refused.
+
 ## 0.1.3 — 2026-09-12
 
 ### Fixed

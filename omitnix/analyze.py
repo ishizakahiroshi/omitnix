@@ -280,9 +280,10 @@ def build_report(
 
     ``files`` restricts the run to an explicit list (what a pre-commit hook passes, or
     what ``--gate`` narrows to). The resulting report is marked partial, because its
-    coverage describes those files only, and discovery is not consulted at all: an
-    explicit list is a different question from "what does this repository contain", and
-    ``tracked_only`` has no effect on it.
+    coverage describes those files only: an explicit list is a different question from
+    "what does this repository contain", and discovery never adds a file to it. Discovery
+    (under ``tracked_only``) still decides the scope a reference in those files may reach,
+    so a listed file is analyzed exactly as the full run analyzes it.
 
     Without ``files``, this is the question ``tracked_only`` answers. Default: what git
     tracks, not everything a full filesystem walk would turn up -- a working tree also
@@ -305,14 +306,23 @@ def build_report(
         selected: SelectionResult | list[str] = discovery.files
         discovery_note = discovery.note
         skipped = 0
+        # The scope every adapter is held to: exactly what this run analyzes.
+        in_scope = frozenset(selected)
     else:
         selection = select_files(config, files)
         selected = selection
         skipped = selection.skipped
-
-    # The scope every adapter is held to. Built from the same selection the run analyzes,
-    # so an adapter can never reach a file this report does not account for.
-    in_scope = frozenset(selected)
+        # An explicit list narrows what is *reported*, not what a reference may reach. The
+        # scope is the one the full run would hold these files to, so a file checked on
+        # its own gets the answer the index gives it. Scoping to the list itself made
+        # every required file "outside this scan": measured on 2026-09-17, a new endpoint
+        # requiring the file that makes its authentication call was refused by --gate for
+        # having none, while the index built from the same tree recorded the call.
+        # ``--print`` already held one file to the discovery scope for the same reason.
+        # The listed files are added because a new, still-untracked file is part of this
+        # run even though discovery does not see it yet.
+        discovered = discover_repository_files(config, tracked_only=tracked_only).files
+        in_scope = frozenset(discovered) | frozenset(selected)
     records = [
         analyze_file(rel, adapter_set, config, schema_tables, in_scope)
         for rel in sorted(selected)
