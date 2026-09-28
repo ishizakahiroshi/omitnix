@@ -1,4 +1,11 @@
 ---
+cover:
+  path: portfolio/overview-2026-09-28.jpg
+  alt: {ja: "omitnix の紹介動画", en: "omitnix overview video"}
+video:
+  provider: youtube
+  id: "5O6vLWGlvq8"
+  durationSeconds: 20
 schemaVersion: 1
 color: "#2f5c8f"
 initials: "om"
