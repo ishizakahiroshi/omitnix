@@ -1,4 +1,5 @@
 #!/bin/sh
+# Compile and run the standalone Java accepted-range walk benchmark.
 set -eu
 cd "$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
 JAVA=${JAVA:-java}
