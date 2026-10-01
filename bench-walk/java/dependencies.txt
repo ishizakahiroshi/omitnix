@@ -1,0 +1,2 @@
+io.github.bonede:tree-sitter:0.26.6
+io.github.bonede:tree-sitter-python:0.25.0

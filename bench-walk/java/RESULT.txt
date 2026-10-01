@@ -1,0 +1,4 @@
+walk java S 825 339900 825 0.4
+walk java N 4200 421900 200 1.7
+walk java M 4000 7998000 4000 7.9
+parse java BINDING_FAILED
