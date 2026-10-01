@@ -1,0 +1,4 @@
+walk rust S 825 339900 825 0.1
+walk rust N 4200 421900 200 0.2
+walk rust M 4000 7998000 4000 3.9
+parse rust ok 68 3794 318139 3597 0.2
