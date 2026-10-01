@@ -1,5 +1,6 @@
 //go:build treesitter
 
+// Check native parsing of every supported fixed-commit source file.
 package main
 
 import (

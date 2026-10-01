@@ -1,5 +1,6 @@
 //go:build treesitter
 
+// Prepare fixed-commit string-node ranges with native tree-sitter grammars.
 package main
 
 import (

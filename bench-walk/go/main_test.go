@@ -1,3 +1,4 @@
+// Check the standalone Go range-walk counters and measurement contract.
 package main
 
 import (
