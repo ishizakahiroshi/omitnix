@@ -1,4 +1,5 @@
 #!/bin/sh
+# Build and run the standalone C# accepted-range walk benchmark.
 set -eu
 here=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 if ! command -v dotnet >/dev/null 2>&1; then
