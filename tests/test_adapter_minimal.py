@@ -1,4 +1,4 @@
-"""The minimal tier: css, rust, shell, powershell and vue.
+"""The minimal tier: css, shell, powershell and vue.
 
 These adapters exist so that an extension a repository contains is *decided* rather than
 left to fail the run, and so that deciding it does not require an exclusion written into
@@ -18,7 +18,6 @@ import pytest
 from omitnix.adapters.base import AnalysisRequest, AnalysisResult
 from omitnix.adapters.css import ADAPTER as CSS
 from omitnix.adapters.powershell import ADAPTER as POWERSHELL
-from omitnix.adapters.rust import ADAPTER as RUST
 from omitnix.adapters.shell import ADAPTER as SHELL
 from omitnix.adapters.vue import ADAPTER as VUE
 from omitnix.analyze import build_report
@@ -39,7 +38,6 @@ MINIMAL_FIXTURES = FIXTURES / "minimal"
 
 ADAPTERS = {
     "styles.css": CSS,
-    "counter.rs": RUST,
     "deploy.sh": SHELL,
     "banner.sh": SHELL,
     "deploy.ps1": POWERSHELL,
@@ -63,7 +61,7 @@ def analyze(rel: str) -> AnalysisResult:
 # --- what these adapters declare ---------------------------------------------------
 
 
-@pytest.mark.parametrize("adapter", [RUST, SHELL, POWERSHELL, VUE])
+@pytest.mark.parametrize("adapter", [SHELL, POWERSHELL, VUE])
 def test_the_minimal_tier_claims_a_summary_and_nothing_else(adapter: object) -> None:
     assert adapter.capabilities == frozenset({Capability.SUMMARY})
 
@@ -74,10 +72,9 @@ def test_the_stylesheet_adapter_claims_nothing_at_all() -> None:
     assert CSS.capabilities == frozenset()
 
 
-@pytest.mark.parametrize("adapter", [CSS, RUST, SHELL, POWERSHELL, VUE])
+@pytest.mark.parametrize("adapter", [CSS, SHELL, POWERSHELL, VUE])
 def test_no_minimal_adapter_extracts_a_table(adapter: object) -> None:
-    """Not until there is something to extract. Rust was measured across 6 repositories
-    and not one of them declared a database crate."""
+    """A table column on this tier would say the file had been checked for one."""
     assert Capability.READS not in adapter.capabilities
     assert Capability.WRITES not in adapter.capabilities
 
@@ -91,14 +88,6 @@ def test_no_grammar_package_is_needed_by_the_minimal_tier() -> None:
 
 
 # --- the summaries they do extract -------------------------------------------------
-
-
-def test_a_rust_inner_doc_comment_does_not_leave_its_marker_behind() -> None:
-    """'//!' opens a comment. Stripping only the slashes left summaries beginning with a
-    stray exclamation mark."""
-    assert analyze("counter.rs").values[Capability.SUMMARY] == (
-        "Counts orders in a batch. Touches no database."
-    )
 
 
 def test_a_shebang_is_not_mistaken_for_the_summary() -> None:
@@ -143,7 +132,6 @@ def test_a_file_with_no_header_comment_reports_no_summary_rather_than_inventing_
 REPO_CONFIG = """
 include:
   - '**/*.css'
-  - '**/*.rs'
   - '**/*.sh'
   - '**/*.ps1'
   - '**/*.vue'

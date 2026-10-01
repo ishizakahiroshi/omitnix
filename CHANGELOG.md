@@ -5,6 +5,19 @@ and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.htm
 
 ## Unreleased
 
+### Changed
+
+- The Rust adapter is full tier. A `.rs` file reports its summary, the configured
+  authentication and authorization calls, and the tables named by SQL that is written
+  out as text: string literals, raw strings, and the string arguments of macros such as
+  `query!`. `concat!` is joined before it is read. A `format!` hole or a `+` chain is
+  reported as SQL assembled at run time, and the part that is still visible is kept.
+  A Diesel, SeaORM, or SeaQuery query-builder call is `unresolved` (`query_builder`):
+  the file is not shown as one that touches no table, and the method chain's table
+  names are not guessed. Schema macros such as `table!` are not queries. Reading `.rs`
+  needs `omitnix[rust]`. A repository that gates new files asks a new `.rs` file for
+  the same summary and auth calls it asks of a new Go file.
+
 ### Fixed
 
 - `--gate` and `--files` refused or under-reported a file whose facts live one `require`

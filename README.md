@@ -531,19 +531,20 @@ an authorization call and found to have none.
 
 | tier | adapters | what they report |
 |---|---|---|
-| full | `php`, `python`, `go`, `tsjs`, `sql` | summary, authn, authz, tables read and written |
+| full | `php`, `python`, `go`, `rust`, `tsjs`, `sql` | summary, authn, authz, tables read and written |
 | reverse-lookup | `html` | summary, and the addresses the screen requests |
-| minimal | `css`, `rust`, `shell`, `powershell`, `vue` | the file exists, and its header comment |
+| minimal | `css`, `shell`, `powershell`, `vue` | the file exists, and its header comment |
 
 | adapter | extensions | install |
 |---|---|---|
 | `php` | `.php` `.phtml` | `omitnix[php]` |
 | `python` | `.py` `.pyi` | `omitnix[python]` |
 | `go` | `.go` | `omitnix[go]` |
+| `rust` | `.rs` | `omitnix[rust]` |
 | `tsjs` | `.ts` `.tsx` `.js` `.mjs` `.cjs` | `omitnix[tsjs]` |
 | `sql` | `.sql` | `omitnix[sql]` |
 | `html` | `.html` `.htm` | `omitnix[html]` |
-| `css` `rust` `shell` `powershell` `vue` | `.css` `.rs` `.sh` `.ps1` `.vue` | nothing to install |
+| `css` `shell` `powershell` `vue` | `.css` `.sh` `.ps1` `.vue` | nothing to install |
 
 The install column is also what a run tells you when the dependency is absent. A file whose
 adapter cannot load its grammar is `unknown` with a reason naming **the extra**, not the
@@ -569,9 +570,14 @@ until somebody wrote an exclusion for it in every repository that had one, so th
 to an adapter was paperwork. That end is fixed now, which is why the tier has to earn its
 place by what it reports instead.
 
-They also stop where the evidence stops. Rust is minimal because none of the measured Rust
-repositories declares a database crate: an extractor for tables would have had nothing to be
-tested against. It moves up when there is something real to test it on, not before.
+Rust reads SQL that is written out as text, including a string passed to a macro, and
+joins `concat!` before reading it. A `format!` hole or a value spliced in with `+` is
+reported as assembled at run time, with whatever part of the statement is still visible.
+A Diesel, SeaORM, or SeaQuery query-builder call has no SQL text; it is `unresolved`
+(`query_builder`), so the file is not shown as one that touches no table, and the table
+names a method chain assembles are not invented. `table!` and the other schema macros
+are mappings, not queries. A statement loaded from another file (`include_str!`,
+`query_file!`) stays on that file's row.
 
 ## Writing an adapter
 

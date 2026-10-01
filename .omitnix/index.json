@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "cbf143088f2692856a291d60a65fa9ef425296fb",
+    "commit": "4a0aa4365e8ef41f43147921a1cbd7c572466e7c",
     "dirty": true,
     "tool": "omitnix 0.1.3",
     "partial": false,
@@ -80,7 +80,11 @@
           ".rs"
         ],
         "capabilities": [
-          "summary"
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
         ]
       },
       {
@@ -134,11 +138,11 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 84,
-    "analyzed": 59,
+    "discovered": 86,
+    "analyzed": 60,
     "unresolved": 2,
     "unknown": 0,
-    "unclaimed": 23,
+    "unclaimed": 24,
     "skipped_by_config": 0
   },
   "files": [
@@ -767,7 +771,7 @@
       "fields": {
         "summary": {
           "state": "value",
-          "value": "Rust, at the minimal tier."
+          "value": "The Rust adapter."
         },
         "authentication": {
           "state": "not_configured"
@@ -1163,6 +1167,14 @@
     },
     {
       "path": "omitnix/queries/python.scm",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.scm'"
+    },
+    {
+      "path": "omitnix/queries/rust.scm",
       "adapter": null,
       "status": "unclaimed",
       "fields": {},
@@ -1612,7 +1624,7 @@
       "fields": {
         "summary": {
           "state": "value",
-          "value": "The minimal tier: css, rust, shell, powershell and vue."
+          "value": "The minimal tier: css, shell, powershell and vue."
         },
         "authentication": {
           "state": "not_configured"
@@ -1642,6 +1654,35 @@
         "summary": {
           "state": "value",
           "value": "The Python adapter."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "tests/test_adapter_rust.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "The Rust adapter."
         },
         "authentication": {
           "state": "not_configured"

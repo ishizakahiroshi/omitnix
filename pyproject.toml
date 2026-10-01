@@ -28,6 +28,7 @@ dependencies = ["pyyaml>=6.0"]
 php = ["tree-sitter>=0.26.0", "tree-sitter-php>=0.24.1", "sqlglot>=30.18.0"]
 python = ["tree-sitter>=0.26.0", "tree-sitter-python>=0.25.0", "sqlglot>=30.18.0"]
 go = ["tree-sitter>=0.26.0", "tree-sitter-go>=0.25.0", "sqlglot>=30.18.0"]
+rust = ["tree-sitter>=0.26.0", "tree-sitter-rust>=0.24.2", "sqlglot>=30.18.0"]
 # One extra for the whole TypeScript/JavaScript family: .ts and .tsx need the TypeScript
 # package (it carries both entry points) and .js/.mjs/.cjs need the JavaScript one.
 tsjs = [
@@ -41,7 +42,7 @@ tsjs = [
 html = ["tree-sitter>=0.26.0", "tree-sitter-html>=0.23.2", "tree-sitter-javascript>=0.25.0"]
 # No grammar: a .sql file is the statement, and sqlglot reads it directly.
 sql = ["sqlglot>=30.18.0"]
-# The minimal-tier adapters (css, rust, shell, powershell, vue) need nothing at all and
+# The minimal-tier adapters (css, shell, powershell, vue) need nothing at all and
 # so have no extra. They read a header comment as text; adding a grammar would put a
 # dependency between a file and being counted.
 all = [
@@ -49,6 +50,7 @@ all = [
   "tree-sitter-php>=0.24.1",
   "tree-sitter-python>=0.25.0",
   "tree-sitter-go>=0.25.0",
+  "tree-sitter-rust>=0.24.2",
   "tree-sitter-typescript>=0.23.2",
   "tree-sitter-javascript>=0.25.0",
   "tree-sitter-html>=0.23.2",
@@ -60,6 +62,7 @@ dev = [
   "tree-sitter-php>=0.24.1",
   "tree-sitter-python>=0.25.0",
   "tree-sitter-go>=0.25.0",
+  "tree-sitter-rust>=0.24.2",
   "tree-sitter-typescript>=0.23.2",
   "tree-sitter-javascript>=0.25.0",
   "tree-sitter-html>=0.23.2",

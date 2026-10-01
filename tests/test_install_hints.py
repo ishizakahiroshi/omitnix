@@ -20,15 +20,15 @@ from pathlib import Path
 
 import pytest
 
-from omitnix.adapters import _treesitter, go, html, php, python, sql, tsjs
+from omitnix.adapters import _treesitter, go, html, php, python, rust, sql, tsjs
 from omitnix.adapters._treesitter import GrammarUnavailable
 from omitnix.adapters.base import AnalysisRequest
 
 #: The adapters that can fail for want of something the user has to install. The minimal
-#: tier (css, rust, shell, powershell, vue) is absent on purpose: those need nothing, so
+#: tier (css, shell, powershell, vue) is absent on purpose: those need nothing, so
 #: they have no extra, and giving them one would put a dependency between a file and
 #: being counted.
-MODULES_WITH_AN_EXTRA = (go, html, php, python, sql, tsjs)
+MODULES_WITH_AN_EXTRA = (go, html, php, python, rust, sql, tsjs)
 
 
 def declared_extras() -> set[str]:

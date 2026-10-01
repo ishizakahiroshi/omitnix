@@ -43,6 +43,7 @@ def _print_record(path: Path, hash_seed: str) -> str:
     [
         "php/orders_list.php",
         "python/orders_list.py",
+        "rust/orders_list.rs",
         "tsjs/orders_list.ts",
     ],
 )
