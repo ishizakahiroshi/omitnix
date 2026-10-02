@@ -1,0 +1,10 @@
+{
+  "description": "--check with no document exits 3.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--check"
+  ],
+  "artifacts": []
+}

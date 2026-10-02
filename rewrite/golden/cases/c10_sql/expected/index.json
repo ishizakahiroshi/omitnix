@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "generated": {
+    "commit": "4fdaf6f203867ac254ade9eba671d01e1f9a2bd7",
+    "dirty": false,
+    "tool": "omitnix 0.1.3",
+    "partial": false,
+    "adapters": [
+      {
+        "name": "css",
+        "extensions": [
+          ".css"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "go",
+        "extensions": [
+          ".go"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "html",
+        "extensions": [
+          ".html",
+          ".htm"
+        ],
+        "capabilities": [
+          "screen_to_api",
+          "summary"
+        ]
+      },
+      {
+        "name": "php",
+        "extensions": [
+          ".php",
+          ".phtml"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "powershell",
+        "extensions": [
+          ".ps1"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "python",
+        "extensions": [
+          ".py",
+          ".pyi"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "rust",
+        "extensions": [
+          ".rs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "shell",
+        "extensions": [
+          ".sh"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "sql",
+        "extensions": [
+          ".sql"
+        ],
+        "capabilities": [
+          "reads",
+          "writes"
+        ]
+      },
+      {
+        "name": "tsjs",
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".mjs",
+          ".cjs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "screen_to_api",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "vue",
+        "extensions": [
+          ".vue"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      }
+    ],
+    "tracked_only": true,
+    "discovery_note": ""
+  },
+  "coverage": {
+    "discovered": 6,
+    "analyzed": 4,
+    "unresolved": 2,
+    "unknown": 0,
+    "unclaimed": 0,
+    "skipped_by_config": 0
+  },
+  "files": [
+    {
+      "path": "src/migrate_audit.sql",
+      "adapter": "sql",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log",
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/notes.sql",
+      "adapter": "sql",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/report.sql",
+      "adapter": "sql",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/salvage.sql",
+      "adapter": "sql",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read this statement: NOT SQL AT ALL ###"
+        }
+      ]
+    },
+    {
+      "path": "src/schema.sql",
+      "adapter": "sql",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders",
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/vendor.sql",
+      "adapter": "sql",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "sql_unsupported",
+          "detail": "1 statement(s) were read only as an opaque command, so their tables are not in this index"
+        }
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "name": "audit_log",
+      "read_by": [
+        "src/migrate_audit.sql"
+      ],
+      "written_by": [
+        "src/migrate_audit.sql",
+        "src/salvage.sql"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/salvage.sql"
+      ]
+    },
+    {
+      "name": "customers",
+      "read_by": [
+        "src/report.sql",
+        "src/vendor.sql"
+      ],
+      "written_by": [
+        "src/schema.sql"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/vendor.sql"
+      ]
+    },
+    {
+      "name": "orders",
+      "read_by": [
+        "src/report.sql",
+        "src/salvage.sql",
+        "src/schema.sql"
+      ],
+      "written_by": [
+        "src/schema.sql"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/salvage.sql"
+      ]
+    },
+    {
+      "name": "search_index",
+      "read_by": [],
+      "written_by": [
+        "src/migrate_audit.sql",
+        "src/schema.sql"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    }
+  ],
+  "table_gaps": {
+    "files": [
+      "src/salvage.sql",
+      "src/vendor.sql"
+    ],
+    "unresolved_count": 2,
+    "note": "2 statements in 2 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+  }
+}

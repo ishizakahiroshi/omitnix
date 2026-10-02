@@ -1,0 +1,7 @@
+include:
+  - '**/*.php'
+authentication_functions:
+  - require_session
+authorization_functions:
+  - apply_visibility_filter
+fail_on_unknown: true

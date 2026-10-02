@@ -1,0 +1,18 @@
+{
+  "description": "--since asks what the branch added, whether or not it is committed.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate",
+    "--since",
+    "base"
+  ],
+  "steps": [
+    {
+      "op": "overlay",
+      "commit": true
+    }
+  ],
+  "artifacts": []
+}

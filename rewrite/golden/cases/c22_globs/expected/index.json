@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "generated": {
+    "commit": "5702a1b2831e1771f890bf1a4ea70da05554d590",
+    "dirty": false,
+    "tool": "omitnix 0.1.3",
+    "partial": false,
+    "adapters": [
+      {
+        "name": "css",
+        "extensions": [
+          ".css"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "go",
+        "extensions": [
+          ".go"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "html",
+        "extensions": [
+          ".html",
+          ".htm"
+        ],
+        "capabilities": [
+          "screen_to_api",
+          "summary"
+        ]
+      },
+      {
+        "name": "php",
+        "extensions": [
+          ".php",
+          ".phtml"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "powershell",
+        "extensions": [
+          ".ps1"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "python",
+        "extensions": [
+          ".py",
+          ".pyi"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "rust",
+        "extensions": [
+          ".rs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "shell",
+        "extensions": [
+          ".sh"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "sql",
+        "extensions": [
+          ".sql"
+        ],
+        "capabilities": [
+          "reads",
+          "writes"
+        ]
+      },
+      {
+        "name": "tsjs",
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".mjs",
+          ".cjs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "screen_to_api",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "vue",
+        "extensions": [
+          ".vue"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      }
+    ],
+    "tracked_only": true,
+    "discovery_note": ""
+  },
+  "coverage": {
+    "discovered": 7,
+    "analyzed": 0,
+    "unresolved": 0,
+    "unknown": 0,
+    "unclaimed": 7,
+    "skipped_by_config": 0
+  },
+  "files": [
+    {
+      "path": "api/nested/deep/orders.dat",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.dat'"
+    },
+    {
+      "path": "api/nested/orders.dat",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.dat'"
+    },
+    {
+      "path": "build/sub/b.dat",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.dat'"
+    },
+    {
+      "path": "build/sub/deep/c.dat",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.dat'"
+    },
+    {
+      "path": "orders.dat",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.dat'"
+    },
+    {
+      "path": "report_10.dat",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.dat'"
+    },
+    {
+      "path": "src/keep/a.dat",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.dat'"
+    }
+  ],
+  "tables": [],
+  "table_gaps": {
+    "files": [],
+    "unresolved_count": 0,
+    "note": ""
+  }
+}

@@ -1,0 +1,69 @@
+usage: omitnix [-h] [--version] [--root ROOT] [--config CONFIG]
+               [--files PATH [PATH ...]] [--write] [--check] [--gate]
+               [--since REF] [--print PATH] [--all-files] [--workspace DIR]
+               [--out DIR] [--exclude-repo GLOB] [--write-per-repo]
+               [--no-workspace-excludes] [--jobs N] [--dry-run] [--status]
+
+Generate a per-file code inventory and a table reverse index, and fail when a
+discovered file could not be analyzed.
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --root ROOT           repository to scan (default: current directory)
+  --config CONFIG       path to .omitnix.yaml (default: the one at the root,
+                        if any)
+  --files PATH [PATH ...]
+                        analyze only these files, as a pre-commit hook would
+                        pass them
+  --write               with --files, write the generated document anyway. Off
+                        by default because a partial run would overwrite the
+                        full index with a subset.
+  --check               write nothing; compare the generated document on disk
+                        with a fresh run
+  --gate                check only the files git reports as newly added, and
+                        refuse one that lacks what its adapter is able to
+                        report. Writes nothing.
+  --since REF           with --gate, treat as new whatever this branch added
+                        since REF instead of reading the working tree. This is
+                        the form CI can use: it holds for work anyone
+                        committed, whether or not their machine had the hook
+                        installed.
+  --print PATH          print the record for one file as JSON and exit
+  --all-files           walk the working directory instead of analyzing what
+                        git tracks. Includes untracked files, and with them
+                        whatever local scratch the working directory happens
+                        to hold. Applies to a single repository the same way
+                        it does inside --workspace; the default either way is
+                        what git tracks.
+
+workspace mode:
+  Run across every git repository under a directory. Records are keyed
+  <repository>/<path> and reverse indexes stay inside their repository.
+
+  --workspace DIR       analyze every repository under DIR instead of a single
+                        repository
+  --out DIR             where a workspace run writes (default: ./.omitnix-
+                        workspace). Scanned repositories are not written to
+                        unless --write-per-repo says so.
+  --exclude-repo GLOB   skip repositories whose workspace-relative path
+                        matches GLOB, or that sit under a directory matching
+                        it. Repeatable. Skipped repositories are reported, not
+                        dropped.
+  --write-per-repo      also write .omitnix/ inside each scanned repository
+                        (off by default)
+  --no-workspace-excludes
+                        do not add the workspace default exclusions to each
+                        repository. Everything a repository contains is
+                        discovered, and most of it will be unknown.
+  --jobs N              worker processes for a workspace run (default: one per
+                        core, at most 8). There is no cache: identical bytes
+                        in two places can analyze to different results, so
+                        repeated work is answered with parallelism instead.
+  --dry-run             with --workspace, list the repositories that would be
+                        analyzed and stop
+  --status              with --workspace, report where this tool is deployed
+                        and whether what it generated has gone stale, instead
+                        of analyzing everything. Writes nothing. A repository
+                        with no committed index is reported as such and is not
+                        analyzed.

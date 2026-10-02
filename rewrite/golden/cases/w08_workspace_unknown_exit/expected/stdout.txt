@@ -1,0 +1,3 @@
+omitnix: 1 repositor(y/ies) analyzed, 0 could not be run, 0 excluded by request
+Coverage: 1/2 analyzed, 0 unresolved, 1 unknown, 0 unclaimed
+wrote <OUT>/workspace.json

@@ -1,0 +1,2 @@
+Coverage: 1/2 analyzed, 0 unresolved, 0 unknown, 1 unclaimed
+wrote <ROOT>/out/inventory/index.json

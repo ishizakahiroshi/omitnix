@@ -1,0 +1,11 @@
+{
+  "description": "--print ../elsewhere.php.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--print",
+    "../elsewhere.php"
+  ],
+  "artifacts": []
+}

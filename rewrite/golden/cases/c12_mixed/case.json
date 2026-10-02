@@ -1,0 +1,14 @@
+{
+  "description": "All adapters, unclaimed files, a binary .py, a BOM, an override, non-ASCII and spaced names, default exclusions.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

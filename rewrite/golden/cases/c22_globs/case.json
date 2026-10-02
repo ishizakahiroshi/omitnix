@@ -1,0 +1,14 @@
+{
+  "description": "include and exclude patterns: *, **, ?, [0-9], [!0-9], direct children only.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

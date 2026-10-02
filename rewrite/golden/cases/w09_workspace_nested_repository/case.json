@@ -1,0 +1,22 @@
+{
+  "description": "A working tree inside a working tree is not a second repository.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}",
+    "--out",
+    "{OUT}"
+  ],
+  "git": [
+    "outer"
+  ],
+  "fake_repositories": [
+    "outer/deploy"
+  ],
+  "artifacts": [
+    {
+      "actual": "{OUT}/workspace.json",
+      "expected": "workspace.json"
+    }
+  ]
+}

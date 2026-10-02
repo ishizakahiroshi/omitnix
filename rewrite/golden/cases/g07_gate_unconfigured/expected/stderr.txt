@@ -1,0 +1,2 @@
+omitnix: authentication not checked: authentication_functions is empty in the configuration, so there is nothing to look for
+omitnix: authorization not checked: authorization_functions is empty in the configuration, so there is nothing to look for

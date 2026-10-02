@@ -1,0 +1,15 @@
+{
+  "description": "Missing summary and calls, an unreadable file; notices for the rest.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate"
+  ],
+  "steps": [
+    {
+      "op": "overlay"
+    }
+  ],
+  "artifacts": []
+}

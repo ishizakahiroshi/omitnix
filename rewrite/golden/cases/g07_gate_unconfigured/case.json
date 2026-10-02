@@ -1,0 +1,15 @@
+{
+  "description": "No function names configured: the check is said not to have been made.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate"
+  ],
+  "steps": [
+    {
+      "op": "overlay"
+    }
+  ],
+  "artifacts": []
+}

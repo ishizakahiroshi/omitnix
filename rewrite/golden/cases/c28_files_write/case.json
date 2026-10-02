@@ -1,0 +1,18 @@
+{
+  "description": "--files --write writes a partial document.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--files",
+    "src/orders_list.php",
+    "src/reindex.php",
+    "--write"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

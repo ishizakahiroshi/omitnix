@@ -1,0 +1,4 @@
+omitnix: [1/2] bad
+omitnix: [2/2] good
+omitnix: 1 repositor(y/ies) name no authorization function, so no authorization check was made in them. This is not a finding that they have none.
+omitnix: could not run bad: <ROOT>/bad/.omitnix.yaml: unknown key(s): nonsense. Known keys: adapters, authentication_functions, authorization_functions, exclude, exclude_defaults, fail_on_unknown, gate_exemptions, include, output_dir, schema_snapshot

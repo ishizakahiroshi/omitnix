@@ -1,0 +1,554 @@
+{
+  "schema_version": 1,
+  "generated": {
+    "commit": "26430a700be4ffa53168add87909b1cef86b2b23",
+    "dirty": false,
+    "tool": "omitnix 0.1.3",
+    "partial": false,
+    "adapters": [
+      {
+        "name": "css",
+        "extensions": [
+          ".css"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "go",
+        "extensions": [
+          ".go"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "html",
+        "extensions": [
+          ".html",
+          ".htm"
+        ],
+        "capabilities": [
+          "screen_to_api",
+          "summary"
+        ]
+      },
+      {
+        "name": "php",
+        "extensions": [
+          ".php",
+          ".phtml"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "powershell",
+        "extensions": [
+          ".ps1"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "python",
+        "extensions": [
+          ".py",
+          ".pyi"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "rust",
+        "extensions": [
+          ".rs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "shell",
+        "extensions": [
+          ".sh"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "sql",
+        "extensions": [
+          ".sql"
+        ],
+        "capabilities": [
+          "reads",
+          "writes"
+        ]
+      },
+      {
+        "name": "tsjs",
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".mjs",
+          ".cjs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "screen_to_api",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "vue",
+        "extensions": [
+          ".vue"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      }
+    ],
+    "tracked_only": true,
+    "discovery_note": ""
+  },
+  "coverage": {
+    "discovered": 10,
+    "analyzed": 2,
+    "unresolved": 7,
+    "unknown": 1,
+    "unclaimed": 0,
+    "skipped_by_config": 0
+  },
+  "files": [
+    {
+      "path": "src/audit.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Show the audit log for one order."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "value",
+          "value": [
+            "apply_visibility_filter"
+          ]
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM audit_log WHERE order_id = omitnix_placeholder"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM audit_log WHERE order_id = omitnix_placeholder"
+        }
+      ]
+    },
+    {
+      "path": "src/broken.php",
+      "adapter": "php",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+    },
+    {
+      "path": "src/declared.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "indirect_call_depth",
+          "detail": "the required file is outside this scan, so it was not followed: src/common/queries.php"
+        }
+      ]
+    },
+    {
+      "path": "src/export.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Export one table as CSV."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM omitnix_placeholder WHERE owner = ?"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT * FROM omitnix_placeholder WHERE owner = ?"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM omitnix_placeholder WHERE owner = ?"
+        }
+      ]
+    },
+    {
+      "path": "src/legacy_report.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Holds a statement the SQL parser cannot read."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: SELECT id FROM orders WHERE ((( id = 1"
+        }
+      ]
+    },
+    {
+      "path": "src/notes.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "none_observed",
+          "value": null
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/orders_list.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "value",
+          "value": [
+            "apply_visibility_filter"
+          ]
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "indirect_call_depth",
+          "detail": "the required file is outside this scan, so it was not followed: src/common/queries.php"
+        }
+      ]
+    },
+    {
+      "path": "src/reindex.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Rebuild the search index overnight."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/router.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Dispatch to the handler named in the request."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "indirect_call_depth",
+          "detail": "the required path is built at run time: __DIR__ . '/handlers/' . $action . '.php'"
+        }
+      ]
+    },
+    {
+      "path": "src/summary.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Summarise orders for the dashboard."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "indirect_call_depth",
+          "detail": "the required file is outside this scan, so it was not followed: src/common/reports.php"
+        }
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "name": "audit_log",
+      "read_by": [
+        "src/audit.php"
+      ],
+      "written_by": [
+        "src/audit.php"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/audit.php"
+      ]
+    },
+    {
+      "name": "orders",
+      "read_by": [
+        "src/reindex.php"
+      ],
+      "written_by": [],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    },
+    {
+      "name": "search_index",
+      "read_by": [],
+      "written_by": [
+        "src/reindex.php"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    }
+  ],
+  "table_gaps": {
+    "files": [
+      "src/audit.php",
+      "src/declared.php",
+      "src/export.php",
+      "src/legacy_report.php",
+      "src/orders_list.php",
+      "src/router.php",
+      "src/summary.php"
+    ],
+    "unresolved_count": 8,
+    "note": "8 statements in 7 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "description": "--since with a ref git cannot resolve: exit 2, not a pass.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate",
+    "--since",
+    "no-such-ref"
+  ],
+  "steps": [
+    {
+      "op": "overlay",
+      "commit": true
+    }
+  ],
+  "artifacts": []
+}

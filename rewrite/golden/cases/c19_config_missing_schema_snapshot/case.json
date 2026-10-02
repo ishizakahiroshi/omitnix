@@ -1,0 +1,12 @@
+{
+  "description": "A schema_snapshot that does not exist is an error.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [],
+  "absent": [
+    "{ROOT}/.omitnix/index.json"
+  ]
+}

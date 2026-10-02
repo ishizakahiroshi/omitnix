@@ -1,0 +1,28 @@
+{
+  "description": "--no-workspace-excludes discovers prose and data too.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}",
+    "--out",
+    "{OUT}",
+    "--exclude-repo",
+    "study",
+    "--no-workspace-excludes"
+  ],
+  "git": [
+    "public/alpha",
+    "private/beta"
+  ],
+  "fake_repositories": [
+    "gamma",
+    "study/borrowed",
+    "study/cloned"
+  ],
+  "artifacts": [
+    {
+      "actual": "{OUT}/workspace.json",
+      "expected": "workspace.json"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "description": "--workspace with --check is an error, exit 2.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}",
+    "--out",
+    "{OUT}",
+    "--check"
+  ],
+  "git": [
+    "one"
+  ],
+  "artifacts": []
+}

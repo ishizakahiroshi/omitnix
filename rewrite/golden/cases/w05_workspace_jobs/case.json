@@ -1,0 +1,41 @@
+{
+  "description": "--jobs 2 gives the same documents as one worker.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}",
+    "--out",
+    "{OUT}",
+    "--exclude-repo",
+    "study",
+    "--jobs",
+    "2"
+  ],
+  "git": [
+    "public/alpha",
+    "private/beta"
+  ],
+  "fake_repositories": [
+    "gamma",
+    "study/borrowed",
+    "study/cloned"
+  ],
+  "artifacts": [
+    {
+      "actual": "{OUT}/workspace.json",
+      "expected": "workspace.json"
+    },
+    {
+      "actual": "{OUT}/repos/public/alpha/index.json",
+      "expected": "repos/public/alpha/index.json"
+    },
+    {
+      "actual": "{OUT}/repos/private/beta/index.json",
+      "expected": "repos/private/beta/index.json"
+    },
+    {
+      "actual": "{OUT}/repos/gamma/index.json",
+      "expected": "repos/gamma/index.json"
+    }
+  ]
+}

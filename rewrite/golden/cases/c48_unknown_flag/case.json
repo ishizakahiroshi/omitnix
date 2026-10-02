@@ -1,0 +1,11 @@
+{
+  "description": "Usage: --nonsense.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--nonsense"
+  ],
+  "artifacts": [],
+  "streams": []
+}

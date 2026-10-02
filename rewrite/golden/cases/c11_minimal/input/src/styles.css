@@ -1,0 +1,6 @@
+/* Order list styling. This adapter declares no capability, so nothing here is read. */
+
+.order-list {
+  display: grid;
+  gap: 0.5rem;
+}

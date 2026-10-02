@@ -1,0 +1,14 @@
+{
+  "description": "A required file that the configuration excludes is not followed.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

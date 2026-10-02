@@ -1,0 +1,1 @@
+omitnix: --all-files cannot be combined with --gate

@@ -1,0 +1,11 @@
+{
+  "description": "Usage: --gate --all-files.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate",
+    "--all-files"
+  ],
+  "artifacts": []
+}

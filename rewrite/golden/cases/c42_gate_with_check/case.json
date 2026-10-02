@@ -1,0 +1,11 @@
+{
+  "description": "Usage: --gate --check.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate",
+    "--check"
+  ],
+  "artifacts": []
+}

@@ -1,0 +1,8 @@
+include:
+  - '**/*.php'
+authentication_functions:
+  - require_session
+authorization_functions:
+  - apply_visibility_filter
+exclude:
+  - 'src/common/**'

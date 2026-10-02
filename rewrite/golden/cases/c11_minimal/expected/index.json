@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "generated": {
+    "commit": "ab92048b465a64465935f7426357c00db3c968e2",
+    "dirty": false,
+    "tool": "omitnix 0.1.3",
+    "partial": false,
+    "adapters": [
+      {
+        "name": "css",
+        "extensions": [
+          ".css"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "go",
+        "extensions": [
+          ".go"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "html",
+        "extensions": [
+          ".html",
+          ".htm"
+        ],
+        "capabilities": [
+          "screen_to_api",
+          "summary"
+        ]
+      },
+      {
+        "name": "php",
+        "extensions": [
+          ".php",
+          ".phtml"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "powershell",
+        "extensions": [
+          ".ps1"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "python",
+        "extensions": [
+          ".py",
+          ".pyi"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "rust",
+        "extensions": [
+          ".rs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "shell",
+        "extensions": [
+          ".sh"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "sql",
+        "extensions": [
+          ".sql"
+        ],
+        "capabilities": [
+          "reads",
+          "writes"
+        ]
+      },
+      {
+        "name": "tsjs",
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".mjs",
+          ".cjs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "screen_to_api",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "vue",
+        "extensions": [
+          ".vue"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      }
+    ],
+    "tracked_only": true,
+    "discovery_note": ""
+  },
+  "coverage": {
+    "discovered": 5,
+    "analyzed": 5,
+    "unresolved": 0,
+    "unknown": 0,
+    "unclaimed": 0,
+    "skipped_by_config": 0
+  },
+  "files": [
+    {
+      "path": "src/banner.sh",
+      "adapter": "shell",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Rotate the fictional staging logs once a day."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/deploy.ps1",
+      "adapter": "powershell",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Copy the built assets to the fictional staging host."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/deploy.sh",
+      "adapter": "shell",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Copy the built assets to the fictional staging host."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/panel.vue",
+      "adapter": "vue",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "The order panel component. Its script block is not analyzed."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/styles.css",
+      "adapter": "css",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    }
+  ],
+  "tables": [],
+  "table_gaps": {
+    "files": [],
+    "unresolved_count": 0,
+    "note": ""
+  }
+}

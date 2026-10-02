@@ -1,0 +1,2 @@
+omitnix: 1 discovered file(s) have an adapter that could not read them. Each one is a defect in this tool or in the file itself.
+  src/stray_open_bracket.html: tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess.

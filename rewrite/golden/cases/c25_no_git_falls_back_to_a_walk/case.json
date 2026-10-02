@@ -1,0 +1,15 @@
+{
+  "description": "Without git the tree is walked and the note is said.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "git": [],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

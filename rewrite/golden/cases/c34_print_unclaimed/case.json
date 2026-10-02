@@ -1,0 +1,11 @@
+{
+  "description": "--print src/schema.json.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--print",
+    "src/schema.json"
+  ],
+  "artifacts": []
+}

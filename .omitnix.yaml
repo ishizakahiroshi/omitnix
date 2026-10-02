@@ -61,6 +61,11 @@ exclude:
   # fixture weakened until it does. This does set aside ten ordinary PHP fixtures too;
   # they are inputs to tests rather than code this project ships.
   - "tests/fixtures/**"
+  # The golden cases for the language rewrites (rewrite/golden/) are the same kind of
+  # thing: repositories made to be fed to the analyzer, with a syntax error, a binary
+  # file and a file in every language on purpose. Their expected results are recorded
+  # beside them and checked by rewrite/tools/run_golden.py.
+  - "rewrite/golden/**"
 
   # --- D. No adapter yet ----------------------------------------------------------
   # THESE ARE PROGRAM SOURCE AND BELONG IN THE INVENTORY. Each line is here only

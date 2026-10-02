@@ -1,0 +1,1 @@
+omitnix: <ROOT>/.omitnix.yaml: 'fail_on_unknown' must be true or false

@@ -1,0 +1,33 @@
+{
+  "description": "--all-files walks each repository.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}",
+    "--out",
+    "{OUT}",
+    "--exclude-repo",
+    "study",
+    "--all-files"
+  ],
+  "git": [
+    "public/alpha",
+    "private/beta"
+  ],
+  "fake_repositories": [
+    "gamma",
+    "study/borrowed",
+    "study/cloned"
+  ],
+  "steps": [
+    {
+      "op": "overlay"
+    }
+  ],
+  "artifacts": [
+    {
+      "actual": "{OUT}/workspace.json",
+      "expected": "workspace.json"
+    }
+  ]
+}

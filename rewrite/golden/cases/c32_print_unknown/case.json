@@ -1,0 +1,11 @@
+{
+  "description": "--print src/broken.php.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--print",
+    "src/broken.php"
+  ],
+  "artifacts": []
+}

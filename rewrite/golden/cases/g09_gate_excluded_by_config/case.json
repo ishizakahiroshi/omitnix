@@ -1,0 +1,15 @@
+{
+  "description": "A new file the configuration excludes is counted, not gated.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate"
+  ],
+  "steps": [
+    {
+      "op": "overlay"
+    }
+  ],
+  "artifacts": []
+}

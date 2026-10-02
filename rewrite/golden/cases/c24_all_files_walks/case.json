@@ -1,0 +1,20 @@
+{
+  "description": "--all-files walks the tree: untracked files are seen.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--all-files"
+  ],
+  "steps": [
+    {
+      "op": "overlay"
+    }
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

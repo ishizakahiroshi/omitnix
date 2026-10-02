@@ -1,0 +1,11 @@
+{
+  "description": "A workspace directory that does not exist is an error.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}/nowhere",
+    "--out",
+    "{OUT}"
+  ],
+  "artifacts": []
+}

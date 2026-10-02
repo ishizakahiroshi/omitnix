@@ -1,0 +1,23 @@
+{
+  "description": "--check says what changed and exits 3.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--check"
+  ],
+  "steps": [
+    {
+      "op": "run",
+      "args": [
+        "--root",
+        "{ROOT}"
+      ]
+    },
+    {
+      "op": "overlay",
+      "stage": true
+    }
+  ],
+  "artifacts": []
+}

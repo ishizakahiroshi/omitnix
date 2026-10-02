@@ -1,0 +1,19 @@
+{
+  "description": "An unreadable file in any repository: exit 1.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}",
+    "--out",
+    "{OUT}"
+  ],
+  "git": [
+    "one"
+  ],
+  "artifacts": [
+    {
+      "actual": "{OUT}/workspace.json",
+      "expected": "workspace.json"
+    }
+  ]
+}

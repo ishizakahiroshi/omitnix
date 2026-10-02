@@ -1,0 +1,38 @@
+{
+  "path": "src/orders_list.php",
+  "adapter": "php",
+  "status": "analyzed",
+  "fields": {
+    "summary": {
+      "state": "value",
+      "value": "List orders for the signed-in customer."
+    },
+    "authentication": {
+      "state": "value",
+      "value": [
+        "require_session"
+      ]
+    },
+    "authorization": {
+      "state": "value",
+      "value": [
+        "apply_visibility_filter"
+      ]
+    },
+    "reads": {
+      "state": "value",
+      "value": [
+        "customers",
+        "orders"
+      ]
+    },
+    "writes": {
+      "state": "none_observed",
+      "value": []
+    },
+    "screen_to_api": {
+      "state": "out_of_scope"
+    }
+  },
+  "unresolved": []
+}

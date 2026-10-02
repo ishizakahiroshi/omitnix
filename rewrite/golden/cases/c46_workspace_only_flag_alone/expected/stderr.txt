@@ -1,0 +1,1 @@
+omitnix: --jobs only applies with --workspace

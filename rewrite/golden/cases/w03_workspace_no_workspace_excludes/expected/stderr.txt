@@ -1,0 +1,7 @@
+omitnix: [1/3] gamma
+omitnix: [2/3] private/beta
+omitnix: [3/3] public/alpha
+omitnix: 2 repositor(y/ies) name no authorization function, so no authorization check was made in them. This is not a finding that they have none.
+omitnix: gamma: git could not list tracked files, so the working tree was walked instead
+omitnix: 5 discovered file(s) are claimed by no adapter. Each repository's entry in <OUT>/workspace.json counts them by extension.
+omitnix: 5 discovered file(s) have an adapter that could not read them. Each repository's entry in <OUT>/workspace.json names them.

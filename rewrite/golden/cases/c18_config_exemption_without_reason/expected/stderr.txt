@@ -1,0 +1,1 @@
+omitnix: <ROOT>/.omitnix.yaml: gate_exemptions[1]: 'reason' is required and must say why these paths are allowed to skip the check. An exemption without a stated reason is not accepted.

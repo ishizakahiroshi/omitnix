@@ -1,0 +1,3 @@
+gate_exemptions:
+  - paths: ['src/**']
+    skip: [authorization]

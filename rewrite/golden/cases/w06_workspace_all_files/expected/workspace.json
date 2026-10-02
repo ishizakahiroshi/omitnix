@@ -1,0 +1,685 @@
+{
+  "schema_version": 1,
+  "kind": "workspace",
+  "generated": {
+    "tool": "omitnix 0.1.3",
+    "workspace": "<ROOT>",
+    "jobs": 8,
+    "seconds": 0.94,
+    "workspace_excludes_applied": true,
+    "tracked_files_only": false
+  },
+  "repositories": {
+    "discovered": 5,
+    "excluded_by_request": 2,
+    "ran": 3,
+    "could_not_run": 0,
+    "excluded_names": [
+      "study/borrowed",
+      "study/cloned"
+    ],
+    "unreadable_directories": []
+  },
+  "coverage": {
+    "discovered": 47,
+    "analyzed": 26,
+    "unresolved": 16,
+    "unknown": 5,
+    "unclaimed": 0,
+    "skipped_by_config": 0
+  },
+  "repos": [
+    {
+      "repo": "gamma",
+      "status": "ok",
+      "configuration": {
+        "source": "defaults",
+        "workspace_excludes_applied": true
+      },
+      "authentication_functions_configured": false,
+      "authorization_functions_configured": false,
+      "commit": null,
+      "dirty": false,
+      "coverage": {
+        "discovered": 13,
+        "analyzed": 8,
+        "unresolved": 3,
+        "unknown": 2,
+        "unclaimed": 0,
+        "skipped_by_config": 0
+      },
+      "discovery": {
+        "mode": "walked",
+        "note": ""
+      },
+      "excluded": {
+        "files": 0,
+        "pruned_directories": 1,
+        "tracked_but_absent": 0
+      },
+      "unclaimed_extensions": {},
+      "unknown_files": [
+        {
+          "id": "gamma/pkg/broken.go",
+          "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+        },
+        {
+          "id": "gamma/pkg/broken.rs",
+          "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+        }
+      ],
+      "tables": [
+        {
+          "name": "audit_log",
+          "read_by": [
+            "gamma/pkg/audit.rs",
+            "gamma/pkg/export.go",
+            "gamma/pkg/export.rs"
+          ],
+          "written_by": [],
+          "in_schema_snapshot": false,
+          "unresolved_in": [
+            "gamma/pkg/export.go",
+            "gamma/pkg/export.rs"
+          ]
+        },
+        {
+          "name": "customers",
+          "read_by": [
+            "gamma/pkg/orders_list.go",
+            "gamma/pkg/orders_list.rs"
+          ],
+          "written_by": [],
+          "in_schema_snapshot": false,
+          "unresolved_in": []
+        },
+        {
+          "name": "orders",
+          "read_by": [
+            "gamma/pkg/export.rs",
+            "gamma/pkg/orders_list.go",
+            "gamma/pkg/orders_list.rs",
+            "gamma/pkg/reindex.go"
+          ],
+          "written_by": [],
+          "in_schema_snapshot": false,
+          "unresolved_in": [
+            "gamma/pkg/export.rs"
+          ]
+        },
+        {
+          "name": "search_index",
+          "read_by": [],
+          "written_by": [
+            "gamma/pkg/export.rs",
+            "gamma/pkg/reindex.go"
+          ],
+          "in_schema_snapshot": false,
+          "unresolved_in": [
+            "gamma/pkg/export.rs"
+          ]
+        }
+      ],
+      "table_gaps": {
+        "files": [
+          "gamma/pkg/builder.rs",
+          "gamma/pkg/export.go",
+          "gamma/pkg/export.rs"
+        ],
+        "unresolved_count": 9,
+        "note": "9 statements in 3 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+      },
+      "documents": [
+        "<OUT>/repos/gamma/index.json"
+      ]
+    },
+    {
+      "repo": "private/beta",
+      "status": "ok",
+      "configuration": {
+        "source": "defaults",
+        "workspace_excludes_applied": true
+      },
+      "authentication_functions_configured": false,
+      "authorization_functions_configured": false,
+      "commit": "3f6b69950f9ef8aea250c86f4845b7b435cf5d17",
+      "dirty": false,
+      "coverage": {
+        "discovered": 14,
+        "analyzed": 8,
+        "unresolved": 5,
+        "unknown": 1,
+        "unclaimed": 0,
+        "skipped_by_config": 0
+      },
+      "discovery": {
+        "mode": "walked",
+        "note": ""
+      },
+      "excluded": {
+        "files": 2,
+        "pruned_directories": 2,
+        "tracked_but_absent": 0
+      },
+      "unclaimed_extensions": {},
+      "unknown_files": [
+        {
+          "id": "private/beta/app/broken.py",
+          "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+        }
+      ],
+      "tables": [
+        {
+          "name": "audit_log",
+          "read_by": [
+            "private/beta/app/audit.py",
+            "private/beta/app/legacy_report.py",
+            "private/beta/app/migrate_audit.sql"
+          ],
+          "written_by": [
+            "private/beta/app/audit.py",
+            "private/beta/app/migrate_audit.sql",
+            "private/beta/app/salvage.sql"
+          ],
+          "in_schema_snapshot": false,
+          "unresolved_in": [
+            "private/beta/app/audit.py",
+            "private/beta/app/legacy_report.py",
+            "private/beta/app/salvage.sql"
+          ]
+        },
+        {
+          "name": "customers",
+          "read_by": [
+            "private/beta/app/orders_list.py",
+            "private/beta/app/report.sql",
+            "private/beta/app/vendor.sql"
+          ],
+          "written_by": [
+            "private/beta/app/schema.sql"
+          ],
+          "in_schema_snapshot": false,
+          "unresolved_in": [
+            "private/beta/app/vendor.sql"
+          ]
+        },
+        {
+          "name": "orders",
+          "read_by": [
+            "private/beta/app/legacy_report.py",
+            "private/beta/app/orders_list.py",
+            "private/beta/app/reindex.py",
+            "private/beta/app/report.sql",
+            "private/beta/app/salvage.sql",
+            "private/beta/app/schema.sql"
+          ],
+          "written_by": [
+            "private/beta/app/schema.sql"
+          ],
+          "in_schema_snapshot": false,
+          "unresolved_in": [
+            "private/beta/app/legacy_report.py",
+            "private/beta/app/salvage.sql"
+          ]
+        },
+        {
+          "name": "search_index",
+          "read_by": [],
+          "written_by": [
+            "private/beta/app/migrate_audit.sql",
+            "private/beta/app/reindex.py",
+            "private/beta/app/schema.sql"
+          ],
+          "in_schema_snapshot": false,
+          "unresolved_in": []
+        }
+      ],
+      "table_gaps": {
+        "files": [
+          "private/beta/app/audit.py",
+          "private/beta/app/export.py",
+          "private/beta/app/legacy_report.py",
+          "private/beta/app/salvage.sql",
+          "private/beta/app/vendor.sql"
+        ],
+        "unresolved_count": 8,
+        "note": "8 statements in 5 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+      },
+      "documents": [
+        "<OUT>/repos/private/beta/index.json"
+      ]
+    },
+    {
+      "repo": "public/alpha",
+      "status": "ok",
+      "configuration": {
+        "source": "own",
+        "workspace_excludes_applied": true
+      },
+      "authentication_functions_configured": true,
+      "authorization_functions_configured": true,
+      "commit": "923370b80639ac03c8385f3cd0b9691ea8c8c813",
+      "dirty": true,
+      "coverage": {
+        "discovered": 20,
+        "analyzed": 10,
+        "unresolved": 8,
+        "unknown": 2,
+        "unclaimed": 0,
+        "skipped_by_config": 0
+      },
+      "discovery": {
+        "mode": "walked",
+        "note": ""
+      },
+      "excluded": {
+        "files": 3,
+        "pruned_directories": 1,
+        "tracked_but_absent": 0
+      },
+      "unclaimed_extensions": {},
+      "unknown_files": [
+        {
+          "id": "public/alpha/src/broken.php",
+          "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+        },
+        {
+          "id": "public/alpha/web/stray_open_bracket.html",
+          "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+        }
+      ],
+      "tables": [
+        {
+          "name": "audit_log",
+          "read_by": [
+            "public/alpha/src/audit.php"
+          ],
+          "written_by": [
+            "public/alpha/src/audit.php",
+            "public/alpha/src/common/queries.php"
+          ],
+          "in_schema_snapshot": false,
+          "unresolved_in": [
+            "public/alpha/src/audit.php"
+          ]
+        },
+        {
+          "name": "customers",
+          "read_by": [
+            "public/alpha/src/common/queries.php",
+            "public/alpha/src/orders_list.php"
+          ],
+          "written_by": [],
+          "in_schema_snapshot": true,
+          "unresolved_in": []
+        },
+        {
+          "name": "orders",
+          "read_by": [
+            "public/alpha/src/common/queries.php",
+            "public/alpha/src/common/reports.php",
+            "public/alpha/src/orders_list.php",
+            "public/alpha/src/reindex.php"
+          ],
+          "written_by": [],
+          "in_schema_snapshot": true,
+          "unresolved_in": []
+        },
+        {
+          "name": "search_index",
+          "read_by": [],
+          "written_by": [
+            "public/alpha/src/reindex.php"
+          ],
+          "in_schema_snapshot": true,
+          "unresolved_in": []
+        }
+      ],
+      "table_gaps": {
+        "files": [
+          "public/alpha/src/audit.php",
+          "public/alpha/src/export.php",
+          "public/alpha/src/legacy_report.php",
+          "public/alpha/src/router.php",
+          "public/alpha/src/summary.php"
+        ],
+        "unresolved_count": 6,
+        "note": "6 statements in 5 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+      },
+      "documents": [
+        "<OUT>/repos/public/alpha/index.json"
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": "gamma/pkg/audit.rs",
+      "repo": "gamma",
+      "path": "pkg/audit.rs",
+      "adapter": "rust",
+      "status": "analyzed"
+    },
+    {
+      "id": "gamma/pkg/broken.go",
+      "repo": "gamma",
+      "path": "pkg/broken.go",
+      "adapter": "go",
+      "status": "unknown"
+    },
+    {
+      "id": "gamma/pkg/broken.rs",
+      "repo": "gamma",
+      "path": "pkg/broken.rs",
+      "adapter": "rust",
+      "status": "unknown"
+    },
+    {
+      "id": "gamma/pkg/builder.rs",
+      "repo": "gamma",
+      "path": "pkg/builder.rs",
+      "adapter": "rust",
+      "status": "unresolved"
+    },
+    {
+      "id": "gamma/pkg/counter.rs",
+      "repo": "gamma",
+      "path": "pkg/counter.rs",
+      "adapter": "rust",
+      "status": "analyzed"
+    },
+    {
+      "id": "gamma/pkg/export.go",
+      "repo": "gamma",
+      "path": "pkg/export.go",
+      "adapter": "go",
+      "status": "unresolved"
+    },
+    {
+      "id": "gamma/pkg/export.rs",
+      "repo": "gamma",
+      "path": "pkg/export.rs",
+      "adapter": "rust",
+      "status": "unresolved"
+    },
+    {
+      "id": "gamma/pkg/notes.go",
+      "repo": "gamma",
+      "path": "pkg/notes.go",
+      "adapter": "go",
+      "status": "analyzed"
+    },
+    {
+      "id": "gamma/pkg/notes.rs",
+      "repo": "gamma",
+      "path": "pkg/notes.rs",
+      "adapter": "rust",
+      "status": "analyzed"
+    },
+    {
+      "id": "gamma/pkg/orders_list.go",
+      "repo": "gamma",
+      "path": "pkg/orders_list.go",
+      "adapter": "go",
+      "status": "analyzed"
+    },
+    {
+      "id": "gamma/pkg/orders_list.rs",
+      "repo": "gamma",
+      "path": "pkg/orders_list.rs",
+      "adapter": "rust",
+      "status": "analyzed"
+    },
+    {
+      "id": "gamma/pkg/plain.rs",
+      "repo": "gamma",
+      "path": "pkg/plain.rs",
+      "adapter": "rust",
+      "status": "analyzed"
+    },
+    {
+      "id": "gamma/pkg/reindex.go",
+      "repo": "gamma",
+      "path": "pkg/reindex.go",
+      "adapter": "go",
+      "status": "analyzed"
+    },
+    {
+      "id": "private/beta/app/audit.py",
+      "repo": "private/beta",
+      "path": "app/audit.py",
+      "adapter": "python",
+      "status": "unresolved"
+    },
+    {
+      "id": "private/beta/app/broken.py",
+      "repo": "private/beta",
+      "path": "app/broken.py",
+      "adapter": "python",
+      "status": "unknown"
+    },
+    {
+      "id": "private/beta/app/client.pyi",
+      "repo": "private/beta",
+      "path": "app/client.pyi",
+      "adapter": "python",
+      "status": "analyzed"
+    },
+    {
+      "id": "private/beta/app/export.py",
+      "repo": "private/beta",
+      "path": "app/export.py",
+      "adapter": "python",
+      "status": "unresolved"
+    },
+    {
+      "id": "private/beta/app/legacy_report.py",
+      "repo": "private/beta",
+      "path": "app/legacy_report.py",
+      "adapter": "python",
+      "status": "unresolved"
+    },
+    {
+      "id": "private/beta/app/migrate_audit.sql",
+      "repo": "private/beta",
+      "path": "app/migrate_audit.sql",
+      "adapter": "sql",
+      "status": "analyzed"
+    },
+    {
+      "id": "private/beta/app/notes.py",
+      "repo": "private/beta",
+      "path": "app/notes.py",
+      "adapter": "python",
+      "status": "analyzed"
+    },
+    {
+      "id": "private/beta/app/notes.sql",
+      "repo": "private/beta",
+      "path": "app/notes.sql",
+      "adapter": "sql",
+      "status": "analyzed"
+    },
+    {
+      "id": "private/beta/app/orders_list.py",
+      "repo": "private/beta",
+      "path": "app/orders_list.py",
+      "adapter": "python",
+      "status": "analyzed"
+    },
+    {
+      "id": "private/beta/app/reindex.py",
+      "repo": "private/beta",
+      "path": "app/reindex.py",
+      "adapter": "python",
+      "status": "analyzed"
+    },
+    {
+      "id": "private/beta/app/report.sql",
+      "repo": "private/beta",
+      "path": "app/report.sql",
+      "adapter": "sql",
+      "status": "analyzed"
+    },
+    {
+      "id": "private/beta/app/salvage.sql",
+      "repo": "private/beta",
+      "path": "app/salvage.sql",
+      "adapter": "sql",
+      "status": "unresolved"
+    },
+    {
+      "id": "private/beta/app/schema.sql",
+      "repo": "private/beta",
+      "path": "app/schema.sql",
+      "adapter": "sql",
+      "status": "analyzed"
+    },
+    {
+      "id": "private/beta/app/vendor.sql",
+      "repo": "private/beta",
+      "path": "app/vendor.sql",
+      "adapter": "sql",
+      "status": "unresolved"
+    },
+    {
+      "id": "public/alpha/src/audit.php",
+      "repo": "public/alpha",
+      "path": "src/audit.php",
+      "adapter": "php",
+      "status": "unresolved"
+    },
+    {
+      "id": "public/alpha/src/broken.php",
+      "repo": "public/alpha",
+      "path": "src/broken.php",
+      "adapter": "php",
+      "status": "unknown"
+    },
+    {
+      "id": "public/alpha/src/common/queries.php",
+      "repo": "public/alpha",
+      "path": "src/common/queries.php",
+      "adapter": "php",
+      "status": "unresolved"
+    },
+    {
+      "id": "public/alpha/src/common/reports.php",
+      "repo": "public/alpha",
+      "path": "src/common/reports.php",
+      "adapter": "php",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/src/declared.php",
+      "repo": "public/alpha",
+      "path": "src/declared.php",
+      "adapter": "php",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/src/export.php",
+      "repo": "public/alpha",
+      "path": "src/export.php",
+      "adapter": "php",
+      "status": "unresolved"
+    },
+    {
+      "id": "public/alpha/src/legacy_report.php",
+      "repo": "public/alpha",
+      "path": "src/legacy_report.php",
+      "adapter": "php",
+      "status": "unresolved"
+    },
+    {
+      "id": "public/alpha/src/notes.php",
+      "repo": "public/alpha",
+      "path": "src/notes.php",
+      "adapter": "php",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/src/orders_list.php",
+      "repo": "public/alpha",
+      "path": "src/orders_list.php",
+      "adapter": "php",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/src/reindex.php",
+      "repo": "public/alpha",
+      "path": "src/reindex.php",
+      "adapter": "php",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/src/router.php",
+      "repo": "public/alpha",
+      "path": "src/router.php",
+      "adapter": "php",
+      "status": "unresolved"
+    },
+    {
+      "id": "public/alpha/src/summary.php",
+      "repo": "public/alpha",
+      "path": "src/summary.php",
+      "adapter": "php",
+      "status": "unresolved"
+    },
+    {
+      "id": "public/alpha/src/untracked.php",
+      "repo": "public/alpha",
+      "path": "src/untracked.php",
+      "adapter": "php",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/web/about.htm",
+      "repo": "public/alpha",
+      "path": "web/about.htm",
+      "adapter": "html",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/web/interpolated.html",
+      "repo": "public/alpha",
+      "path": "web/interpolated.html",
+      "adapter": "html",
+      "status": "unresolved"
+    },
+    {
+      "id": "public/alpha/web/interpolated_escaped.html",
+      "repo": "public/alpha",
+      "path": "web/interpolated_escaped.html",
+      "adapter": "html",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/web/notes.html",
+      "repo": "public/alpha",
+      "path": "web/notes.html",
+      "adapter": "html",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/web/orders.html",
+      "repo": "public/alpha",
+      "path": "web/orders.html",
+      "adapter": "html",
+      "status": "analyzed"
+    },
+    {
+      "id": "public/alpha/web/stray_open_bracket.html",
+      "repo": "public/alpha",
+      "path": "web/stray_open_bracket.html",
+      "adapter": "html",
+      "status": "unknown"
+    },
+    {
+      "id": "public/alpha/web/templated.html",
+      "repo": "public/alpha",
+      "path": "web/templated.html",
+      "adapter": "html",
+      "status": "unresolved"
+    }
+  ]
+}

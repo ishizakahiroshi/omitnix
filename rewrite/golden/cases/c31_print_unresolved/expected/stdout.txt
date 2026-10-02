@@ -1,0 +1,46 @@
+{
+  "path": "src/export.php",
+  "adapter": "php",
+  "status": "unresolved",
+  "fields": {
+    "summary": {
+      "state": "value",
+      "value": "Export one table as CSV."
+    },
+    "authentication": {
+      "state": "value",
+      "value": [
+        "require_session"
+      ]
+    },
+    "authorization": {
+      "state": "none_observed",
+      "value": []
+    },
+    "reads": {
+      "state": "none_observed",
+      "value": []
+    },
+    "writes": {
+      "state": "none_observed",
+      "value": []
+    },
+    "screen_to_api": {
+      "state": "out_of_scope"
+    }
+  },
+  "unresolved": [
+    {
+      "code": "dynamic_sql",
+      "detail": "assembled at run time: SELECT * FROM omitnix_placeholder WHERE owner = ?"
+    },
+    {
+      "code": "dynamic_table_name",
+      "detail": "the table name is a run-time value: SELECT * FROM omitnix_placeholder WHERE owner = ?"
+    },
+    {
+      "code": "select_star",
+      "detail": "the tables are known, the columns are not: SELECT * FROM omitnix_placeholder WHERE owner = ?"
+    }
+  ]
+}

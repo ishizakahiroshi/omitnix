@@ -1,0 +1,9 @@
+{
+  "description": "--help exits 0. The wording of the usage text is not compared.",
+  "mode": "repo",
+  "args": [
+    "--help"
+  ],
+  "artifacts": [],
+  "streams": []
+}

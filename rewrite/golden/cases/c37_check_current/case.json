@@ -1,0 +1,19 @@
+{
+  "description": "--check on a current document is quiet and exits 0.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--check"
+  ],
+  "steps": [
+    {
+      "op": "run",
+      "args": [
+        "--root",
+        "{ROOT}"
+      ]
+    }
+  ],
+  "artifacts": []
+}

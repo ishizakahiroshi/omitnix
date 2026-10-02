@@ -1,0 +1,20 @@
+{
+  "description": "A staged addition is part of the tracked set.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "steps": [
+    {
+      "op": "overlay",
+      "stage": true
+    }
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "description": "--files analyzes a subset and does not touch the index.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--files",
+    "src/orders_list.php",
+    "src/reindex.php"
+  ],
+  "artifacts": [],
+  "absent": [
+    "{ROOT}/.omitnix/index.json"
+  ]
+}

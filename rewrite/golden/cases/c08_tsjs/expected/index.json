@@ -1,0 +1,401 @@
+{
+  "schema_version": 1,
+  "generated": {
+    "commit": "859503740a6d01cf34afbe2ff2c2a344677509dd",
+    "dirty": false,
+    "tool": "omitnix 0.1.3",
+    "partial": false,
+    "adapters": [
+      {
+        "name": "css",
+        "extensions": [
+          ".css"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "go",
+        "extensions": [
+          ".go"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "html",
+        "extensions": [
+          ".html",
+          ".htm"
+        ],
+        "capabilities": [
+          "screen_to_api",
+          "summary"
+        ]
+      },
+      {
+        "name": "php",
+        "extensions": [
+          ".php",
+          ".phtml"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "powershell",
+        "extensions": [
+          ".ps1"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "python",
+        "extensions": [
+          ".py",
+          ".pyi"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "rust",
+        "extensions": [
+          ".rs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "shell",
+        "extensions": [
+          ".sh"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "sql",
+        "extensions": [
+          ".sql"
+        ],
+        "capabilities": [
+          "reads",
+          "writes"
+        ]
+      },
+      {
+        "name": "tsjs",
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".mjs",
+          ".cjs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "screen_to_api",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "vue",
+        "extensions": [
+          ".vue"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      }
+    ],
+    "tracked_only": true,
+    "discovery_note": ""
+  },
+  "coverage": {
+    "discovered": 7,
+    "analyzed": 1,
+    "unresolved": 4,
+    "unknown": 1,
+    "unclaimed": 1,
+    "skipped_by_config": 0
+  },
+  "files": [
+    {
+      "path": ".omitnix.yaml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.yaml'"
+    },
+    {
+      "path": "src/audit.js",
+      "adapter": "tsjs",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Read and stamp the audit trail."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "value",
+          "value": [
+            "/api/audit"
+          ]
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM audit_log ORDER BY id DESC LIMIT omitnix_placeholder"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM audit_log ORDER BY id DESC LIMIT omitnix_placeholder"
+        }
+      ]
+    },
+    {
+      "path": "src/broken.js",
+      "adapter": "tsjs",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+    },
+    {
+      "path": "src/client.cjs",
+      "adapter": "tsjs",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "A request whose address is decided at run time."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "none_observed",
+          "value": []
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_endpoint",
+          "detail": "the address of this request is a run-time value: endpoint"
+        }
+      ]
+    },
+    {
+      "path": "src/orders_list.ts",
+      "adapter": "tsjs",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "value",
+          "value": [
+            "/api/orders",
+            "/api/orders/*"
+          ]
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_endpoint",
+          "detail": "part of this address is filled in at run time: /api/orders/*"
+        }
+      ]
+    },
+    {
+      "path": "src/panel.tsx",
+      "adapter": "tsjs",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "The customer panel screen."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "value",
+          "value": [
+            "/api/customers/*"
+          ]
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_endpoint",
+          "detail": "part of this address is filled in at run time: /api/customers/*"
+        }
+      ]
+    },
+    {
+      "path": "src/reindex.mjs",
+      "adapter": "tsjs",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Nightly reindex of the order search table."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "none_observed",
+          "value": []
+        }
+      },
+      "unresolved": []
+    }
+  ],
+  "tables": [
+    {
+      "name": "audit_log",
+      "read_by": [
+        "src/audit.js"
+      ],
+      "written_by": [],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/audit.js"
+      ]
+    },
+    {
+      "name": "orders",
+      "read_by": [
+        "src/reindex.mjs"
+      ],
+      "written_by": [],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    },
+    {
+      "name": "search_index",
+      "read_by": [],
+      "written_by": [
+        "src/reindex.mjs"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    }
+  ],
+  "table_gaps": {
+    "files": [
+      "src/audit.js"
+    ],
+    "unresolved_count": 1,
+    "note": "1 statement in 1 file could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+  }
+}

@@ -20,3 +20,5 @@
 .githooks/* text eol=lf
 .omitnix/* text eol=lf
 tests/fixtures/** text eol=lf
+rewrite/golden/** text eol=lf
+rewrite/tools/** text eol=lf

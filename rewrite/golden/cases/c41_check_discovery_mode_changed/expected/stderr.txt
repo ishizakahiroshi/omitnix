@@ -1,0 +1,6 @@
+omitnix: 6 statements in 5 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names.
+omitnix: generated document is out of date
+  1 file(s) removed: src/untracked.php
+  coverage {'discovered': 13, 'analyzed': 7, 'unresolved': 5, 'unknown': 1, 'unclaimed': 0, 'skipped_by_config': 0} -> {'discovered': 12, 'analyzed': 6, 'unresolved': 5, 'unknown': 1, 'unclaimed': 0, 'skipped_by_config': 0}
+  discovery mode changed: tracked_only False -> True
+  regenerate with: omitnix
