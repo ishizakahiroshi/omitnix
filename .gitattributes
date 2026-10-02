@@ -16,6 +16,11 @@
 
 * text=auto
 
+# Markdown is pinned to LF and declared as text outright (not text=auto). AGENTS.md is
+# edited by tools that append and strip blocks assuming LF; once a stray CR lands in it,
+# text=auto stops treating the file as text and `git diff` reports every line as changed.
+# Declaring it as text keeps the diff down to what really changed.
+*.md text eol=lf
 *.sh text eol=lf
 .githooks/* text eol=lf
 .omitnix/* text eol=lf
