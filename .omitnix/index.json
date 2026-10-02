@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "374e5bb337ec0f7e0f4a47d97c70083a306eb1ed",
+    "commit": "6771d376655658d4cd0f52eb3cb9bdb3dd797dd5",
     "dirty": true,
     "tool": "omitnix 0.1.3",
     "partial": false,
@@ -138,11 +138,11 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 90,
-    "analyzed": 64,
-    "unresolved": 2,
+    "discovered": 96,
+    "analyzed": 65,
+    "unresolved": 3,
     "unknown": 0,
-    "unclaimed": 24,
+    "unclaimed": 28,
     "skipped_by_config": 0
   },
   "files": [
@@ -1388,6 +1388,381 @@
       "reason": "no adapter claims '.toml'"
     },
     {
+      "path": "rewrite/sqlbehavior/.gitattributes",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '(no extension)'"
+    },
+    {
+      "path": "rewrite/sqlbehavior/README.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "rewrite/sqlbehavior/cases.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/sqlbehavior/make_cases.py",
+      "adapter": "python",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Record read_sql behavior for synthetic SQL; never infer expected parser output."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "omitnix_placeholder"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "omitnix_placeholder"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: DELETE FROM omitnix_placeholder WHERE id = 1"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: DELETE FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: DELETE FROM omitnix_placeholder WHERE id IN (SELECT id FROM omitnix_pl..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT * FROM omitnix_placeholder"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT omitnix_placeholder .id FROM omitnix_placeholder JOIN omitnix_p..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder SELECT id FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder WHERE status = 'omitnix_placeholder..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT ＊ FROM omitnix_placeholder"
+        },
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: SELECT id FROM omitnix_placeholder WHERE id ＝ 1"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id，status FROM omitnix_placeholder"
+        },
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: INSERT INTO omitnix_placeholder （id） VALUES （1）"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder (id) VALUES (1)"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder (id) SELECT id FROM omitnix_placeholde..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder (id, status) VALUES (1, 'open'), (2, '..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT omitnix_placeholder .* FROM omitnix_placeholder LEFT JOIN omitn..."
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT omitnix_placeholder .* FROM omitnix_placeholder LEFT JOIN omitn..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT omitnix_placeholder .id FROM omitnix_placeholder CROSS JOIN omi..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder ; INSERT INTO omitnix_placeholder (..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder ; SELECT id FROM omitnix_placeholde..."
+        },
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: SELECT id FROM omitnix_placeholder ; SELECT ((( FROM omitnix_placehold..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder ; VACUUM omitnix_placeholder ;"
+        },
+        {
+          "code": "sql_unsupported",
+          "detail": "sqlglot read this only as an opaque command, so its tables are not in this index: SELECT id FROM omitnix_placeholder ; VACUUM omitnix_placeholder ;"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: UPDATE omitnix_placeholder SET status = 'open' LIMIT 1"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: DELETE FROM omitnix_placeholder LIMIT 1"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder LIMIT 1, 2"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: UPDATE omitnix_placeholder , omitnix_placeholder SET omitnix_placehold..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: UPDATE omitnix_placeholder JOIN omitnix_placeholder ON omitnix_placeho..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder (id) VALUES (1) ON DUPLICATE KEY UPDAT..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder WHERE id = ?"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder WHERE id = :name"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder WHERE id = omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder WHERE id = $1"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder WHERE id = { omitnix_placeholder }"
+        },
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: SELECT id FROM { omitnix_placeholder }"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id::TEXT FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT CAST(id AS TEXT) FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder FOR UPDATE"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder FOR UPDATE SKIP LOCKED"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder WHERE created_at > CURRENT_TIMESTAM..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT INTERVAL '2 hours' FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder (id) VALUES (1) ON CONFLICT (id) DO NO..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder (id) VALUES (1) ON CONFLICT (id) DO UP..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder (id) VALUES (1) RETURNING *"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: UPDATE omitnix_placeholder SET status = 'open' RETURNING id"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: DELETE FROM omitnix_placeholder WHERE id = 1 RETURNING id"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT * FROM omitnix_placeholder WHERE id = 1"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM omitnix_placeholder WHERE id = 1"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT omitnix_placeholder .* FROM omitnix_placeholder"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT omitnix_placeholder .* FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT COUNT(*) FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT OR IGNORE INTO omitnix_placeholder (id) VALUES (1)"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT OR IGNORE INTO omitnix_placeholder (id) SELECT id FROM omitnix_..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder WHERE EXISTS (SELECT 1 FROM omitnix..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM (SELECT id FROM omitnix_placeholder ) AS omitnix_placeh..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT (SELECT MAX(id) FROM omitnix_placeholder ) FROM omitnix_placeho..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: INSERT INTO omitnix_placeholder (id)"
+        },
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: INSERT INTO omitnix_placeholder (id) VALUES"
+        },
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: SELECT id FROM omitnix_placeholder WHERE (id = 1"
+        },
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: INSERT INTO omitnix_placeholder (id VALUES (1)"
+        },
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: SELECT (id FROM omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder UNION SELECT id FROM omitnix_placeh..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT id FROM omitnix_placeholder UNION ALL SELECT id FROM omitnix_pl..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT * FROM omitnix_placeholder UNION SELECT * FROM omitnix_placehol..."
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM omitnix_placeholder UNION SELECT * FROM omitnix_placehol..."
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: UPDATE omitnix_placeholder SET status = 'open' WHERE id = 1"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: UPDATE omitnix_placeholder SET id = id + 1"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: UPDATE omitnix_placeholder SET status = (SELECT status FROM omitnix_pl..."
+        }
+      ]
+    },
+    {
+      "path": "rewrite/sqlbehavior/requirements.txt",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.txt'"
+    },
+    {
+      "path": "rewrite/sqlbehavior/test_cases.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Check the synthetic corpus against the pinned repository SQL reader."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
       "path": "rewrite/tools/compare_index.py",
       "adapter": "python",
       "status": "analyzed",
@@ -2283,6 +2658,19 @@
       "unresolved_in": []
     },
     {
+      "name": "omitnix_placeholder",
+      "read_by": [
+        "rewrite/sqlbehavior/make_cases.py"
+      ],
+      "written_by": [
+        "rewrite/sqlbehavior/make_cases.py"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "rewrite/sqlbehavior/make_cases.py"
+      ]
+    },
+    {
       "name": "orders",
       "read_by": [
         ".semgrep/examples/orders_export.php",
@@ -2298,10 +2686,11 @@
   ],
   "table_gaps": {
     "files": [
+      "rewrite/sqlbehavior/make_cases.py",
       "tests/test_install_hints.py",
       "tests/test_php_adapter.py"
     ],
-    "unresolved_count": 3,
-    "note": "3 statements in 2 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+    "unresolved_count": 68,
+    "note": "68 statements in 3 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
   }
 }

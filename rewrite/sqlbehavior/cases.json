@@ -1,0 +1,6610 @@
+{
+  "format_version": 1,
+  "sqlglot_version": "30.18.0",
+  "reference": {
+    "commit": "9311c9c8334ed74808e374aecf0cb2fb13534307",
+    "source": "omitnix/adapters/_sql.py",
+    "git_blob": "8b43f832505826518bc68782ee6065db20212e32",
+    "entry_point": "read_sql"
+  },
+  "case_count": 534,
+  "cases": [
+    {
+      "id": "alter_add_column.01.1",
+      "category": "alter_add_column",
+      "sql": "ALTER TABLE orders ADD COLUMN status TEXT",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_add_column.01.2",
+      "category": "alter_add_column",
+      "sql": "ALTER TABLE customers ADD COLUMN status TEXT",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_add_column.01.3",
+      "category": "alter_add_column",
+      "sql": "ALTER TABLE invoices ADD COLUMN status TEXT",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_add_column.02.1",
+      "category": "alter_add_column",
+      "sql": "ALTER TABLE orders ADD COLUMN IF NOT EXISTS id INT DEFAULT 0",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_add_column.02.2",
+      "category": "alter_add_column",
+      "sql": "ALTER TABLE customers ADD COLUMN IF NOT EXISTS id INT DEFAULT 0",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_add_column.02.3",
+      "category": "alter_add_column",
+      "sql": "ALTER TABLE invoices ADD COLUMN IF NOT EXISTS id INT DEFAULT 0",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_change.01.1",
+      "category": "alter_change",
+      "sql": "ALTER TABLE orders CHANGE id order_id BIGINT",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_change.01.2",
+      "category": "alter_change",
+      "sql": "ALTER TABLE customers CHANGE id order_id BIGINT",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_change.01.3",
+      "category": "alter_change",
+      "sql": "ALTER TABLE invoices CHANGE id order_id BIGINT",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_change.02.1",
+      "category": "alter_change",
+      "sql": "ALTER TABLE orders CHANGE COLUMN status state VARCHAR(30)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_change.02.2",
+      "category": "alter_change",
+      "sql": "ALTER TABLE customers CHANGE COLUMN status state VARCHAR(30)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_change.02.3",
+      "category": "alter_change",
+      "sql": "ALTER TABLE invoices CHANGE COLUMN status state VARCHAR(30)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_constraint.01.1",
+      "category": "alter_constraint",
+      "sql": "ALTER TABLE orders VALIDATE CONSTRAINT customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_constraint.01.2",
+      "category": "alter_constraint",
+      "sql": "ALTER TABLE customers VALIDATE CONSTRAINT invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_constraint.01.3",
+      "category": "alter_constraint",
+      "sql": "ALTER TABLE invoices VALIDATE CONSTRAINT orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_constraint.02.1",
+      "category": "alter_constraint",
+      "sql": "ALTER TABLE orders DROP CONSTRAINT IF EXISTS customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_constraint.02.2",
+      "category": "alter_constraint",
+      "sql": "ALTER TABLE customers DROP CONSTRAINT IF EXISTS invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_constraint.02.3",
+      "category": "alter_constraint",
+      "sql": "ALTER TABLE invoices DROP CONSTRAINT IF EXISTS orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_drop_column.01.1",
+      "category": "alter_drop_column",
+      "sql": "ALTER TABLE orders DROP COLUMN status",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_drop_column.01.2",
+      "category": "alter_drop_column",
+      "sql": "ALTER TABLE customers DROP COLUMN status",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_drop_column.01.3",
+      "category": "alter_drop_column",
+      "sql": "ALTER TABLE invoices DROP COLUMN status",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_drop_column.02.1",
+      "category": "alter_drop_column",
+      "sql": "ALTER TABLE orders DROP COLUMN IF EXISTS status CASCADE",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_drop_column.02.2",
+      "category": "alter_drop_column",
+      "sql": "ALTER TABLE customers DROP COLUMN IF EXISTS status CASCADE",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_drop_column.02.3",
+      "category": "alter_drop_column",
+      "sql": "ALTER TABLE invoices DROP COLUMN IF EXISTS status CASCADE",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_engine.01.1",
+      "category": "alter_engine",
+      "sql": "ALTER TABLE orders ENGINE=innodb",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_engine.01.2",
+      "category": "alter_engine",
+      "sql": "ALTER TABLE customers ENGINE=innodb",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_engine.01.3",
+      "category": "alter_engine",
+      "sql": "ALTER TABLE invoices ENGINE=innodb",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_engine.02.1",
+      "category": "alter_engine",
+      "sql": "ALTER TABLE orders ENGINE = myisam",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_engine.02.2",
+      "category": "alter_engine",
+      "sql": "ALTER TABLE customers ENGINE = myisam",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_engine.02.3",
+      "category": "alter_engine",
+      "sql": "ALTER TABLE invoices ENGINE = myisam",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_modify.01.1",
+      "category": "alter_modify",
+      "sql": "ALTER TABLE orders MODIFY id BIGINT",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_modify.01.2",
+      "category": "alter_modify",
+      "sql": "ALTER TABLE customers MODIFY id BIGINT",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_modify.01.3",
+      "category": "alter_modify",
+      "sql": "ALTER TABLE invoices MODIFY id BIGINT",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_modify.02.1",
+      "category": "alter_modify",
+      "sql": "ALTER TABLE orders MODIFY COLUMN status VARCHAR(30) NOT NULL",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_modify.02.2",
+      "category": "alter_modify",
+      "sql": "ALTER TABLE customers MODIFY COLUMN status VARCHAR(30) NOT NULL",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_modify.02.3",
+      "category": "alter_modify",
+      "sql": "ALTER TABLE invoices MODIFY COLUMN status VARCHAR(30) NOT NULL",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_owner.01.1",
+      "category": "alter_owner",
+      "sql": "ALTER TABLE orders OWNER TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_owner.01.2",
+      "category": "alter_owner",
+      "sql": "ALTER TABLE customers OWNER TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_owner.01.3",
+      "category": "alter_owner",
+      "sql": "ALTER TABLE invoices OWNER TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_owner.02.1",
+      "category": "alter_owner",
+      "sql": "ALTER TABLE IF EXISTS orders OWNER TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_owner.02.2",
+      "category": "alter_owner",
+      "sql": "ALTER TABLE IF EXISTS customers OWNER TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_owner.02.3",
+      "category": "alter_owner",
+      "sql": "ALTER TABLE IF EXISTS invoices OWNER TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_rename.01.1",
+      "category": "alter_rename",
+      "sql": "ALTER TABLE orders RENAME TO customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_rename.01.2",
+      "category": "alter_rename",
+      "sql": "ALTER TABLE customers RENAME TO invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_rename.01.3",
+      "category": "alter_rename",
+      "sql": "ALTER TABLE invoices RENAME TO orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_rename.02.1",
+      "category": "alter_rename",
+      "sql": "ALTER TABLE orders RENAME COLUMN status TO state",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_rename.02.2",
+      "category": "alter_rename",
+      "sql": "ALTER TABLE customers RENAME COLUMN status TO state",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_rename.02.3",
+      "category": "alter_rename",
+      "sql": "ALTER TABLE invoices RENAME COLUMN status TO state",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "alter_rls.01.1",
+      "category": "alter_rls",
+      "sql": "ALTER TABLE orders ENABLE ROW LEVEL SECURITY",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_rls.01.2",
+      "category": "alter_rls",
+      "sql": "ALTER TABLE customers ENABLE ROW LEVEL SECURITY",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_rls.01.3",
+      "category": "alter_rls",
+      "sql": "ALTER TABLE invoices ENABLE ROW LEVEL SECURITY",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_rls.02.1",
+      "category": "alter_rls",
+      "sql": "ALTER TABLE orders FORCE ROW LEVEL SECURITY",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_rls.02.2",
+      "category": "alter_rls",
+      "sql": "ALTER TABLE customers FORCE ROW LEVEL SECURITY",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_rls.02.3",
+      "category": "alter_rls",
+      "sql": "ALTER TABLE invoices FORCE ROW LEVEL SECURITY",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_trigger.01.1",
+      "category": "alter_trigger",
+      "sql": "ALTER TABLE orders ENABLE TRIGGER customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_trigger.01.2",
+      "category": "alter_trigger",
+      "sql": "ALTER TABLE customers ENABLE TRIGGER invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_trigger.01.3",
+      "category": "alter_trigger",
+      "sql": "ALTER TABLE invoices ENABLE TRIGGER orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_trigger.02.1",
+      "category": "alter_trigger",
+      "sql": "ALTER TABLE orders ENABLE TRIGGER ALL",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_trigger.02.2",
+      "category": "alter_trigger",
+      "sql": "ALTER TABLE customers ENABLE TRIGGER ALL",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "alter_trigger.02.3",
+      "category": "alter_trigger",
+      "sql": "ALTER TABLE invoices ENABLE TRIGGER ALL",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "analyze.01.1",
+      "category": "analyze",
+      "sql": "ANALYZE orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "analyze.01.2",
+      "category": "analyze",
+      "sql": "ANALYZE customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "analyze.01.3",
+      "category": "analyze",
+      "sql": "ANALYZE invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "analyze.02.1",
+      "category": "analyze",
+      "sql": "ANALYZE TABLE orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "analyze.02.2",
+      "category": "analyze",
+      "sql": "ANALYZE TABLE customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "analyze.02.3",
+      "category": "analyze",
+      "sql": "ANALYZE TABLE invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "column_fragment.01.1",
+      "category": "column_fragment",
+      "sql": "id INT",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "column_fragment.02.1",
+      "category": "column_fragment",
+      "sql": "status TEXT NOT NULL",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "column_fragment.03.1",
+      "category": "column_fragment",
+      "sql": "id INT REFERENCES orders(id)",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "column_fragment.03.2",
+      "category": "column_fragment",
+      "sql": "id INT REFERENCES customers(id)",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "column_fragment.03.3",
+      "category": "column_fragment",
+      "sql": "id INT REFERENCES invoices(id)",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "comment_on.01.1",
+      "category": "comment_on",
+      "sql": "COMMENT ON TABLE orders IS 'synthetic'",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "comment_on.01.2",
+      "category": "comment_on",
+      "sql": "COMMENT ON TABLE customers IS 'synthetic'",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "comment_on.01.3",
+      "category": "comment_on",
+      "sql": "COMMENT ON TABLE invoices IS 'synthetic'",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "comment_on.02.1",
+      "category": "comment_on",
+      "sql": "COMMENT ON COLUMN orders.id IS 'synthetic'",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "comment_on.02.2",
+      "category": "comment_on",
+      "sql": "COMMENT ON COLUMN customers.id IS 'synthetic'",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "comment_on.02.3",
+      "category": "comment_on",
+      "sql": "COMMENT ON COLUMN invoices.id IS 'synthetic'",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_extension.01.1",
+      "category": "create_extension",
+      "sql": "CREATE EXTENSION orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_extension.01.2",
+      "category": "create_extension",
+      "sql": "CREATE EXTENSION customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_extension.01.3",
+      "category": "create_extension",
+      "sql": "CREATE EXTENSION invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_extension.02.1",
+      "category": "create_extension",
+      "sql": "CREATE EXTENSION IF NOT EXISTS orders WITH SCHEMA customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_extension.02.2",
+      "category": "create_extension",
+      "sql": "CREATE EXTENSION IF NOT EXISTS customers WITH SCHEMA invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_extension.02.3",
+      "category": "create_extension",
+      "sql": "CREATE EXTENSION IF NOT EXISTS invoices WITH SCHEMA orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_index.01.1",
+      "category": "create_index",
+      "sql": "CREATE INDEX invoices ON orders (id)",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_index.01.2",
+      "category": "create_index",
+      "sql": "CREATE INDEX orders ON customers (id)",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_index.01.3",
+      "category": "create_index",
+      "sql": "CREATE INDEX customers ON invoices (id)",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_index.02.1",
+      "category": "create_index",
+      "sql": "CREATE UNIQUE INDEX invoices ON orders (id)",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_index.02.2",
+      "category": "create_index",
+      "sql": "CREATE UNIQUE INDEX orders ON customers (id)",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_index.02.3",
+      "category": "create_index",
+      "sql": "CREATE UNIQUE INDEX customers ON invoices (id)",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_policy.01.1",
+      "category": "create_policy",
+      "sql": "CREATE POLICY invoices ON orders USING (id > 0)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_policy.01.2",
+      "category": "create_policy",
+      "sql": "CREATE POLICY orders ON customers USING (id > 0)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_policy.01.3",
+      "category": "create_policy",
+      "sql": "CREATE POLICY customers ON invoices USING (id > 0)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_policy.02.1",
+      "category": "create_policy",
+      "sql": "CREATE POLICY invoices ON orders FOR SELECT TO customers USING (true)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_policy.02.2",
+      "category": "create_policy",
+      "sql": "CREATE POLICY orders ON customers FOR SELECT TO invoices USING (true)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_policy.02.3",
+      "category": "create_policy",
+      "sql": "CREATE POLICY customers ON invoices FOR SELECT TO orders USING (true)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_role.01.1",
+      "category": "create_role",
+      "sql": "CREATE ROLE orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_role.01.2",
+      "category": "create_role",
+      "sql": "CREATE ROLE customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_role.01.3",
+      "category": "create_role",
+      "sql": "CREATE ROLE invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_role.02.1",
+      "category": "create_role",
+      "sql": "CREATE ROLE orders WITH NOLOGIN",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_role.02.2",
+      "category": "create_role",
+      "sql": "CREATE ROLE customers WITH NOLOGIN",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_role.02.3",
+      "category": "create_role",
+      "sql": "CREATE ROLE invoices WITH NOLOGIN",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_schema.01.1",
+      "category": "create_schema",
+      "sql": "CREATE SCHEMA orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_schema.01.2",
+      "category": "create_schema",
+      "sql": "CREATE SCHEMA customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_schema.01.3",
+      "category": "create_schema",
+      "sql": "CREATE SCHEMA invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_schema.02.1",
+      "category": "create_schema",
+      "sql": "CREATE SCHEMA IF NOT EXISTS orders AUTHORIZATION customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_schema.02.2",
+      "category": "create_schema",
+      "sql": "CREATE SCHEMA IF NOT EXISTS customers AUTHORIZATION invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_schema.02.3",
+      "category": "create_schema",
+      "sql": "CREATE SCHEMA IF NOT EXISTS invoices AUTHORIZATION orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_sequence.01.1",
+      "category": "create_sequence",
+      "sql": "CREATE SEQUENCE orders",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_sequence.01.2",
+      "category": "create_sequence",
+      "sql": "CREATE SEQUENCE customers",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_sequence.01.3",
+      "category": "create_sequence",
+      "sql": "CREATE SEQUENCE invoices",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_sequence.02.1",
+      "category": "create_sequence",
+      "sql": "CREATE SEQUENCE IF NOT EXISTS orders START WITH 1 INCREMENT BY 2",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_sequence.02.2",
+      "category": "create_sequence",
+      "sql": "CREATE SEQUENCE IF NOT EXISTS customers START WITH 1 INCREMENT BY 2",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_sequence.02.3",
+      "category": "create_sequence",
+      "sql": "CREATE SEQUENCE IF NOT EXISTS invoices START WITH 1 INCREMENT BY 2",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.01.1",
+      "category": "create_table",
+      "sql": "CREATE TABLE orders (id INT)",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.01.2",
+      "category": "create_table",
+      "sql": "CREATE TABLE customers (id INT)",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.01.3",
+      "category": "create_table",
+      "sql": "CREATE TABLE invoices (id INT)",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.02.1",
+      "category": "create_table",
+      "sql": "CREATE TABLE IF NOT EXISTS orders (id INT PRIMARY KEY, status TEXT)",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.02.2",
+      "category": "create_table",
+      "sql": "CREATE TABLE IF NOT EXISTS customers (id INT PRIMARY KEY, status TEXT)",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.02.3",
+      "category": "create_table",
+      "sql": "CREATE TABLE IF NOT EXISTS invoices (id INT PRIMARY KEY, status TEXT)",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.03.1",
+      "category": "create_table",
+      "sql": "CREATE TABLE orders AS SELECT id FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.03.2",
+      "category": "create_table",
+      "sql": "CREATE TABLE customers AS SELECT id FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.03.3",
+      "category": "create_table",
+      "sql": "CREATE TABLE invoices AS SELECT id FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.04.1",
+      "category": "create_table",
+      "sql": "CREATE TABLE orders (id INT REFERENCES customers(id))",
+      "reads": [],
+      "writes": [
+        "customers",
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.04.2",
+      "category": "create_table",
+      "sql": "CREATE TABLE customers (id INT REFERENCES invoices(id))",
+      "reads": [],
+      "writes": [
+        "customers",
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_table.04.3",
+      "category": "create_table",
+      "sql": "CREATE TABLE invoices (id INT REFERENCES orders(id))",
+      "reads": [],
+      "writes": [
+        "invoices",
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_trigger.01.1",
+      "category": "create_trigger",
+      "sql": "CREATE TRIGGER invoices BEFORE INSERT ON orders FOR EACH ROW EXECUTE FUNCTION customers()",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_trigger.01.2",
+      "category": "create_trigger",
+      "sql": "CREATE TRIGGER orders BEFORE INSERT ON customers FOR EACH ROW EXECUTE FUNCTION invoices()",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_trigger.01.3",
+      "category": "create_trigger",
+      "sql": "CREATE TRIGGER customers BEFORE INSERT ON invoices FOR EACH ROW EXECUTE FUNCTION orders()",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_trigger.02.1",
+      "category": "create_trigger",
+      "sql": "CREATE TRIGGER invoices AFTER INSERT ON orders BEGIN INSERT INTO customers VALUES (new.id); END",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_trigger.02.2",
+      "category": "create_trigger",
+      "sql": "CREATE TRIGGER orders AFTER INSERT ON customers BEGIN INSERT INTO invoices VALUES (new.id); END",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_trigger.02.3",
+      "category": "create_trigger",
+      "sql": "CREATE TRIGGER customers AFTER INSERT ON invoices BEGIN INSERT INTO orders VALUES (new.id); END",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_type.01.1",
+      "category": "create_type",
+      "sql": "CREATE TYPE orders AS ENUM ('open', 'closed')",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_type.01.2",
+      "category": "create_type",
+      "sql": "CREATE TYPE customers AS ENUM ('open', 'closed')",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_type.01.3",
+      "category": "create_type",
+      "sql": "CREATE TYPE invoices AS ENUM ('open', 'closed')",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_type.02.1",
+      "category": "create_type",
+      "sql": "CREATE TYPE orders AS (id INT, status TEXT)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_type.02.2",
+      "category": "create_type",
+      "sql": "CREATE TYPE customers AS (id INT, status TEXT)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_type.02.3",
+      "category": "create_type",
+      "sql": "CREATE TYPE invoices AS (id INT, status TEXT)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "create_view.01.1",
+      "category": "create_view",
+      "sql": "CREATE VIEW invoices AS SELECT id FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_view.01.2",
+      "category": "create_view",
+      "sql": "CREATE VIEW orders AS SELECT id FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_view.01.3",
+      "category": "create_view",
+      "sql": "CREATE VIEW customers AS SELECT id FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_view.02.1",
+      "category": "create_view",
+      "sql": "CREATE OR REPLACE VIEW invoices AS SELECT * FROM orders JOIN customers USING (id)",
+      "reads": [
+        "customers",
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_view.02.2",
+      "category": "create_view",
+      "sql": "CREATE OR REPLACE VIEW orders AS SELECT * FROM customers JOIN invoices USING (id)",
+      "reads": [
+        "customers",
+        "invoices"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "create_view.02.3",
+      "category": "create_view",
+      "sql": "CREATE OR REPLACE VIEW customers AS SELECT * FROM invoices JOIN orders USING (id)",
+      "reads": [
+        "invoices",
+        "orders"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "deallocate.01.1",
+      "category": "deallocate",
+      "sql": "DEALLOCATE orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "deallocate.01.2",
+      "category": "deallocate",
+      "sql": "DEALLOCATE customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "deallocate.01.3",
+      "category": "deallocate",
+      "sql": "DEALLOCATE invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "deallocate.02.1",
+      "category": "deallocate",
+      "sql": "DEALLOCATE PREPARE orders",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "deallocate.02.2",
+      "category": "deallocate",
+      "sql": "DEALLOCATE PREPARE customers",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "deallocate.02.3",
+      "category": "deallocate",
+      "sql": "DEALLOCATE PREPARE invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "delete.01.1",
+      "category": "delete",
+      "sql": "DELETE FROM orders WHERE id = 1",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "delete.01.2",
+      "category": "delete",
+      "sql": "DELETE FROM customers WHERE id = 1",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "delete.01.3",
+      "category": "delete",
+      "sql": "DELETE FROM invoices WHERE id = 1",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "delete.02.1",
+      "category": "delete",
+      "sql": "DELETE FROM orders",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "delete.02.2",
+      "category": "delete",
+      "sql": "DELETE FROM customers",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "delete.02.3",
+      "category": "delete",
+      "sql": "DELETE FROM invoices",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "delete.03.1",
+      "category": "delete",
+      "sql": "DELETE FROM orders WHERE id IN (SELECT id FROM customers)",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "delete.03.2",
+      "category": "delete",
+      "sql": "DELETE FROM customers WHERE id IN (SELECT id FROM invoices)",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "delete.03.3",
+      "category": "delete",
+      "sql": "DELETE FROM invoices WHERE id IN (SELECT id FROM orders)",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.01.1",
+      "category": "drop",
+      "sql": "DROP TABLE orders",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.01.2",
+      "category": "drop",
+      "sql": "DROP TABLE customers",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.01.3",
+      "category": "drop",
+      "sql": "DROP TABLE invoices",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.02.1",
+      "category": "drop",
+      "sql": "DROP TABLE IF EXISTS orders, customers",
+      "reads": [],
+      "writes": [
+        "customers",
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.02.2",
+      "category": "drop",
+      "sql": "DROP TABLE IF EXISTS customers, invoices",
+      "reads": [],
+      "writes": [
+        "customers",
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.02.3",
+      "category": "drop",
+      "sql": "DROP TABLE IF EXISTS invoices, orders",
+      "reads": [],
+      "writes": [
+        "invoices",
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.03.1",
+      "category": "drop",
+      "sql": "DROP INDEX invoices",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.03.2",
+      "category": "drop",
+      "sql": "DROP INDEX orders",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.03.3",
+      "category": "drop",
+      "sql": "DROP INDEX customers",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.04.1",
+      "category": "drop",
+      "sql": "DROP VIEW invoices",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.04.2",
+      "category": "drop",
+      "sql": "DROP VIEW orders",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.04.3",
+      "category": "drop",
+      "sql": "DROP VIEW customers",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.05.1",
+      "category": "drop",
+      "sql": "DROP TRIGGER invoices ON orders",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.05.2",
+      "category": "drop",
+      "sql": "DROP TRIGGER orders ON customers",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.05.3",
+      "category": "drop",
+      "sql": "DROP TRIGGER customers ON invoices",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.06.1",
+      "category": "drop",
+      "sql": "DROP SEQUENCE orders",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.06.2",
+      "category": "drop",
+      "sql": "DROP SEQUENCE customers",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.06.3",
+      "category": "drop",
+      "sql": "DROP SEQUENCE invoices",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.07.1",
+      "category": "drop",
+      "sql": "DROP SCHEMA orders CASCADE",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.07.2",
+      "category": "drop",
+      "sql": "DROP SCHEMA customers CASCADE",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.07.3",
+      "category": "drop",
+      "sql": "DROP SCHEMA invoices CASCADE",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "drop.08.1",
+      "category": "drop",
+      "sql": "DROP TYPE orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.08.2",
+      "category": "drop",
+      "sql": "DROP TYPE customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.08.3",
+      "category": "drop",
+      "sql": "DROP TYPE invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.09.1",
+      "category": "drop",
+      "sql": "DROP POLICY invoices ON orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.09.2",
+      "category": "drop",
+      "sql": "DROP POLICY orders ON customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.09.3",
+      "category": "drop",
+      "sql": "DROP POLICY customers ON invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.10.1",
+      "category": "drop",
+      "sql": "DROP EXTENSION orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.10.2",
+      "category": "drop",
+      "sql": "DROP EXTENSION customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.10.3",
+      "category": "drop",
+      "sql": "DROP EXTENSION invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.11.1",
+      "category": "drop",
+      "sql": "DROP ROLE orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.11.2",
+      "category": "drop",
+      "sql": "DROP ROLE customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "drop.11.3",
+      "category": "drop",
+      "sql": "DROP ROLE invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "dynamic_table.01.1",
+      "category": "dynamic_table",
+      "sql": "SELECT * FROM omitnix_placeholder",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": true,
+      "unsupported": 0
+    },
+    {
+      "id": "dynamic_table.02.1",
+      "category": "dynamic_table",
+      "sql": "SELECT orders.id FROM orders JOIN omitnix_placeholder ON orders.id = 1",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": true,
+      "unsupported": 0
+    },
+    {
+      "id": "dynamic_table.02.2",
+      "category": "dynamic_table",
+      "sql": "SELECT customers.id FROM customers JOIN omitnix_placeholder ON customers.id = 1",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": true,
+      "unsupported": 0
+    },
+    {
+      "id": "dynamic_table.02.3",
+      "category": "dynamic_table",
+      "sql": "SELECT invoices.id FROM invoices JOIN omitnix_placeholder ON invoices.id = 1",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": true,
+      "unsupported": 0
+    },
+    {
+      "id": "dynamic_table.03.1",
+      "category": "dynamic_table",
+      "sql": "INSERT INTO omitnix_placeholder SELECT id FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": true,
+      "unsupported": 0
+    },
+    {
+      "id": "dynamic_table.03.2",
+      "category": "dynamic_table",
+      "sql": "INSERT INTO omitnix_placeholder SELECT id FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": true,
+      "unsupported": 0
+    },
+    {
+      "id": "dynamic_table.03.3",
+      "category": "dynamic_table",
+      "sql": "INSERT INTO omitnix_placeholder SELECT id FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": true,
+      "unsupported": 0
+    },
+    {
+      "id": "dynamic_table.04.1",
+      "category": "dynamic_table",
+      "sql": "SELECT id FROM orders WHERE status = 'omitnix_placeholder'",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "dynamic_table.04.2",
+      "category": "dynamic_table",
+      "sql": "SELECT id FROM customers WHERE status = 'omitnix_placeholder'",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "dynamic_table.04.3",
+      "category": "dynamic_table",
+      "sql": "SELECT id FROM invoices WHERE status = 'omitnix_placeholder'",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "execute.01.1",
+      "category": "execute",
+      "sql": "EXECUTE orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "execute.01.2",
+      "category": "execute",
+      "sql": "EXECUTE customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "execute.01.3",
+      "category": "execute",
+      "sql": "EXECUTE invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "execute.02.1",
+      "category": "execute",
+      "sql": "EXECUTE orders(1)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "execute.02.2",
+      "category": "execute",
+      "sql": "EXECUTE customers(1)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "execute.02.3",
+      "category": "execute",
+      "sql": "EXECUTE invoices(1)",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "explain.01.1",
+      "category": "explain",
+      "sql": "EXPLAIN SELECT id FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "explain.01.2",
+      "category": "explain",
+      "sql": "EXPLAIN SELECT id FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "explain.01.3",
+      "category": "explain",
+      "sql": "EXPLAIN SELECT id FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "explain.02.1",
+      "category": "explain",
+      "sql": "EXPLAIN ANALYZE SELECT * FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "explain.02.2",
+      "category": "explain",
+      "sql": "EXPLAIN ANALYZE SELECT * FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "explain.02.3",
+      "category": "explain",
+      "sql": "EXPLAIN ANALYZE SELECT * FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "fullwidth.01.1",
+      "category": "fullwidth",
+      "sql": "SELECT ＊ FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.01.2",
+      "category": "fullwidth",
+      "sql": "SELECT ＊ FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.01.3",
+      "category": "fullwidth",
+      "sql": "SELECT ＊ FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.02.1",
+      "category": "fullwidth",
+      "sql": "SELECT id FROM orders WHERE id ＝ 1",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.02.2",
+      "category": "fullwidth",
+      "sql": "SELECT id FROM customers WHERE id ＝ 1",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.02.3",
+      "category": "fullwidth",
+      "sql": "SELECT id FROM invoices WHERE id ＝ 1",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.03.1",
+      "category": "fullwidth",
+      "sql": "SELECT id，status FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.03.2",
+      "category": "fullwidth",
+      "sql": "SELECT id，status FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.03.3",
+      "category": "fullwidth",
+      "sql": "SELECT id，status FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.04.1",
+      "category": "fullwidth",
+      "sql": "INSERT INTO orders （id） VALUES （1）",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.04.2",
+      "category": "fullwidth",
+      "sql": "INSERT INTO customers （id） VALUES （1）",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "fullwidth.04.3",
+      "category": "fullwidth",
+      "sql": "INSERT INTO invoices （id） VALUES （1）",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_all_tables.01.1",
+      "category": "grant_all_tables",
+      "sql": "GRANT SELECT ON ALL TABLES IN SCHEMA orders TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_all_tables.01.2",
+      "category": "grant_all_tables",
+      "sql": "GRANT SELECT ON ALL TABLES IN SCHEMA customers TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_all_tables.01.3",
+      "category": "grant_all_tables",
+      "sql": "GRANT SELECT ON ALL TABLES IN SCHEMA invoices TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_all_tables.02.1",
+      "category": "grant_all_tables",
+      "sql": "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA orders TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_all_tables.02.2",
+      "category": "grant_all_tables",
+      "sql": "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA customers TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_all_tables.02.3",
+      "category": "grant_all_tables",
+      "sql": "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA invoices TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_function.01.1",
+      "category": "grant_function",
+      "sql": "GRANT EXECUTE ON FUNCTION orders() TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_function.01.2",
+      "category": "grant_function",
+      "sql": "GRANT EXECUTE ON FUNCTION customers() TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_function.01.3",
+      "category": "grant_function",
+      "sql": "GRANT EXECUTE ON FUNCTION invoices() TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_function.02.1",
+      "category": "grant_function",
+      "sql": "GRANT EXECUTE ON FUNCTION orders(INT, TEXT) TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_function.02.2",
+      "category": "grant_function",
+      "sql": "GRANT EXECUTE ON FUNCTION customers(INT, TEXT) TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_function.02.3",
+      "category": "grant_function",
+      "sql": "GRANT EXECUTE ON FUNCTION invoices(INT, TEXT) TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_named_function.01.1",
+      "category": "grant_named_function",
+      "sql": "GRANT EXECUTE ON FUNCTION orders(id INT) TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_named_function.01.2",
+      "category": "grant_named_function",
+      "sql": "GRANT EXECUTE ON FUNCTION customers(id INT) TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_named_function.01.3",
+      "category": "grant_named_function",
+      "sql": "GRANT EXECUTE ON FUNCTION invoices(id INT) TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_named_function.02.1",
+      "category": "grant_named_function",
+      "sql": "GRANT EXECUTE ON FUNCTION orders(id INT, status TEXT) TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_named_function.02.2",
+      "category": "grant_named_function",
+      "sql": "GRANT EXECUTE ON FUNCTION customers(id INT, status TEXT) TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_named_function.02.3",
+      "category": "grant_named_function",
+      "sql": "GRANT EXECUTE ON FUNCTION invoices(id INT, status TEXT) TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_schema.01.1",
+      "category": "grant_schema",
+      "sql": "GRANT USAGE ON SCHEMA orders TO customers",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_schema.01.2",
+      "category": "grant_schema",
+      "sql": "GRANT USAGE ON SCHEMA customers TO invoices",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_schema.01.3",
+      "category": "grant_schema",
+      "sql": "GRANT USAGE ON SCHEMA invoices TO orders",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_schema.02.1",
+      "category": "grant_schema",
+      "sql": "GRANT CREATE, USAGE ON SCHEMA orders, invoices TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_schema.02.2",
+      "category": "grant_schema",
+      "sql": "GRANT CREATE, USAGE ON SCHEMA customers, orders TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_schema.02.3",
+      "category": "grant_schema",
+      "sql": "GRANT CREATE, USAGE ON SCHEMA invoices, customers TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_table.01.1",
+      "category": "grant_table",
+      "sql": "GRANT SELECT ON TABLE orders TO customers",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_table.01.2",
+      "category": "grant_table",
+      "sql": "GRANT SELECT ON TABLE customers TO invoices",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_table.01.3",
+      "category": "grant_table",
+      "sql": "GRANT SELECT ON TABLE invoices TO orders",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "grant_table.02.1",
+      "category": "grant_table",
+      "sql": "GRANT SELECT, INSERT, UPDATE ON orders, invoices TO customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_table.02.2",
+      "category": "grant_table",
+      "sql": "GRANT SELECT, INSERT, UPDATE ON customers, orders TO invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "grant_table.02.3",
+      "category": "grant_table",
+      "sql": "GRANT SELECT, INSERT, UPDATE ON invoices, customers TO orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "insert.01.1",
+      "category": "insert",
+      "sql": "INSERT INTO orders (id) VALUES (1)",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.01.2",
+      "category": "insert",
+      "sql": "INSERT INTO customers (id) VALUES (1)",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.01.3",
+      "category": "insert",
+      "sql": "INSERT INTO invoices (id) VALUES (1)",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.02.1",
+      "category": "insert",
+      "sql": "INSERT INTO orders (id) SELECT id FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.02.2",
+      "category": "insert",
+      "sql": "INSERT INTO customers (id) SELECT id FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.02.3",
+      "category": "insert",
+      "sql": "INSERT INTO invoices (id) SELECT id FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.03.1",
+      "category": "insert",
+      "sql": "INSERT INTO orders (id) SELECT id FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.03.2",
+      "category": "insert",
+      "sql": "INSERT INTO customers (id) SELECT id FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.03.3",
+      "category": "insert",
+      "sql": "INSERT INTO invoices (id) SELECT id FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.04.1",
+      "category": "insert",
+      "sql": "INSERT INTO orders (id, status) VALUES (1, 'open'), (2, 'closed')",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.04.2",
+      "category": "insert",
+      "sql": "INSERT INTO customers (id, status) VALUES (1, 'open'), (2, 'closed')",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "insert.04.3",
+      "category": "insert",
+      "sql": "INSERT INTO invoices (id, status) VALUES (1, 'open'), (2, 'closed')",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "joins.01.1",
+      "category": "joins",
+      "sql": "SELECT orders.id FROM orders JOIN customers ON orders.id = customers.id",
+      "reads": [
+        "customers",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "joins.01.2",
+      "category": "joins",
+      "sql": "SELECT customers.id FROM customers JOIN invoices ON customers.id = invoices.id",
+      "reads": [
+        "customers",
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "joins.01.3",
+      "category": "joins",
+      "sql": "SELECT invoices.id FROM invoices JOIN orders ON invoices.id = orders.id",
+      "reads": [
+        "invoices",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "joins.02.1",
+      "category": "joins",
+      "sql": "SELECT orders.* FROM orders LEFT JOIN customers ON orders.id = customers.id",
+      "reads": [
+        "customers",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "joins.02.2",
+      "category": "joins",
+      "sql": "SELECT customers.* FROM customers LEFT JOIN invoices ON customers.id = invoices.id",
+      "reads": [
+        "customers",
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "joins.02.3",
+      "category": "joins",
+      "sql": "SELECT invoices.* FROM invoices LEFT JOIN orders ON invoices.id = orders.id",
+      "reads": [
+        "invoices",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "joins.03.1",
+      "category": "joins",
+      "sql": "SELECT orders.id FROM orders CROSS JOIN customers",
+      "reads": [
+        "customers",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "joins.03.2",
+      "category": "joins",
+      "sql": "SELECT customers.id FROM customers CROSS JOIN invoices",
+      "reads": [
+        "customers",
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "joins.03.3",
+      "category": "joins",
+      "sql": "SELECT invoices.id FROM invoices CROSS JOIN orders",
+      "reads": [
+        "invoices",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "leading_comments.01.1",
+      "category": "leading_comments",
+      "sql": "-- synthetic\nSELECT id FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "leading_comments.01.2",
+      "category": "leading_comments",
+      "sql": "-- synthetic\nSELECT id FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "leading_comments.01.3",
+      "category": "leading_comments",
+      "sql": "-- synthetic\nSELECT id FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "leading_comments.02.1",
+      "category": "leading_comments",
+      "sql": "/* synthetic */ SELECT * FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "leading_comments.02.2",
+      "category": "leading_comments",
+      "sql": "/* synthetic */ SELECT * FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "leading_comments.02.3",
+      "category": "leading_comments",
+      "sql": "/* synthetic */ SELECT * FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "leading_comments.03.1",
+      "category": "leading_comments",
+      "sql": "/* synthetic */\nUPDATE orders SET id = 1",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "leading_comments.03.2",
+      "category": "leading_comments",
+      "sql": "/* synthetic */\nUPDATE customers SET id = 1",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "leading_comments.03.3",
+      "category": "leading_comments",
+      "sql": "/* synthetic */\nUPDATE invoices SET id = 1",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "lock.01.1",
+      "category": "lock",
+      "sql": "LOCK TABLE orders IN ACCESS EXCLUSIVE MODE",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "lock.01.2",
+      "category": "lock",
+      "sql": "LOCK TABLE customers IN ACCESS EXCLUSIVE MODE",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "lock.01.3",
+      "category": "lock",
+      "sql": "LOCK TABLE invoices IN ACCESS EXCLUSIVE MODE",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "lock.02.1",
+      "category": "lock",
+      "sql": "LOCK TABLE orders, customers IN SHARE MODE",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "lock.02.2",
+      "category": "lock",
+      "sql": "LOCK TABLE customers, invoices IN SHARE MODE",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "lock.02.3",
+      "category": "lock",
+      "sql": "LOCK TABLE invoices, orders IN SHARE MODE",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.01.1",
+      "category": "multistatement",
+      "sql": "SELECT id FROM orders; INSERT INTO customers (id) VALUES (1);",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.01.2",
+      "category": "multistatement",
+      "sql": "SELECT id FROM customers; INSERT INTO invoices (id) VALUES (1);",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.01.3",
+      "category": "multistatement",
+      "sql": "SELECT id FROM invoices; INSERT INTO orders (id) VALUES (1);",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.02.1",
+      "category": "multistatement",
+      "sql": "SELECT id FROM orders; SELECT id FROM orders;",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.02.2",
+      "category": "multistatement",
+      "sql": "SELECT id FROM customers; SELECT id FROM customers;",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.02.3",
+      "category": "multistatement",
+      "sql": "SELECT id FROM invoices; SELECT id FROM invoices;",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.03.1",
+      "category": "multistatement",
+      "sql": "SELECT id FROM orders; SELECT ((( FROM customers;",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.03.2",
+      "category": "multistatement",
+      "sql": "SELECT id FROM customers; SELECT ((( FROM invoices;",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.03.3",
+      "category": "multistatement",
+      "sql": "SELECT id FROM invoices; SELECT ((( FROM orders;",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "multistatement.04.1",
+      "category": "multistatement",
+      "sql": "SELECT id FROM orders; VACUUM customers;",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "multistatement.04.2",
+      "category": "multistatement",
+      "sql": "SELECT id FROM customers; VACUUM invoices;",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "multistatement.04.3",
+      "category": "multistatement",
+      "sql": "SELECT id FROM invoices; VACUUM orders;",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "mysql_backticks.01.1",
+      "category": "mysql_backticks",
+      "sql": "SELECT `id` FROM `orders`",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_backticks.01.2",
+      "category": "mysql_backticks",
+      "sql": "SELECT `id` FROM `customers`",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_backticks.01.3",
+      "category": "mysql_backticks",
+      "sql": "SELECT `id` FROM `invoices`",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_backticks.02.1",
+      "category": "mysql_backticks",
+      "sql": "UPDATE `orders` SET `status` = 'open' WHERE `id` = 1",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_backticks.02.2",
+      "category": "mysql_backticks",
+      "sql": "UPDATE `customers` SET `status` = 'open' WHERE `id` = 1",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_backticks.02.3",
+      "category": "mysql_backticks",
+      "sql": "UPDATE `invoices` SET `status` = 'open' WHERE `id` = 1",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_limit.01.1",
+      "category": "mysql_limit",
+      "sql": "UPDATE orders SET status = 'open' LIMIT 1",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_limit.01.2",
+      "category": "mysql_limit",
+      "sql": "UPDATE customers SET status = 'open' LIMIT 1",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_limit.01.3",
+      "category": "mysql_limit",
+      "sql": "UPDATE invoices SET status = 'open' LIMIT 1",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_limit.02.1",
+      "category": "mysql_limit",
+      "sql": "DELETE FROM orders LIMIT 1",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_limit.02.2",
+      "category": "mysql_limit",
+      "sql": "DELETE FROM customers LIMIT 1",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_limit.02.3",
+      "category": "mysql_limit",
+      "sql": "DELETE FROM invoices LIMIT 1",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_limit.03.1",
+      "category": "mysql_limit",
+      "sql": "SELECT id FROM orders LIMIT 1, 2",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_limit.03.2",
+      "category": "mysql_limit",
+      "sql": "SELECT id FROM customers LIMIT 1, 2",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_limit.03.3",
+      "category": "mysql_limit",
+      "sql": "SELECT id FROM invoices LIMIT 1, 2",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_multi_update.01.1",
+      "category": "mysql_multi_update",
+      "sql": "UPDATE orders, customers SET orders.id = customers.id WHERE orders.id = 1",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_multi_update.01.2",
+      "category": "mysql_multi_update",
+      "sql": "UPDATE customers, invoices SET customers.id = invoices.id WHERE customers.id = 1",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_multi_update.01.3",
+      "category": "mysql_multi_update",
+      "sql": "UPDATE invoices, orders SET invoices.id = orders.id WHERE invoices.id = 1",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_multi_update.02.1",
+      "category": "mysql_multi_update",
+      "sql": "UPDATE orders JOIN customers ON orders.id = customers.id SET orders.status = 'open', customers.status = 'closed'",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_multi_update.02.2",
+      "category": "mysql_multi_update",
+      "sql": "UPDATE customers JOIN invoices ON customers.id = invoices.id SET customers.status = 'open', invoices.status = 'closed'",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_multi_update.02.3",
+      "category": "mysql_multi_update",
+      "sql": "UPDATE invoices JOIN orders ON invoices.id = orders.id SET invoices.status = 'open', orders.status = 'closed'",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_on_duplicate.01.1",
+      "category": "mysql_on_duplicate",
+      "sql": "INSERT INTO orders (id) VALUES (1) ON DUPLICATE KEY UPDATE id = VALUES(id)",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_on_duplicate.01.2",
+      "category": "mysql_on_duplicate",
+      "sql": "INSERT INTO customers (id) VALUES (1) ON DUPLICATE KEY UPDATE id = VALUES(id)",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_on_duplicate.01.3",
+      "category": "mysql_on_duplicate",
+      "sql": "INSERT INTO invoices (id) VALUES (1) ON DUPLICATE KEY UPDATE id = VALUES(id)",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_on_duplicate.02.1",
+      "category": "mysql_on_duplicate",
+      "sql": "INSERT INTO orders (id) SELECT id FROM customers ON DUPLICATE KEY UPDATE id = 1",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_on_duplicate.02.2",
+      "category": "mysql_on_duplicate",
+      "sql": "INSERT INTO customers (id) SELECT id FROM invoices ON DUPLICATE KEY UPDATE id = 1",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "mysql_on_duplicate.02.3",
+      "category": "mysql_on_duplicate",
+      "sql": "INSERT INTO invoices (id) SELECT id FROM orders ON DUPLICATE KEY UPDATE id = 1",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "near_blank.01.1",
+      "category": "near_blank",
+      "sql": "",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "near_blank.02.1",
+      "category": "near_blank",
+      "sql": " ",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "near_blank.03.1",
+      "category": "near_blank",
+      "sql": "\n\t",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "near_blank.04.1",
+      "category": "near_blank",
+      "sql": ";",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "near_blank.05.1",
+      "category": "near_blank",
+      "sql": ";;;",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "near_blank.06.1",
+      "category": "near_blank",
+      "sql": "-- synthetic",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "near_blank.07.1",
+      "category": "near_blank",
+      "sql": "/* synthetic */",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.01.1",
+      "category": "placeholders",
+      "sql": "SELECT id FROM orders WHERE id = ?",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.01.2",
+      "category": "placeholders",
+      "sql": "SELECT id FROM customers WHERE id = ?",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.01.3",
+      "category": "placeholders",
+      "sql": "SELECT id FROM invoices WHERE id = ?",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.02.1",
+      "category": "placeholders",
+      "sql": "SELECT id FROM orders WHERE id = :name",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.02.2",
+      "category": "placeholders",
+      "sql": "SELECT id FROM customers WHERE id = :name",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.02.3",
+      "category": "placeholders",
+      "sql": "SELECT id FROM invoices WHERE id = :name",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.03.1",
+      "category": "placeholders",
+      "sql": "SELECT id FROM orders WHERE id = %s",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.03.2",
+      "category": "placeholders",
+      "sql": "SELECT id FROM customers WHERE id = %s",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.03.3",
+      "category": "placeholders",
+      "sql": "SELECT id FROM invoices WHERE id = %s",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.04.1",
+      "category": "placeholders",
+      "sql": "SELECT id FROM orders WHERE id = $1",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.04.2",
+      "category": "placeholders",
+      "sql": "SELECT id FROM customers WHERE id = $1",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.04.3",
+      "category": "placeholders",
+      "sql": "SELECT id FROM invoices WHERE id = $1",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.05.1",
+      "category": "placeholders",
+      "sql": "SELECT id FROM orders WHERE id = {{name}}",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.05.2",
+      "category": "placeholders",
+      "sql": "SELECT id FROM customers WHERE id = {{name}}",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.05.3",
+      "category": "placeholders",
+      "sql": "SELECT id FROM invoices WHERE id = {{name}}",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "placeholders.06.1",
+      "category": "placeholders",
+      "sql": "SELECT id FROM {{name}}",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "plpgsql_assignment.01.1",
+      "category": "plpgsql_assignment",
+      "sql": "id := 1;",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "plpgsql_assignment.02.1",
+      "category": "plpgsql_assignment",
+      "sql": "status := 'open';",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "plpgsql_assignment.03.1",
+      "category": "plpgsql_assignment",
+      "sql": "id := (SELECT id FROM orders);",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "plpgsql_assignment.03.2",
+      "category": "plpgsql_assignment",
+      "sql": "id := (SELECT id FROM customers);",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "plpgsql_assignment.03.3",
+      "category": "plpgsql_assignment",
+      "sql": "id := (SELECT id FROM invoices);",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_cast.01.1",
+      "category": "postgres_cast",
+      "sql": "SELECT id::TEXT FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_cast.01.2",
+      "category": "postgres_cast",
+      "sql": "SELECT id::TEXT FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_cast.01.3",
+      "category": "postgres_cast",
+      "sql": "SELECT id::TEXT FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_cast.02.1",
+      "category": "postgres_cast",
+      "sql": "SELECT CAST(id AS TEXT) FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_cast.02.2",
+      "category": "postgres_cast",
+      "sql": "SELECT CAST(id AS TEXT) FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_cast.02.3",
+      "category": "postgres_cast",
+      "sql": "SELECT CAST(id AS TEXT) FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_for_update.01.1",
+      "category": "postgres_for_update",
+      "sql": "SELECT id FROM orders FOR UPDATE",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_for_update.01.2",
+      "category": "postgres_for_update",
+      "sql": "SELECT id FROM customers FOR UPDATE",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_for_update.01.3",
+      "category": "postgres_for_update",
+      "sql": "SELECT id FROM invoices FOR UPDATE",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_for_update.02.1",
+      "category": "postgres_for_update",
+      "sql": "SELECT id FROM orders FOR UPDATE SKIP LOCKED",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_for_update.02.2",
+      "category": "postgres_for_update",
+      "sql": "SELECT id FROM customers FOR UPDATE SKIP LOCKED",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_for_update.02.3",
+      "category": "postgres_for_update",
+      "sql": "SELECT id FROM invoices FOR UPDATE SKIP LOCKED",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_interval.01.1",
+      "category": "postgres_interval",
+      "sql": "SELECT id FROM orders WHERE created_at > CURRENT_TIMESTAMP - INTERVAL '1 day'",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_interval.01.2",
+      "category": "postgres_interval",
+      "sql": "SELECT id FROM customers WHERE created_at > CURRENT_TIMESTAMP - INTERVAL '1 day'",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_interval.01.3",
+      "category": "postgres_interval",
+      "sql": "SELECT id FROM invoices WHERE created_at > CURRENT_TIMESTAMP - INTERVAL '1 day'",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_interval.02.1",
+      "category": "postgres_interval",
+      "sql": "SELECT INTERVAL '2 hours' FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_interval.02.2",
+      "category": "postgres_interval",
+      "sql": "SELECT INTERVAL '2 hours' FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_interval.02.3",
+      "category": "postgres_interval",
+      "sql": "SELECT INTERVAL '2 hours' FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_on_conflict.01.1",
+      "category": "postgres_on_conflict",
+      "sql": "INSERT INTO orders (id) VALUES (1) ON CONFLICT (id) DO NOTHING",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_on_conflict.01.2",
+      "category": "postgres_on_conflict",
+      "sql": "INSERT INTO customers (id) VALUES (1) ON CONFLICT (id) DO NOTHING",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_on_conflict.01.3",
+      "category": "postgres_on_conflict",
+      "sql": "INSERT INTO invoices (id) VALUES (1) ON CONFLICT (id) DO NOTHING",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_on_conflict.02.1",
+      "category": "postgres_on_conflict",
+      "sql": "INSERT INTO orders (id) VALUES (1) ON CONFLICT (id) DO UPDATE SET id = excluded.id",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_on_conflict.02.2",
+      "category": "postgres_on_conflict",
+      "sql": "INSERT INTO customers (id) VALUES (1) ON CONFLICT (id) DO UPDATE SET id = excluded.id",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_on_conflict.02.3",
+      "category": "postgres_on_conflict",
+      "sql": "INSERT INTO invoices (id) VALUES (1) ON CONFLICT (id) DO UPDATE SET id = excluded.id",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_returning.01.1",
+      "category": "postgres_returning",
+      "sql": "INSERT INTO orders (id) VALUES (1) RETURNING *",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_returning.01.2",
+      "category": "postgres_returning",
+      "sql": "INSERT INTO customers (id) VALUES (1) RETURNING *",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_returning.01.3",
+      "category": "postgres_returning",
+      "sql": "INSERT INTO invoices (id) VALUES (1) RETURNING *",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_returning.02.1",
+      "category": "postgres_returning",
+      "sql": "UPDATE orders SET status = 'open' RETURNING id",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_returning.02.2",
+      "category": "postgres_returning",
+      "sql": "UPDATE customers SET status = 'open' RETURNING id",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_returning.02.3",
+      "category": "postgres_returning",
+      "sql": "UPDATE invoices SET status = 'open' RETURNING id",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_returning.03.1",
+      "category": "postgres_returning",
+      "sql": "DELETE FROM orders WHERE id = 1 RETURNING id",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_returning.03.2",
+      "category": "postgres_returning",
+      "sql": "DELETE FROM customers WHERE id = 1 RETURNING id",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "postgres_returning.03.3",
+      "category": "postgres_returning",
+      "sql": "DELETE FROM invoices WHERE id = 1 RETURNING id",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "prepare.01.1",
+      "category": "prepare",
+      "sql": "PREPARE invoices AS SELECT id FROM orders WHERE id = $1",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "prepare.01.2",
+      "category": "prepare",
+      "sql": "PREPARE orders AS SELECT id FROM customers WHERE id = $1",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "prepare.01.3",
+      "category": "prepare",
+      "sql": "PREPARE customers AS SELECT id FROM invoices WHERE id = $1",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "prepare.02.1",
+      "category": "prepare",
+      "sql": "PREPARE invoices(INT) AS UPDATE orders SET id = $1",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "prepare.02.2",
+      "category": "prepare",
+      "sql": "PREPARE orders(INT) AS UPDATE customers SET id = $1",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "prepare.02.3",
+      "category": "prepare",
+      "sql": "PREPARE customers(INT) AS UPDATE invoices SET id = $1",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "procedural_block.01.1",
+      "category": "procedural_block",
+      "sql": "IF id > 0 THEN SELECT id FROM orders; END IF;",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "procedural_block.01.2",
+      "category": "procedural_block",
+      "sql": "IF id > 0 THEN SELECT id FROM customers; END IF;",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "procedural_block.01.3",
+      "category": "procedural_block",
+      "sql": "IF id > 0 THEN SELECT id FROM invoices; END IF;",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "procedural_block.02.1",
+      "category": "procedural_block",
+      "sql": "BEGIN SELECT id FROM orders; END;",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "procedural_block.02.2",
+      "category": "procedural_block",
+      "sql": "BEGIN SELECT id FROM customers; END;",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "procedural_block.02.3",
+      "category": "procedural_block",
+      "sql": "BEGIN SELECT id FROM invoices; END;",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "procedural_block.03.1",
+      "category": "procedural_block",
+      "sql": "IF",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "procedural_block.04.1",
+      "category": "procedural_block",
+      "sql": "END IF",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "procedural_block.05.1",
+      "category": "procedural_block",
+      "sql": "BEGIN",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "procedural_block.06.1",
+      "category": "procedural_block",
+      "sql": "END",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "procedural_block.07.1",
+      "category": "procedural_block",
+      "sql": "ENDIF",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "prose.01.1",
+      "category": "prose",
+      "sql": "update your orders from the settings page",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "prose.02.1",
+      "category": "prose",
+      "sql": "delete an order from the orders",
+      "reads": [
+        "an"
+      ],
+      "writes": [
+        "the"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "prose.03.1",
+      "category": "prose",
+      "sql": "select an invoice from invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "prose.04.1",
+      "category": "prose",
+      "sql": "orders are ready",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "prose.05.1",
+      "category": "prose",
+      "sql": "please read invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "return_new.01.1",
+      "category": "return_new",
+      "sql": "RETURN NEW;",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "return_new.02.1",
+      "category": "return_new",
+      "sql": "RETURN NEW.id;",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "return_new.03.1",
+      "category": "return_new",
+      "sql": "RETURN NULL;",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_all_tables.01.1",
+      "category": "revoke_all_tables",
+      "sql": "REVOKE SELECT ON ALL TABLES IN SCHEMA orders FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_all_tables.01.2",
+      "category": "revoke_all_tables",
+      "sql": "REVOKE SELECT ON ALL TABLES IN SCHEMA customers FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_all_tables.01.3",
+      "category": "revoke_all_tables",
+      "sql": "REVOKE SELECT ON ALL TABLES IN SCHEMA invoices FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_all_tables.02.1",
+      "category": "revoke_all_tables",
+      "sql": "REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA orders FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_all_tables.02.2",
+      "category": "revoke_all_tables",
+      "sql": "REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA customers FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_all_tables.02.3",
+      "category": "revoke_all_tables",
+      "sql": "REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA invoices FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_function.01.1",
+      "category": "revoke_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION orders() FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_function.01.2",
+      "category": "revoke_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION customers() FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_function.01.3",
+      "category": "revoke_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION invoices() FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_function.02.1",
+      "category": "revoke_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION orders(INT, TEXT) FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_function.02.2",
+      "category": "revoke_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION customers(INT, TEXT) FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_function.02.3",
+      "category": "revoke_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION invoices(INT, TEXT) FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_named_function.01.1",
+      "category": "revoke_named_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION orders(id INT) FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_named_function.01.2",
+      "category": "revoke_named_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION customers(id INT) FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_named_function.01.3",
+      "category": "revoke_named_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION invoices(id INT) FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_named_function.02.1",
+      "category": "revoke_named_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION orders(id INT, status TEXT) FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_named_function.02.2",
+      "category": "revoke_named_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION customers(id INT, status TEXT) FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_named_function.02.3",
+      "category": "revoke_named_function",
+      "sql": "REVOKE EXECUTE ON FUNCTION invoices(id INT, status TEXT) FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_schema.01.1",
+      "category": "revoke_schema",
+      "sql": "REVOKE USAGE ON SCHEMA orders FROM customers",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_schema.01.2",
+      "category": "revoke_schema",
+      "sql": "REVOKE USAGE ON SCHEMA customers FROM invoices",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_schema.01.3",
+      "category": "revoke_schema",
+      "sql": "REVOKE USAGE ON SCHEMA invoices FROM orders",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_schema.02.1",
+      "category": "revoke_schema",
+      "sql": "REVOKE CREATE, USAGE ON SCHEMA orders, invoices FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_schema.02.2",
+      "category": "revoke_schema",
+      "sql": "REVOKE CREATE, USAGE ON SCHEMA customers, orders FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_schema.02.3",
+      "category": "revoke_schema",
+      "sql": "REVOKE CREATE, USAGE ON SCHEMA invoices, customers FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_table.01.1",
+      "category": "revoke_table",
+      "sql": "REVOKE SELECT ON TABLE orders FROM customers",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_table.01.2",
+      "category": "revoke_table",
+      "sql": "REVOKE SELECT ON TABLE customers FROM invoices",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_table.01.3",
+      "category": "revoke_table",
+      "sql": "REVOKE SELECT ON TABLE invoices FROM orders",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "revoke_table.02.1",
+      "category": "revoke_table",
+      "sql": "REVOKE SELECT, INSERT ON orders, invoices FROM customers CASCADE",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_table.02.2",
+      "category": "revoke_table",
+      "sql": "REVOKE SELECT, INSERT ON customers, orders FROM invoices CASCADE",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "revoke_table.02.3",
+      "category": "revoke_table",
+      "sql": "REVOKE SELECT, INSERT ON invoices, customers FROM orders CASCADE",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "select.01.1",
+      "category": "select",
+      "sql": "SELECT id FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.01.2",
+      "category": "select",
+      "sql": "SELECT id FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.01.3",
+      "category": "select",
+      "sql": "SELECT id FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.02.1",
+      "category": "select",
+      "sql": "SELECT * FROM orders WHERE id = 1",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.02.2",
+      "category": "select",
+      "sql": "SELECT * FROM customers WHERE id = 1",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.02.3",
+      "category": "select",
+      "sql": "SELECT * FROM invoices WHERE id = 1",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.03.1",
+      "category": "select",
+      "sql": "SELECT orders.* FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.03.2",
+      "category": "select",
+      "sql": "SELECT customers.* FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.03.3",
+      "category": "select",
+      "sql": "SELECT invoices.* FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.04.1",
+      "category": "select",
+      "sql": "SELECT COUNT(*) FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.04.2",
+      "category": "select",
+      "sql": "SELECT COUNT(*) FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.04.3",
+      "category": "select",
+      "sql": "SELECT COUNT(*) FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.05.1",
+      "category": "select",
+      "sql": "select id from orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.05.2",
+      "category": "select",
+      "sql": "select id from customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.05.3",
+      "category": "select",
+      "sql": "select id from invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "select.06.1",
+      "category": "select",
+      "sql": "SELECT 1",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "sqlite_ignore.01.1",
+      "category": "sqlite_ignore",
+      "sql": "INSERT OR IGNORE INTO orders (id) VALUES (1)",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "sqlite_ignore.01.2",
+      "category": "sqlite_ignore",
+      "sql": "INSERT OR IGNORE INTO customers (id) VALUES (1)",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "sqlite_ignore.01.3",
+      "category": "sqlite_ignore",
+      "sql": "INSERT OR IGNORE INTO invoices (id) VALUES (1)",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "sqlite_ignore.02.1",
+      "category": "sqlite_ignore",
+      "sql": "INSERT OR IGNORE INTO orders (id) SELECT id FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "sqlite_ignore.02.2",
+      "category": "sqlite_ignore",
+      "sql": "INSERT OR IGNORE INTO customers (id) SELECT id FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "sqlite_ignore.02.3",
+      "category": "sqlite_ignore",
+      "sql": "INSERT OR IGNORE INTO invoices (id) SELECT id FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "subquery.01.1",
+      "category": "subquery",
+      "sql": "SELECT id FROM orders WHERE EXISTS (SELECT 1 FROM customers WHERE customers.id = orders.id)",
+      "reads": [
+        "customers",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "subquery.01.2",
+      "category": "subquery",
+      "sql": "SELECT id FROM customers WHERE EXISTS (SELECT 1 FROM invoices WHERE invoices.id = customers.id)",
+      "reads": [
+        "customers",
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "subquery.01.3",
+      "category": "subquery",
+      "sql": "SELECT id FROM invoices WHERE EXISTS (SELECT 1 FROM orders WHERE orders.id = invoices.id)",
+      "reads": [
+        "invoices",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "subquery.02.1",
+      "category": "subquery",
+      "sql": "SELECT id FROM (SELECT id FROM orders) AS customers",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "subquery.02.2",
+      "category": "subquery",
+      "sql": "SELECT id FROM (SELECT id FROM customers) AS invoices",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "subquery.02.3",
+      "category": "subquery",
+      "sql": "SELECT id FROM (SELECT id FROM invoices) AS orders",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "subquery.03.1",
+      "category": "subquery",
+      "sql": "SELECT (SELECT MAX(id) FROM customers) FROM orders",
+      "reads": [
+        "customers",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "subquery.03.2",
+      "category": "subquery",
+      "sql": "SELECT (SELECT MAX(id) FROM invoices) FROM customers",
+      "reads": [
+        "customers",
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "subquery.03.3",
+      "category": "subquery",
+      "sql": "SELECT (SELECT MAX(id) FROM orders) FROM invoices",
+      "reads": [
+        "invoices",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncate.01.1",
+      "category": "truncate",
+      "sql": "TRUNCATE TABLE orders",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncate.01.2",
+      "category": "truncate",
+      "sql": "TRUNCATE TABLE customers",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncate.01.3",
+      "category": "truncate",
+      "sql": "TRUNCATE TABLE invoices",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncate.02.1",
+      "category": "truncate",
+      "sql": "TRUNCATE TABLE orders, customers RESTART IDENTITY CASCADE",
+      "reads": [],
+      "writes": [
+        "customers",
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncate.02.2",
+      "category": "truncate",
+      "sql": "TRUNCATE TABLE customers, invoices RESTART IDENTITY CASCADE",
+      "reads": [],
+      "writes": [
+        "customers",
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncate.02.3",
+      "category": "truncate",
+      "sql": "TRUNCATE TABLE invoices, orders RESTART IDENTITY CASCADE",
+      "reads": [],
+      "writes": [
+        "invoices",
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncated_insert.01.1",
+      "category": "truncated_insert",
+      "sql": "INSERT INTO orders",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncated_insert.01.2",
+      "category": "truncated_insert",
+      "sql": "INSERT INTO customers",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncated_insert.01.3",
+      "category": "truncated_insert",
+      "sql": "INSERT INTO invoices",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncated_insert.02.1",
+      "category": "truncated_insert",
+      "sql": "INSERT INTO orders (id)",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncated_insert.02.2",
+      "category": "truncated_insert",
+      "sql": "INSERT INTO customers (id)",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncated_insert.02.3",
+      "category": "truncated_insert",
+      "sql": "INSERT INTO invoices (id)",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncated_insert.03.1",
+      "category": "truncated_insert",
+      "sql": "INSERT INTO orders (id) VALUES",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncated_insert.03.2",
+      "category": "truncated_insert",
+      "sql": "INSERT INTO customers (id) VALUES",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "truncated_insert.03.3",
+      "category": "truncated_insert",
+      "sql": "INSERT INTO invoices (id) VALUES",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "unclosed_parenthesis.01.1",
+      "category": "unclosed_parenthesis",
+      "sql": "SELECT id FROM orders WHERE (id = 1",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "unclosed_parenthesis.01.2",
+      "category": "unclosed_parenthesis",
+      "sql": "SELECT id FROM customers WHERE (id = 1",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "unclosed_parenthesis.01.3",
+      "category": "unclosed_parenthesis",
+      "sql": "SELECT id FROM invoices WHERE (id = 1",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "unclosed_parenthesis.02.1",
+      "category": "unclosed_parenthesis",
+      "sql": "INSERT INTO orders (id VALUES (1)",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "unclosed_parenthesis.02.2",
+      "category": "unclosed_parenthesis",
+      "sql": "INSERT INTO customers (id VALUES (1)",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "unclosed_parenthesis.02.3",
+      "category": "unclosed_parenthesis",
+      "sql": "INSERT INTO invoices (id VALUES (1)",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "unclosed_parenthesis.03.1",
+      "category": "unclosed_parenthesis",
+      "sql": "SELECT (id FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "unclosed_parenthesis.03.2",
+      "category": "unclosed_parenthesis",
+      "sql": "SELECT (id FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "unclosed_parenthesis.03.3",
+      "category": "unclosed_parenthesis",
+      "sql": "SELECT (id FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": false,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "union.01.1",
+      "category": "union",
+      "sql": "SELECT id FROM orders UNION SELECT id FROM customers",
+      "reads": [
+        "customers",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "union.01.2",
+      "category": "union",
+      "sql": "SELECT id FROM customers UNION SELECT id FROM invoices",
+      "reads": [
+        "customers",
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "union.01.3",
+      "category": "union",
+      "sql": "SELECT id FROM invoices UNION SELECT id FROM orders",
+      "reads": [
+        "invoices",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "union.02.1",
+      "category": "union",
+      "sql": "SELECT id FROM orders UNION ALL SELECT id FROM customers",
+      "reads": [
+        "customers",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "union.02.2",
+      "category": "union",
+      "sql": "SELECT id FROM customers UNION ALL SELECT id FROM invoices",
+      "reads": [
+        "customers",
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "union.02.3",
+      "category": "union",
+      "sql": "SELECT id FROM invoices UNION ALL SELECT id FROM orders",
+      "reads": [
+        "invoices",
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "union.03.1",
+      "category": "union",
+      "sql": "SELECT * FROM orders UNION SELECT * FROM orders",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "union.03.2",
+      "category": "union",
+      "sql": "SELECT * FROM customers UNION SELECT * FROM customers",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "union.03.3",
+      "category": "union",
+      "sql": "SELECT * FROM invoices UNION SELECT * FROM invoices",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": true,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "update.01.1",
+      "category": "update",
+      "sql": "UPDATE orders SET status = 'open' WHERE id = 1",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "update.01.2",
+      "category": "update",
+      "sql": "UPDATE customers SET status = 'open' WHERE id = 1",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "update.01.3",
+      "category": "update",
+      "sql": "UPDATE invoices SET status = 'open' WHERE id = 1",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "update.02.1",
+      "category": "update",
+      "sql": "UPDATE orders SET id = id + 1",
+      "reads": [],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "update.02.2",
+      "category": "update",
+      "sql": "UPDATE customers SET id = id + 1",
+      "reads": [],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "update.02.3",
+      "category": "update",
+      "sql": "UPDATE invoices SET id = id + 1",
+      "reads": [],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "update.03.1",
+      "category": "update",
+      "sql": "UPDATE orders SET status = (SELECT status FROM customers WHERE id = 1) WHERE id = 2",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "update.03.2",
+      "category": "update",
+      "sql": "UPDATE customers SET status = (SELECT status FROM invoices WHERE id = 1) WHERE id = 2",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "update.03.3",
+      "category": "update",
+      "sql": "UPDATE invoices SET status = (SELECT status FROM orders WHERE id = 1) WHERE id = 2",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "vacuum.01.1",
+      "category": "vacuum",
+      "sql": "VACUUM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "vacuum.01.2",
+      "category": "vacuum",
+      "sql": "VACUUM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "vacuum.01.3",
+      "category": "vacuum",
+      "sql": "VACUUM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "vacuum.02.1",
+      "category": "vacuum",
+      "sql": "VACUUM (ANALYZE) orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "vacuum.02.2",
+      "category": "vacuum",
+      "sql": "VACUUM (ANALYZE) customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "vacuum.02.3",
+      "category": "vacuum",
+      "sql": "VACUUM (ANALYZE) invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 1
+    },
+    {
+      "id": "with.01.1",
+      "category": "with",
+      "sql": "WITH invoices AS (SELECT id FROM orders) SELECT id FROM invoices",
+      "reads": [
+        "orders"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "with.01.2",
+      "category": "with",
+      "sql": "WITH orders AS (SELECT id FROM customers) SELECT id FROM orders",
+      "reads": [
+        "customers"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "with.01.3",
+      "category": "with",
+      "sql": "WITH customers AS (SELECT id FROM invoices) SELECT id FROM customers",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "with.02.1",
+      "category": "with",
+      "sql": "WITH invoices AS (SELECT id FROM orders) INSERT INTO customers SELECT id FROM invoices",
+      "reads": [
+        "orders"
+      ],
+      "writes": [
+        "customers"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "with.02.2",
+      "category": "with",
+      "sql": "WITH orders AS (SELECT id FROM customers) INSERT INTO invoices SELECT id FROM orders",
+      "reads": [
+        "customers"
+      ],
+      "writes": [
+        "invoices"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "with.02.3",
+      "category": "with",
+      "sql": "WITH customers AS (SELECT id FROM invoices) INSERT INTO orders SELECT id FROM customers",
+      "reads": [
+        "invoices"
+      ],
+      "writes": [
+        "orders"
+      ],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "with.03.1",
+      "category": "with",
+      "sql": "WITH orders AS (SELECT id FROM orders) SELECT id FROM orders",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "with.03.2",
+      "category": "with",
+      "sql": "WITH customers AS (SELECT id FROM customers) SELECT id FROM customers",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    },
+    {
+      "id": "with.03.3",
+      "category": "with",
+      "sql": "WITH invoices AS (SELECT id FROM invoices) SELECT id FROM invoices",
+      "reads": [],
+      "writes": [],
+      "parsed": true,
+      "select_star": false,
+      "dynamic_table": false,
+      "unsupported": 0
+    }
+  ]
+}
