@@ -43,6 +43,7 @@ from .errors import OmitnixError
 from .gate import new_files, run_gate
 from .globs import normalize
 from .model import Status
+from .output import write_document
 from .registry import build_adapter_set
 from .render import payload_for_check, render_json, to_payload
 from .scan import discover_files
@@ -728,11 +729,11 @@ def main(argv: list[str] | None = None, out=None, err=None) -> int:
             file=err,
         )
     else:
-        output_dir = config.root / config.output_dir
-        output_dir.mkdir(parents=True, exist_ok=True)
-        # newline="\n" on purpose: this document is meant to be committed, and the
-        # platform that happened to run the tool must not show up as a whole-file diff.
-        config.json_path.write_text(render_json(report), encoding="utf-8", newline="\n")
+        try:
+            write_document(config.json_path, render_json(report), root=config.root)
+        except OmitnixError as exc:
+            print(f"omitnix: {exc}", file=err)
+            return EXIT_ERROR
         wrote = [config.json_path]
 
     print(report.coverage.headline(), file=out)

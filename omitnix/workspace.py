@@ -46,6 +46,7 @@ from .errors import OmitnixError
 from .gitmeta import last_commit_date_for, main_worktree_of
 from .globs import glob_match, normalize
 from .model import Coverage, FileRecord, Report, Status
+from .output import write_document
 from .registry import AdapterSet, build_adapter_set
 from .render import payload_for_check, render_json, to_payload
 from .scan import RepoDiscovery, discover_repository_files
@@ -556,10 +557,11 @@ def repository_config(
     return replace(config, exclude=config.exclude + extra)
 
 
-def _write_documents(report: Report, target_dir: Path) -> tuple[Path, ...]:
-    target_dir.mkdir(parents=True, exist_ok=True)
+def _write_documents(
+    report: Report, target_dir: Path, *, root: Path | None = None
+) -> tuple[Path, ...]:
     json_path = target_dir / "index.json"
-    json_path.write_text(render_json(report), encoding="utf-8", newline="\n")
+    write_document(json_path, render_json(report), root=root)
     return (json_path,)
 
 
@@ -654,10 +656,17 @@ def run_repository(
 
     documents: tuple[Path, ...] = ()
     if write_documents:
-        if write_per_repo:
-            documents = _write_documents(report, config.root / config.output_dir)
-        elif out_dir is not None:
-            documents = _write_documents(report, out_dir / "repos" / repo)
+        try:
+            if write_per_repo:
+                documents = _write_documents(
+                    report, config.root / config.output_dir, root=config.root
+                )
+            elif out_dir is not None:
+                documents = _write_documents(report, out_dir / "repos" / repo)
+        except OmitnixError as exc:
+            return RepositoryRun(
+                **common, ok=False, error=str(exc), seconds=time.perf_counter() - started
+            )
 
     return RepositoryRun(
         **common,
@@ -844,9 +853,8 @@ def render_workspace_json(result: WorkspaceResult) -> str:
 
 
 def write_workspace_documents(result: WorkspaceResult, out_dir: Path) -> tuple[Path, ...]:
-    out_dir.mkdir(parents=True, exist_ok=True)
     json_path = out_dir / "workspace.json"
-    json_path.write_text(render_workspace_json(result), encoding="utf-8", newline="\n")
+    write_document(json_path, render_workspace_json(result))
     return (json_path,)
 
 

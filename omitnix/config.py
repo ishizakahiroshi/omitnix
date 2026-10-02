@@ -11,7 +11,7 @@ nothing is exactly how an exclusion quietly stops applying.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any
 
 import yaml
@@ -259,6 +259,16 @@ def load_config(root: Path, config_path: Path | None = None) -> Config:
     output_dir = raw.get("output_dir", DEFAULT_OUTPUT_DIR)
     if not isinstance(output_dir, str) or not output_dir:
         raise ConfigError(f"{config_path}: 'output_dir' must be a non-empty string")
+    parts = output_dir.replace("\\", "/").split("/")
+    if (
+        PurePosixPath(output_dir).is_absolute()
+        or PureWindowsPath(output_dir).is_absolute()
+        or PureWindowsPath(output_dir).drive
+        or ".." in parts
+    ):
+        raise ConfigError(
+            f"{config_path}: 'output_dir' must be a relative path inside the repository"
+        )
 
     fail_on_unknown = raw.get("fail_on_unknown", False)
     if not isinstance(fail_on_unknown, bool):
