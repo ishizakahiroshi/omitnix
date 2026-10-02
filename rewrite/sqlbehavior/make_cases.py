@@ -526,7 +526,7 @@ def empirical_notes(cases: list[dict]) -> list[str]:
             ),
         ),
         group(
-            "Commands can parse opaquely",
+            "Command classifications",
             (
                 "comment_on", "lock", "vacuum", "analyze",
                 "explain", "prepare", "execute", "deallocate",
@@ -548,7 +548,7 @@ def empirical_notes(cases: list[dict]) -> list[str]:
             "Run-time table hole versus value text", "dynamic_table.02.1", "dynamic_table.04.1"
         ),
         group(
-            "Whole-string parse failures",
+            "Whole-string parsing",
             ("multistatement", "truncated_insert", "unclosed_parenthesis"),
         ),
         group(

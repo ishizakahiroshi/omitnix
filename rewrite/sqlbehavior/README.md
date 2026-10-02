@@ -11,10 +11,11 @@ There is no empirical summary or inferred behavior rule in this draft.
 ## Blocker
 
 The available cloud executor failed before Python started with an ENOSPC workspace
-setup error. Therefore dependency installation, corpus generation, pytest, and ruff
-have not run. The existing CI only runs its configured tests directory; it does not
-run rewrite/sqlbehavior or rewrite/tools and does not pin sqlglot to 30.18.0.
-A green default test job would not establish that this corpus is verified.
+setup error. Dependency installation, corpus generation, pytest, and ruff could not
+run in that executor. The separate existing PR CI has run; exact commit/check results
+are recorded in [draft PR #7](https://github.com/ishizakahiroshi/omitnix/pull/7).
+Its default tests do not run rewrite/sqlbehavior or rewrite/tools, and its parser is
+not pinned to sqlglot 30.18.0. A green default test job does not establish corpus verification.
 
 The reference is commit 9311c9c8334ed74808e374aecf0cb2fb13534307 on rewrite-spec.
 Only new files under rewrite/sqlbehavior are included; the adapter and CI are unchanged.
