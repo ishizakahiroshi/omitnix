@@ -1,0 +1,489 @@
+{
+  "schema_version": 1,
+  "generated": {
+    "commit": "1a088b9bb11bc8b5ce15e973e074ec147d2ed44b",
+    "dirty": false,
+    "tool": "omitnix 0.1.3",
+    "partial": false,
+    "adapters": [
+      {
+        "name": "css",
+        "extensions": [
+          ".css"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "go",
+        "extensions": [
+          ".go"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "html",
+        "extensions": [
+          ".html",
+          ".htm"
+        ],
+        "capabilities": [
+          "screen_to_api",
+          "summary"
+        ]
+      },
+      {
+        "name": "php",
+        "extensions": [
+          ".php",
+          ".phtml"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "powershell",
+        "extensions": [
+          ".ps1"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "python",
+        "extensions": [
+          ".py",
+          ".pyi"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "rust",
+        "extensions": [
+          ".rs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "shell",
+        "extensions": [
+          ".sh"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "sql",
+        "extensions": [
+          ".sql"
+        ],
+        "capabilities": [
+          "reads",
+          "writes"
+        ]
+      },
+      {
+        "name": "tsjs",
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".mjs",
+          ".cjs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "screen_to_api",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "vue",
+        "extensions": [
+          ".vue"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      }
+    ],
+    "tracked_only": true,
+    "discovery_note": ""
+  },
+  "coverage": {
+    "discovered": 9,
+    "analyzed": 4,
+    "unresolved": 3,
+    "unknown": 1,
+    "unclaimed": 1,
+    "skipped_by_config": 0
+  },
+  "files": [
+    {
+      "path": ".omitnix.yaml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.yaml'"
+    },
+    {
+      "path": "src/audit.py",
+      "adapter": "python",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Read and stamp the audit trail."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM audit_log ORDER BY id DESC LIMIT omitnix_placeholder"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM audit_log ORDER BY id DESC LIMIT omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: UPDATE audit_log SET seen = 1 WHERE id = omitnix_placeholder"
+        }
+      ]
+    },
+    {
+      "path": "src/broken.py",
+      "adapter": "python",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+    },
+    {
+      "path": "src/client.pyi",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Type stubs for the fictional database client used by these fixtures."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/export.py",
+      "adapter": "python",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Export rows from a table chosen by the caller."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: DELETE FROM omitnix_placeholder WHERE created_at < omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: DELETE FROM omitnix_placeholder WHERE created_at < omitnix_placeholder"
+        }
+      ]
+    },
+    {
+      "path": "src/legacy_report.py",
+      "adapter": "python",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Build statements the unsafe way, so that the safe way can be told apart from it."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT id FROM orders WHERE status = ' omitnix_placeholder '"
+        },
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT id FROM audit_log WHERE actor = ' omitnix_placeholder '"
+        }
+      ]
+    },
+    {
+      "path": "src/notes.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "none_observed",
+          "value": null
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/orders_list.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "value",
+          "value": [
+            "apply_visibility_filter"
+          ]
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/reindex.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Nightly reindex of the order search table."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    }
+  ],
+  "tables": [
+    {
+      "name": "audit_log",
+      "read_by": [
+        "src/audit.py",
+        "src/legacy_report.py"
+      ],
+      "written_by": [
+        "src/audit.py"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/audit.py",
+        "src/legacy_report.py"
+      ]
+    },
+    {
+      "name": "customers",
+      "read_by": [
+        "src/orders_list.py"
+      ],
+      "written_by": [],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    },
+    {
+      "name": "orders",
+      "read_by": [
+        "src/legacy_report.py",
+        "src/orders_list.py",
+        "src/reindex.py"
+      ],
+      "written_by": [],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/legacy_report.py"
+      ]
+    },
+    {
+      "name": "search_index",
+      "read_by": [],
+      "written_by": [
+        "src/reindex.py"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    }
+  ],
+  "table_gaps": {
+    "files": [
+      "src/audit.py",
+      "src/export.py",
+      "src/legacy_report.py"
+    ],
+    "unresolved_count": 6,
+    "note": "6 statements in 3 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+  }
+}

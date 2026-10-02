@@ -1,0 +1,2330 @@
+{
+  "schema_version": 1,
+  "generated": {
+    "commit": "323109043d1828a8dbfcc5e76358fc2785f65790",
+    "dirty": false,
+    "tool": "omitnix 0.1.3",
+    "partial": false,
+    "adapters": [
+      {
+        "name": "css",
+        "extensions": [
+          ".css"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "go",
+        "extensions": [
+          ".go"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "html",
+        "extensions": [
+          ".html",
+          ".htm"
+        ],
+        "capabilities": [
+          "screen_to_api",
+          "summary"
+        ]
+      },
+      {
+        "name": "php",
+        "extensions": [
+          ".php",
+          ".phtml"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "powershell",
+        "extensions": [
+          ".ps1"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "python",
+        "extensions": [
+          ".py",
+          ".pyi"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "rust",
+        "extensions": [
+          ".rs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "shell",
+        "extensions": [
+          ".sh"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "sql",
+        "extensions": [
+          ".sql"
+        ],
+        "capabilities": [
+          "reads",
+          "writes"
+        ]
+      },
+      {
+        "name": "tsjs",
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".mjs",
+          ".cjs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "screen_to_api",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "vue",
+        "extensions": [
+          ".vue"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      }
+    ],
+    "tracked_only": true,
+    "discovery_note": ""
+  },
+  "coverage": {
+    "discovered": 70,
+    "analyzed": 36,
+    "unresolved": 19,
+    "unknown": 7,
+    "unclaimed": 8,
+    "skipped_by_config": 0
+  },
+  "files": [
+    {
+      "path": ".gitignore",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '(no extension)'"
+    },
+    {
+      "path": ".omitnix.yaml",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.yaml'"
+    },
+    {
+      "path": "LICENSE",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '(no extension)'"
+    },
+    {
+      "path": "Makefile",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '(no extension)'"
+    },
+    {
+      "path": "assets/logo.png",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.png'"
+    },
+    {
+      "path": "data/orders.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "docs/README.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "src/binary.py",
+      "adapter": "python",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "file is not valid UTF-8 text"
+    },
+    {
+      "path": "src/bom.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Rebuild the search index overnight."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/go/broken.go",
+      "adapter": "go",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+    },
+    {
+      "path": "src/go/export.go",
+      "adapter": "go",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Package export removes rows from a table chosen by the caller."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: DELETE FROM omitnix_placeholder WHERE created_at < ?"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: DELETE FROM omitnix_placeholder WHERE created_at < ?"
+        },
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM audit_log WHERE actor = omitnix_placeholder LIMIT 1"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM audit_log WHERE actor = omitnix_placeholder LIMIT 1"
+        }
+      ]
+    },
+    {
+      "path": "src/go/notes.go",
+      "adapter": "go",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Package notes holds user-facing text and touches no table."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/go/orders_list.go",
+      "adapter": "go",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Package orders lists orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/go/reindex.go",
+      "adapter": "go",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Package reindex rebuilds the order search table."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/html/about.htm",
+      "adapter": "html",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "About this fictional shop"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "none_observed",
+          "value": []
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/html/interpolated.html",
+      "adapter": "html",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Order summary"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "value",
+          "value": [
+            "/api/orders"
+          ]
+        }
+      },
+      "unresolved": [
+        {
+          "code": "unescaped_text",
+          "detail": "a bare '>' or '&' sits in text at lines 7, 8, 9; HTML allows that and this grammar does not, so those spans were read as text rather than as markup"
+        }
+      ]
+    },
+    {
+      "path": "src/html/interpolated_escaped.html",
+      "adapter": "html",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Order summary"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "value",
+          "value": [
+            "/api/orders"
+          ]
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/html/notes.html",
+      "adapter": "html",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "A fragment with no head and therefore no title. Every name here is invented."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "none_observed",
+          "value": []
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/html/orders.html",
+      "adapter": "html",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Orders"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "value",
+          "value": [
+            "/api/audit",
+            "/api/customers",
+            "/api/orders",
+            "/static/orders.js"
+          ]
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/html/stray_open_bracket.html",
+      "adapter": "html",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+    },
+    {
+      "path": "src/html/templated.html",
+      "adapter": "html",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "A screen whose form action is filled in by the template engine."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "none_observed",
+          "value": []
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_endpoint",
+          "detail": "the form action is not a literal address: {{ route_for_orders }}"
+        }
+      ]
+    },
+    {
+      "path": "src/legacy.inc",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Rebuild the search index overnight."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/minimal/banner.sh",
+      "adapter": "shell",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Rotate the fictional staging logs once a day."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/minimal/deploy.ps1",
+      "adapter": "powershell",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Copy the built assets to the fictional staging host."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/minimal/deploy.sh",
+      "adapter": "shell",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Copy the built assets to the fictional staging host."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/minimal/panel.vue",
+      "adapter": "vue",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "The order panel component. Its script block is not analyzed."
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/minimal/styles.css",
+      "adapter": "css",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "out_of_scope"
+        },
+        "writes": {
+          "state": "out_of_scope"
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/php/audit.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Show the audit log for one order."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "value",
+          "value": [
+            "apply_visibility_filter"
+          ]
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM audit_log WHERE order_id = omitnix_placeholder"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM audit_log WHERE order_id = omitnix_placeholder"
+        }
+      ]
+    },
+    {
+      "path": "src/php/broken.php",
+      "adapter": "php",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+    },
+    {
+      "path": "src/php/common/queries.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Shared queries for the orders screens."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/php/common/reports.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Report helpers. The statement lives one call further in on purpose."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/php/declared.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/php/export.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Export one table as CSV."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM omitnix_placeholder WHERE owner = ?"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: SELECT * FROM omitnix_placeholder WHERE owner = ?"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM omitnix_placeholder WHERE owner = ?"
+        }
+      ]
+    },
+    {
+      "path": "src/php/legacy_report.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Holds a statement the SQL parser cannot read."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: SELECT id FROM orders WHERE ((( id = 1"
+        }
+      ]
+    },
+    {
+      "path": "src/php/notes.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "none_observed",
+          "value": null
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/php/orders_list.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "value",
+          "value": [
+            "apply_visibility_filter"
+          ]
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/php/reindex.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Rebuild the search index overnight."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/php/router.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Dispatch to the handler named in the request."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "indirect_call_depth",
+          "detail": "the required path is built at run time: __DIR__ . '/handlers/' . $action . '.php'"
+        }
+      ]
+    },
+    {
+      "path": "src/php/schema.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "src/php/summary.php",
+      "adapter": "php",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Summarise orders for the dashboard."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "indirect_call_depth",
+          "detail": "'order_totals()' in src/php/common/reports.php calls 'build_totals_sql()', which is two hops away and was not followed"
+        }
+      ]
+    },
+    {
+      "path": "src/python/audit.py",
+      "adapter": "python",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Read and stamp the audit trail."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM audit_log ORDER BY id DESC LIMIT omitnix_placeholder"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM audit_log ORDER BY id DESC LIMIT omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: UPDATE audit_log SET seen = 1 WHERE id = omitnix_placeholder"
+        }
+      ]
+    },
+    {
+      "path": "src/python/broken.py",
+      "adapter": "python",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+    },
+    {
+      "path": "src/python/client.pyi",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Type stubs for the fictional database client used by these fixtures."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/python/export.py",
+      "adapter": "python",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Export rows from a table chosen by the caller."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: DELETE FROM omitnix_placeholder WHERE created_at < omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: DELETE FROM omitnix_placeholder WHERE created_at < omitnix_placeholder"
+        }
+      ]
+    },
+    {
+      "path": "src/python/legacy_report.py",
+      "adapter": "python",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Build statements the unsafe way, so that the safe way can be told apart from it."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT id FROM orders WHERE status = ' omitnix_placeholder '"
+        },
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT id FROM audit_log WHERE actor = ' omitnix_placeholder '"
+        }
+      ]
+    },
+    {
+      "path": "src/python/notes.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "none_observed",
+          "value": null
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/python/orders_list.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "value",
+          "value": [
+            "apply_visibility_filter"
+          ]
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/python/reindex.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Nightly reindex of the order search table."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/rust/audit.rs",
+      "adapter": "rust",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Reads the audit log from a string the query builder is given."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/rust/broken.rs",
+      "adapter": "rust",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+    },
+    {
+      "path": "src/rust/builder.rs",
+      "adapter": "rust",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Writes an order through a query builder."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "query_builder",
+          "detail": "query builder call 'insert_into' does not spell its tables out as SQL"
+        },
+        {
+          "code": "query_builder",
+          "detail": "query builder call 'load' does not spell its tables out as SQL"
+        },
+        {
+          "code": "query_builder",
+          "detail": "query builder call 'find' does not spell its tables out as SQL"
+        }
+      ]
+    },
+    {
+      "path": "src/rust/counter.rs",
+      "adapter": "rust",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Counts orders in a batch. Touches no database."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/rust/export.rs",
+      "adapter": "rust",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Removes rows from a table chosen by the caller."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM audit_log WHERE actor = omitnix_placeholder"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM audit_log WHERE actor = omitnix_placeholder"
+        },
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: DELETE FROM omitnix_placeholder WHERE created_at < $1"
+        },
+        {
+          "code": "dynamic_table_name",
+          "detail": "the table name is a run-time value: DELETE FROM omitnix_placeholder WHERE created_at < $1"
+        }
+      ]
+    },
+    {
+      "path": "src/rust/notes.rs",
+      "adapter": "rust",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "User-facing text. Touches no table."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/rust/orders_list.rs",
+      "adapter": "rust",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Lists orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "value",
+          "value": [
+            "apply_visibility_filter"
+          ]
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/rust/plain.rs",
+      "adapter": "rust",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Forwards a batch to a loader. Touches no database."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/sql/migrate_audit.sql",
+      "adapter": "sql",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log",
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/sql/notes.sql",
+      "adapter": "sql",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/sql/report.sql",
+      "adapter": "sql",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/sql/salvage.sql",
+      "adapter": "sql",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read this statement: NOT SQL AT ALL ###"
+        }
+      ]
+    },
+    {
+      "path": "src/sql/schema.sql",
+      "adapter": "sql",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders",
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/sql/vendor.sql",
+      "adapter": "sql",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "out_of_scope"
+        },
+        "authentication": {
+          "state": "out_of_scope"
+        },
+        "authorization": {
+          "state": "out_of_scope"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "sql_unsupported",
+          "detail": "1 statement(s) were read only as an opaque command, so their tables are not in this index"
+        }
+      ]
+    },
+    {
+      "path": "src/tsjs/audit.js",
+      "adapter": "tsjs",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Read and stamp the audit trail."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "audit_log"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "value",
+          "value": [
+            "/api/audit"
+          ]
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_sql",
+          "detail": "assembled at run time: SELECT * FROM audit_log ORDER BY id DESC LIMIT omitnix_placeholder"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: SELECT * FROM audit_log ORDER BY id DESC LIMIT omitnix_placeholder"
+        }
+      ]
+    },
+    {
+      "path": "src/tsjs/broken.js",
+      "adapter": "tsjs",
+      "status": "unknown",
+      "fields": {},
+      "unresolved": [],
+      "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+    },
+    {
+      "path": "src/tsjs/client.cjs",
+      "adapter": "tsjs",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "A request whose address is decided at run time."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "none_observed",
+          "value": []
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_endpoint",
+          "detail": "the address of this request is a run-time value: endpoint"
+        }
+      ]
+    },
+    {
+      "path": "src/tsjs/orders_list.ts",
+      "adapter": "tsjs",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "value",
+          "value": [
+            "/api/orders",
+            "/api/orders/*"
+          ]
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_endpoint",
+          "detail": "part of this address is filled in at run time: /api/orders/*"
+        }
+      ]
+    },
+    {
+      "path": "src/tsjs/panel.tsx",
+      "adapter": "tsjs",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "The customer panel screen."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "value",
+          "value": [
+            "/api/customers/*"
+          ]
+        }
+      },
+      "unresolved": [
+        {
+          "code": "dynamic_endpoint",
+          "detail": "part of this address is filled in at run time: /api/customers/*"
+        }
+      ]
+    },
+    {
+      "path": "src/tsjs/reindex.mjs",
+      "adapter": "tsjs",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Nightly reindex of the order search table."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "none_observed",
+          "value": []
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/with space.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "A file name with a space."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/注文_list.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders (a non-ASCII file name)."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    }
+  ],
+  "tables": [
+    {
+      "name": "audit_log",
+      "read_by": [
+        "src/go/export.go",
+        "src/php/audit.php",
+        "src/python/audit.py",
+        "src/python/legacy_report.py",
+        "src/rust/audit.rs",
+        "src/rust/export.rs",
+        "src/sql/migrate_audit.sql",
+        "src/tsjs/audit.js"
+      ],
+      "written_by": [
+        "src/php/audit.php",
+        "src/php/common/queries.php",
+        "src/python/audit.py",
+        "src/sql/migrate_audit.sql",
+        "src/sql/salvage.sql"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/go/export.go",
+        "src/php/audit.php",
+        "src/python/audit.py",
+        "src/python/legacy_report.py",
+        "src/rust/export.rs",
+        "src/sql/salvage.sql",
+        "src/tsjs/audit.js"
+      ]
+    },
+    {
+      "name": "customers",
+      "read_by": [
+        "src/go/orders_list.go",
+        "src/php/common/queries.php",
+        "src/php/orders_list.php",
+        "src/python/orders_list.py",
+        "src/rust/orders_list.rs",
+        "src/sql/report.sql",
+        "src/sql/vendor.sql"
+      ],
+      "written_by": [
+        "src/sql/schema.sql"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/sql/vendor.sql"
+      ]
+    },
+    {
+      "name": "orders",
+      "read_by": [
+        "src/bom.php",
+        "src/go/orders_list.go",
+        "src/go/reindex.go",
+        "src/legacy.inc",
+        "src/php/common/queries.php",
+        "src/php/common/reports.php",
+        "src/php/orders_list.php",
+        "src/php/reindex.php",
+        "src/python/legacy_report.py",
+        "src/python/orders_list.py",
+        "src/python/reindex.py",
+        "src/rust/export.rs",
+        "src/rust/orders_list.rs",
+        "src/sql/report.sql",
+        "src/sql/salvage.sql",
+        "src/sql/schema.sql",
+        "src/tsjs/reindex.mjs"
+      ],
+      "written_by": [
+        "src/sql/schema.sql"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/python/legacy_report.py",
+        "src/rust/export.rs",
+        "src/sql/salvage.sql"
+      ]
+    },
+    {
+      "name": "search_index",
+      "read_by": [],
+      "written_by": [
+        "src/bom.php",
+        "src/go/reindex.go",
+        "src/legacy.inc",
+        "src/php/reindex.php",
+        "src/python/reindex.py",
+        "src/rust/export.rs",
+        "src/sql/migrate_audit.sql",
+        "src/sql/schema.sql",
+        "src/tsjs/reindex.mjs"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "src/rust/export.rs"
+      ]
+    }
+  ],
+  "table_gaps": {
+    "files": [
+      "src/go/export.go",
+      "src/php/audit.php",
+      "src/php/export.php",
+      "src/php/legacy_report.php",
+      "src/php/router.php",
+      "src/php/summary.php",
+      "src/python/audit.py",
+      "src/python/export.py",
+      "src/python/legacy_report.py",
+      "src/rust/builder.rs",
+      "src/rust/export.rs",
+      "src/sql/salvage.sql",
+      "src/sql/vendor.sql",
+      "src/tsjs/audit.js"
+    ],
+    "unresolved_count": 24,
+    "note": "24 statements in 14 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+  }
+}

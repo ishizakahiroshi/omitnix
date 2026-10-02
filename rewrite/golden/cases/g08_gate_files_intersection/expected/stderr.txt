@@ -1,0 +1,5 @@
+omitnix: no such file under <ROOT>: src/absent.py
+omitnix: gate refused 1 file newly added in the working tree
+  src/new_report.php: no summary (adapter 'php' reports summaries and found none here)
+  src/new_report.php: no authentication call (adapter 'php' observed no call to any authentication function listed in authentication_functions)
+  src/new_report.php: no authorization call (adapter 'php' observed no call to any authorization function listed in authorization_functions)

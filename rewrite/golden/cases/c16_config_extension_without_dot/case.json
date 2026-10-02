@@ -1,0 +1,12 @@
+{
+  "description": "An adapters key without a dot is an error.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [],
+  "absent": [
+    "{ROOT}/.omitnix/index.json"
+  ]
+}

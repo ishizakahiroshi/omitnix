@@ -1,0 +1,14 @@
+{
+  "description": "exclude_defaults: false walks vendor/ and node_modules/.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

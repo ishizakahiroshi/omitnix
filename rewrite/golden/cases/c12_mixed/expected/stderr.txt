@@ -1,0 +1,11 @@
+omitnix: 24 statements in 14 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names.
+omitnix: 7 discovered file(s) have an adapter that could not read them. Each one is a defect in this tool or in the file itself.
+  src/binary.py: file is not valid UTF-8 text
+  src/go/broken.go: tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess.
+  src/html/stray_open_bracket.html: tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess.
+  src/php/broken.php: tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess.
+  src/python/broken.py: tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess.
+  src/rust/broken.rs: tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess.
+  src/tsjs/broken.js: tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess.
+omitnix: 8 discovered file(s) are claimed by no adapter, so nothing tried to read them. They are counted, and each one is in the generated document by name:
+  (no extension) x3, .json x2, .md x1, .png x1, .yaml x1

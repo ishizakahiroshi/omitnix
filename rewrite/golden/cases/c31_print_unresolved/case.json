@@ -1,0 +1,11 @@
+{
+  "description": "--print src/export.php.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--print",
+    "src/export.php"
+  ],
+  "artifacts": []
+}

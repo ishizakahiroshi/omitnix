@@ -1,0 +1,15 @@
+{
+  "description": "A configured exemption skips one check and says so.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate"
+  ],
+  "steps": [
+    {
+      "op": "overlay"
+    }
+  ],
+  "artifacts": []
+}

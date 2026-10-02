@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "kind": "workspace",
+  "generated": {
+    "tool": "omitnix 0.1.3",
+    "workspace": "<ROOT>",
+    "jobs": 8,
+    "seconds": 0.133,
+    "workspace_excludes_applied": true,
+    "tracked_files_only": true
+  },
+  "repositories": {
+    "discovered": 2,
+    "excluded_by_request": 0,
+    "ran": 1,
+    "could_not_run": 1,
+    "excluded_names": [],
+    "unreadable_directories": []
+  },
+  "coverage": {
+    "discovered": 1,
+    "analyzed": 1,
+    "unresolved": 0,
+    "unknown": 0,
+    "unclaimed": 0,
+    "skipped_by_config": 0
+  },
+  "repos": [
+    {
+      "repo": "bad",
+      "status": "could_not_run",
+      "configuration": {
+        "source": "defaults",
+        "workspace_excludes_applied": false
+      },
+      "authentication_functions_configured": false,
+      "authorization_functions_configured": false,
+      "error": "<ROOT>/bad/.omitnix.yaml: unknown key(s): nonsense. Known keys: adapters, authentication_functions, authorization_functions, exclude, exclude_defaults, fail_on_unknown, gate_exemptions, include, output_dir, schema_snapshot"
+    },
+    {
+      "repo": "good",
+      "status": "ok",
+      "configuration": {
+        "source": "defaults",
+        "workspace_excludes_applied": true
+      },
+      "authentication_functions_configured": false,
+      "authorization_functions_configured": false,
+      "commit": "6110c7f616a74a3ea746b1dae90d05fc0f3d9191",
+      "dirty": false,
+      "coverage": {
+        "discovered": 1,
+        "analyzed": 1,
+        "unresolved": 0,
+        "unknown": 0,
+        "unclaimed": 0,
+        "skipped_by_config": 0
+      },
+      "discovery": {
+        "mode": "tracked",
+        "note": ""
+      },
+      "excluded": {
+        "files": 0,
+        "pruned_directories": 0,
+        "tracked_but_absent": 0
+      },
+      "unclaimed_extensions": {},
+      "unknown_files": [],
+      "tables": [],
+      "table_gaps": {
+        "files": [],
+        "unresolved_count": 0,
+        "note": ""
+      },
+      "documents": [
+        "<OUT>/repos/good/index.json"
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": "good/a.py",
+      "repo": "good",
+      "path": "a.py",
+      "adapter": "python",
+      "status": "analyzed"
+    }
+  ]
+}

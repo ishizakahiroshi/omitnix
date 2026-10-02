@@ -1,0 +1,16 @@
+{
+  "description": "A requested path the configuration excludes is counted.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--files",
+    "src/reindex.php",
+    "src/common/queries.php",
+    "src/nope.php"
+  ],
+  "artifacts": [],
+  "absent": [
+    "{ROOT}/.omitnix/index.json"
+  ]
+}

@@ -1,0 +1,1 @@
+omitnix: --out only applies with --workspace

@@ -1,0 +1,14 @@
+{
+  "description": "fail_on_unknown turns the unreadable PHP file into exit 1.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

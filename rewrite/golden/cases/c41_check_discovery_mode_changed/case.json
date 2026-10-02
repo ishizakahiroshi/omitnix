@@ -1,0 +1,23 @@
+{
+  "description": "A document made with --all-files, checked without.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--check"
+  ],
+  "steps": [
+    {
+      "op": "overlay"
+    },
+    {
+      "op": "run",
+      "args": [
+        "--root",
+        "{ROOT}",
+        "--all-files"
+      ]
+    }
+  ],
+  "artifacts": []
+}

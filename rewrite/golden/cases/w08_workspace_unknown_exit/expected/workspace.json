@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "kind": "workspace",
+  "generated": {
+    "tool": "omitnix 0.1.3",
+    "workspace": "<ROOT>",
+    "jobs": 8,
+    "seconds": 0.402,
+    "workspace_excludes_applied": true,
+    "tracked_files_only": true
+  },
+  "repositories": {
+    "discovered": 1,
+    "excluded_by_request": 0,
+    "ran": 1,
+    "could_not_run": 0,
+    "excluded_names": [],
+    "unreadable_directories": []
+  },
+  "coverage": {
+    "discovered": 2,
+    "analyzed": 1,
+    "unresolved": 0,
+    "unknown": 1,
+    "unclaimed": 0,
+    "skipped_by_config": 0
+  },
+  "repos": [
+    {
+      "repo": "one",
+      "status": "ok",
+      "configuration": {
+        "source": "defaults",
+        "workspace_excludes_applied": true
+      },
+      "authentication_functions_configured": false,
+      "authorization_functions_configured": false,
+      "commit": "a44f343d51a664fd79c08eb3b93e85494a1bd588",
+      "dirty": false,
+      "coverage": {
+        "discovered": 2,
+        "analyzed": 1,
+        "unresolved": 0,
+        "unknown": 1,
+        "unclaimed": 0,
+        "skipped_by_config": 0
+      },
+      "discovery": {
+        "mode": "tracked",
+        "note": ""
+      },
+      "excluded": {
+        "files": 0,
+        "pruned_directories": 0,
+        "tracked_but_absent": 0
+      },
+      "unclaimed_extensions": {},
+      "unknown_files": [
+        {
+          "id": "one/a.php",
+          "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+        }
+      ],
+      "tables": [
+        {
+          "name": "orders",
+          "read_by": [
+            "one/b.php"
+          ],
+          "written_by": [],
+          "in_schema_snapshot": false,
+          "unresolved_in": []
+        },
+        {
+          "name": "search_index",
+          "read_by": [],
+          "written_by": [
+            "one/b.php"
+          ],
+          "in_schema_snapshot": false,
+          "unresolved_in": []
+        }
+      ],
+      "table_gaps": {
+        "files": [],
+        "unresolved_count": 0,
+        "note": ""
+      },
+      "documents": [
+        "<OUT>/repos/one/index.json"
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": "one/a.php",
+      "repo": "one",
+      "path": "a.php",
+      "adapter": "php",
+      "status": "unknown"
+    },
+    {
+      "id": "one/b.php",
+      "repo": "one",
+      "path": "b.php",
+      "adapter": "php",
+      "status": "analyzed"
+    }
+  ]
+}

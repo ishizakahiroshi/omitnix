@@ -1,0 +1,1 @@
+omitnix: ../elsewhere.php is outside <ROOT>

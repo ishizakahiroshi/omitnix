@@ -1,0 +1,6 @@
+usage: omitnix [-h] [--version] [--root ROOT] [--config CONFIG]
+               [--files PATH [PATH ...]] [--write] [--check] [--gate]
+               [--since REF] [--print PATH] [--all-files] [--workspace DIR]
+               [--out DIR] [--exclude-repo GLOB] [--write-per-repo]
+               [--no-workspace-excludes] [--jobs N] [--dry-run] [--status]
+omitnix: error: unrecognized arguments: --nonsense

@@ -1,0 +1,11 @@
+{
+  "description": "Usage: --out {OUT}.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--out",
+    "{OUT}"
+  ],
+  "artifacts": []
+}

@@ -1,0 +1,14 @@
+{
+  "description": "output_dir moves the index, and the index is not discovered.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/out/inventory/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

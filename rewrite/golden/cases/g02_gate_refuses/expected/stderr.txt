@@ -1,0 +1,8 @@
+omitnix: noted: docs/notes.md: unclaimed (no adapter claims '.md')
+omitnix: noted: src/dynamic.py: unresolved (dynamic_sql) (assembled at run time: SELECT id FROM omitnix_placeholder)
+omitnix: noted: src/dynamic.py: unresolved (dynamic_table_name) (the table name is a run-time value: SELECT id FROM omitnix_placeholder)
+omitnix: gate refused 2 files newly added in the working tree
+  src/new_broken.php: unknown (tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess.)
+  src/new_report.php: no summary (adapter 'php' reports summaries and found none here)
+  src/new_report.php: no authentication call (adapter 'php' observed no call to any authentication function listed in authentication_functions)
+  src/new_report.php: no authorization call (adapter 'php' observed no call to any authorization function listed in authorization_functions)

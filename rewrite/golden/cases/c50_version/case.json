@@ -1,0 +1,11 @@
+{
+  "description": "--version prints the tool name and version.",
+  "mode": "repo",
+  "args": [
+    "--version"
+  ],
+  "artifacts": [],
+  "streams": [
+    "stdout"
+  ]
+}

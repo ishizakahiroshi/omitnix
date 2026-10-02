@@ -1,0 +1,12 @@
+{
+  "description": "An unknown key is an error, exit 2.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [],
+  "absent": [
+    "{ROOT}/.omitnix/index.json"
+  ]
+}

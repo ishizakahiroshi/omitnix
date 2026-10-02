@@ -1,0 +1,1 @@
+omitnix: the gate needs git to tell which files are new, but <ROOT> is not inside a git working tree

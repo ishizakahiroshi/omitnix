@@ -1,0 +1,1 @@
+omitnix: git could not list tracked files, so the working tree was walked instead

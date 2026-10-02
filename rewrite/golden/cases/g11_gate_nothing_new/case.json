@@ -1,0 +1,10 @@
+{
+  "description": "Nothing is new: the gate passes and says what it asked.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate"
+  ],
+  "artifacts": []
+}

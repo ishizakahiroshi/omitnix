@@ -1,0 +1,23 @@
+{
+  "description": "--dry-run lists the repositories and writes nothing.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}",
+    "--out",
+    "{OUT}",
+    "--dry-run",
+    "--exclude-repo",
+    "study/*"
+  ],
+  "git": [
+    "public/alpha",
+    "private/beta"
+  ],
+  "fake_repositories": [
+    "gamma",
+    "study/borrowed",
+    "study/cloned"
+  ],
+  "artifacts": []
+}

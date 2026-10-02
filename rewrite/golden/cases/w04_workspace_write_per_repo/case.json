@@ -1,0 +1,36 @@
+{
+  "description": "--write-per-repo writes .omitnix/ inside each repository.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}",
+    "--out",
+    "{OUT}",
+    "--exclude-repo",
+    "study",
+    "--write-per-repo"
+  ],
+  "git": [
+    "public/alpha",
+    "private/beta"
+  ],
+  "fake_repositories": [
+    "gamma",
+    "study/borrowed",
+    "study/cloned"
+  ],
+  "artifacts": [
+    {
+      "actual": "{OUT}/workspace.json",
+      "expected": "workspace.json"
+    },
+    {
+      "actual": "{ROOT}/public/alpha/.omitnix/index.json",
+      "expected": "alpha.index.json"
+    },
+    {
+      "actual": "{ROOT}/private/beta/.omitnix/index.json",
+      "expected": "beta.index.json"
+    }
+  ]
+}

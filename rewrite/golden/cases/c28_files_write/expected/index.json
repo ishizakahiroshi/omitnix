@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "generated": {
+    "commit": "cf67920c2c808b69ede162d7618d61a7c7797676",
+    "dirty": false,
+    "tool": "omitnix 0.1.3",
+    "partial": true,
+    "adapters": [
+      {
+        "name": "css",
+        "extensions": [
+          ".css"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "go",
+        "extensions": [
+          ".go"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "html",
+        "extensions": [
+          ".html",
+          ".htm"
+        ],
+        "capabilities": [
+          "screen_to_api",
+          "summary"
+        ]
+      },
+      {
+        "name": "php",
+        "extensions": [
+          ".php",
+          ".phtml"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "powershell",
+        "extensions": [
+          ".ps1"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "python",
+        "extensions": [
+          ".py",
+          ".pyi"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "rust",
+        "extensions": [
+          ".rs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "shell",
+        "extensions": [
+          ".sh"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      },
+      {
+        "name": "sql",
+        "extensions": [
+          ".sql"
+        ],
+        "capabilities": [
+          "reads",
+          "writes"
+        ]
+      },
+      {
+        "name": "tsjs",
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".mjs",
+          ".cjs"
+        ],
+        "capabilities": [
+          "authentication",
+          "authorization",
+          "reads",
+          "screen_to_api",
+          "summary",
+          "writes"
+        ]
+      },
+      {
+        "name": "vue",
+        "extensions": [
+          ".vue"
+        ],
+        "capabilities": [
+          "summary"
+        ]
+      }
+    ],
+    "tracked_only": true,
+    "discovery_note": ""
+  },
+  "coverage": {
+    "discovered": 2,
+    "analyzed": 2,
+    "unresolved": 0,
+    "unknown": 0,
+    "unclaimed": 0,
+    "skipped_by_config": 0
+  },
+  "files": [
+    {
+      "path": "src/orders_list.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "List orders for the signed-in customer."
+        },
+        "authentication": {
+          "state": "value",
+          "value": [
+            "require_session"
+          ]
+        },
+        "authorization": {
+          "state": "value",
+          "value": [
+            "apply_visibility_filter"
+          ]
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "customers",
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "src/reindex.php",
+      "adapter": "php",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Rebuild the search index overnight."
+        },
+        "authentication": {
+          "state": "none_observed",
+          "value": []
+        },
+        "authorization": {
+          "state": "none_observed",
+          "value": []
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "orders"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "search_index"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    }
+  ],
+  "tables": [
+    {
+      "name": "customers",
+      "read_by": [
+        "src/orders_list.php"
+      ],
+      "written_by": [],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    },
+    {
+      "name": "orders",
+      "read_by": [
+        "src/orders_list.php",
+        "src/reindex.php"
+      ],
+      "written_by": [],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    },
+    {
+      "name": "search_index",
+      "read_by": [],
+      "written_by": [
+        "src/reindex.php"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": []
+    }
+  ],
+  "table_gaps": {
+    "files": [],
+    "unresolved_count": 0,
+    "note": ""
+  }
+}

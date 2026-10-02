@@ -1,0 +1,14 @@
+{
+  "description": "A schema snapshot: tables with no reference, and one not in it.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

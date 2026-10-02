@@ -1,0 +1,11 @@
+{
+  "description": "Not a git working tree: the gate cannot answer, exit 2.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate"
+  ],
+  "git": [],
+  "artifacts": []
+}

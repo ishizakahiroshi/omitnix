@@ -1,0 +1,20 @@
+{
+  "description": "A repository with a bad configuration is reported and does not end the survey; exit 2.",
+  "mode": "workspace",
+  "args": [
+    "--workspace",
+    "{ROOT}",
+    "--out",
+    "{OUT}"
+  ],
+  "git": [
+    "good",
+    "bad"
+  ],
+  "artifacts": [
+    {
+      "actual": "{OUT}/workspace.json",
+      "expected": "workspace.json"
+    }
+  ]
+}

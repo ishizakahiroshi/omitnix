@@ -1,0 +1,11 @@
+{
+  "description": "Usage: --gate --write.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate",
+    "--write"
+  ],
+  "artifacts": []
+}

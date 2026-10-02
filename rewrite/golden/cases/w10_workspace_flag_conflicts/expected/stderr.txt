@@ -1,0 +1,1 @@
+omitnix: --check cannot be combined with --workspace

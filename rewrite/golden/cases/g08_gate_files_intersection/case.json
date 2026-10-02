@@ -1,0 +1,19 @@
+{
+  "description": "--files narrows the gate to the new files among them.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate",
+    "--files",
+    "src/new_report.php",
+    "src/old.py",
+    "src/absent.py"
+  ],
+  "steps": [
+    {
+      "op": "overlay"
+    }
+  ],
+  "artifacts": []
+}

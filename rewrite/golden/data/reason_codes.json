@@ -1,0 +1,22 @@
+{
+  "shared": {
+    "DYNAMIC_ENDPOINT": "dynamic_endpoint",
+    "DYNAMIC_SQL": "dynamic_sql",
+    "DYNAMIC_TABLE_NAME": "dynamic_table_name",
+    "INDIRECT_CALL_DEPTH": "indirect_call_depth",
+    "SELECT_STAR": "select_star",
+    "SQL_UNREADABLE": "sql_unreadable",
+    "SQL_UNSUPPORTED": "sql_unsupported",
+    "TABLE_NOT_IN_SCHEMA": "table_not_in_schema"
+  },
+  "not_a_table_gap": [
+    "dynamic_endpoint",
+    "select_star",
+    "table_not_in_schema"
+  ],
+  "adapter_own": {
+    "html.SCRIPT_UNREADABLE": "script_unreadable",
+    "html.UNESCAPED_TEXT": "unescaped_text",
+    "rust.QUERY_BUILDER": "query_builder"
+  }
+}

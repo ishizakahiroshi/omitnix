@@ -1,0 +1,16 @@
+{
+  "description": "The same files staged: the same answer.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--gate"
+  ],
+  "steps": [
+    {
+      "op": "overlay",
+      "stage": true
+    }
+  ],
+  "artifacts": []
+}

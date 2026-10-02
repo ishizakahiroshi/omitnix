@@ -1,0 +1,2 @@
+Coverage: 2/10 analyzed, 7 unresolved, 1 unknown, 0 unclaimed
+wrote <ROOT>/.omitnix/index.json

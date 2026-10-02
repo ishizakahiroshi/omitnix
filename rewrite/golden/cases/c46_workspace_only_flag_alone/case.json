@@ -1,0 +1,11 @@
+{
+  "description": "Usage: --jobs 2.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--jobs",
+    "2"
+  ],
+  "artifacts": []
+}

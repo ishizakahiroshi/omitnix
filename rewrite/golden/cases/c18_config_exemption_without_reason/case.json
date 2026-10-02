@@ -1,0 +1,12 @@
+{
+  "description": "A gate exemption needs a reason, exit 2.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [],
+  "absent": [
+    "{ROOT}/.omitnix/index.json"
+  ]
+}

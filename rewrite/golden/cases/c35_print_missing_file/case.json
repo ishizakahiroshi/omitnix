@@ -1,0 +1,11 @@
+{
+  "description": "--print src/absent.php.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--print",
+    "src/absent.php"
+  ],
+  "artifacts": []
+}

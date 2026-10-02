@@ -1,0 +1,129 @@
+[
+  {
+    "name": "css",
+    "extensions": [
+      ".css"
+    ],
+    "capabilities": []
+  },
+  {
+    "name": "go",
+    "extensions": [
+      ".go"
+    ],
+    "capabilities": [
+      "authentication",
+      "authorization",
+      "reads",
+      "summary",
+      "writes"
+    ]
+  },
+  {
+    "name": "html",
+    "extensions": [
+      ".html",
+      ".htm"
+    ],
+    "capabilities": [
+      "screen_to_api",
+      "summary"
+    ]
+  },
+  {
+    "name": "php",
+    "extensions": [
+      ".php",
+      ".phtml"
+    ],
+    "capabilities": [
+      "authentication",
+      "authorization",
+      "reads",
+      "summary",
+      "writes"
+    ]
+  },
+  {
+    "name": "powershell",
+    "extensions": [
+      ".ps1"
+    ],
+    "capabilities": [
+      "summary"
+    ]
+  },
+  {
+    "name": "python",
+    "extensions": [
+      ".py",
+      ".pyi"
+    ],
+    "capabilities": [
+      "authentication",
+      "authorization",
+      "reads",
+      "summary",
+      "writes"
+    ]
+  },
+  {
+    "name": "rust",
+    "extensions": [
+      ".rs"
+    ],
+    "capabilities": [
+      "authentication",
+      "authorization",
+      "reads",
+      "summary",
+      "writes"
+    ]
+  },
+  {
+    "name": "shell",
+    "extensions": [
+      ".sh"
+    ],
+    "capabilities": [
+      "summary"
+    ]
+  },
+  {
+    "name": "sql",
+    "extensions": [
+      ".sql"
+    ],
+    "capabilities": [
+      "reads",
+      "writes"
+    ]
+  },
+  {
+    "name": "tsjs",
+    "extensions": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".mjs",
+      ".cjs"
+    ],
+    "capabilities": [
+      "authentication",
+      "authorization",
+      "reads",
+      "screen_to_api",
+      "summary",
+      "writes"
+    ]
+  },
+  {
+    "name": "vue",
+    "extensions": [
+      ".vue"
+    ],
+    "capabilities": [
+      "summary"
+    ]
+  }
+]

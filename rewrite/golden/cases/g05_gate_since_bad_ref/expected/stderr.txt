@@ -1,0 +1,1 @@
+omitnix: the gate was asked which files were added since 'no-such-ref', and git could not answer in <ROOT>. The ref may not exist here (a shallow clone has no history to compare against; fetch it first), or the two histories may be unrelated. Refusing rather than reporting that nothing was added.

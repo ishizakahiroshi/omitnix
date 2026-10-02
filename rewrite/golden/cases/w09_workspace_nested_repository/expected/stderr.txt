@@ -1,0 +1,2 @@
+omitnix: [1/1] outer
+omitnix: 1 repositor(y/ies) name no authorization function, so no authorization check was made in them. This is not a finding that they have none.

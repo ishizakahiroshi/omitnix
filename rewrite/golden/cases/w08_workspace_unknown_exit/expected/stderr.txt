@@ -1,0 +1,3 @@
+omitnix: [1/1] one
+omitnix: 1 repositor(y/ies) name no authorization function, so no authorization check was made in them. This is not a finding that they have none.
+omitnix: 1 discovered file(s) have an adapter that could not read them. Each repository's entry in <OUT>/workspace.json names them.

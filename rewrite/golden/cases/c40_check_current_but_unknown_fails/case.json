@@ -1,0 +1,23 @@
+{
+  "description": "A current document, an unreadable file, fail_on_unknown: exit 1.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--check"
+  ],
+  "steps": [
+    {
+      "op": "run",
+      "args": [
+        "--root",
+        "{ROOT}"
+      ],
+      "allowed_exit_codes": [
+        0,
+        1
+      ]
+    }
+  ],
+  "artifacts": []
+}

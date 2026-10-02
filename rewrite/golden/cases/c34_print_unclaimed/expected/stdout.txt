@@ -1,0 +1,8 @@
+{
+  "path": "src/schema.json",
+  "adapter": null,
+  "status": "unclaimed",
+  "fields": {},
+  "unresolved": [],
+  "reason": "no adapter claims '.json'"
+}

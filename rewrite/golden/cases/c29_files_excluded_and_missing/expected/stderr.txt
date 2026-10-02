@@ -1,0 +1,2 @@
+omitnix: 1 requested path(s) excluded by the configuration
+omitnix: partial run (--files); the document was not written. Pass --write to overwrite it with this subset.

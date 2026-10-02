@@ -1,0 +1,1 @@
+omitnix: exemption applied: src/legacy/menu.py: authorization not required (handled by the router in front of it)

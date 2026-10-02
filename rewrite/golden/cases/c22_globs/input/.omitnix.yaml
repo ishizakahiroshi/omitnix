@@ -1,0 +1,8 @@
+include:
+  - '**/*.dat'
+exclude:
+  - 'api/*.dat'
+  - 'report_[!0-9].dat'
+  - 'report_?.dat'
+  - 'build/*'
+  - 'app/vendored/**'

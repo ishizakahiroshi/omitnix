@@ -1,0 +1,11 @@
+{
+  "description": "Usage: --since base.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}",
+    "--since",
+    "base"
+  ],
+  "artifacts": []
+}

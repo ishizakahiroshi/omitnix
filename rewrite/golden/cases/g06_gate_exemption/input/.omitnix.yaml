@@ -1,0 +1,8 @@
+authentication_functions:
+  - require_session
+authorization_functions:
+  - apply_visibility_filter
+gate_exemptions:
+  - paths: ['src/legacy/**']
+    skip: [authorization]
+    reason: handled by the router in front of it
