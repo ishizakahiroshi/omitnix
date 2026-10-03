@@ -1,0 +1,639 @@
+{
+  "adapter": "rust",
+  "claims": [
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.rs"
+      },
+      "capability": "SUMMARY",
+      "expected": "Lists orders for the signed-in customer.",
+      "kind": "values",
+      "line": 90,
+      "test": "test_the_summary_is_the_inner_doc_comment"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "counter.rs"
+      },
+      "capability": "SUMMARY",
+      "expected": "Counts orders in a batch. Touches no database.",
+      "kind": "values",
+      "line": 97,
+      "test": "test_an_inner_doc_comment_does_not_leave_its_marker_behind"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.rs"
+      },
+      "capability": "AUTHENTICATION",
+      "expected": [
+        "require_session"
+      ],
+      "kind": "values",
+      "line": 105,
+      "test": "test_a_method_call_and_a_scoped_call_are_matched_on_the_bare_name"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.rs"
+      },
+      "capability": "AUTHORIZATION",
+      "expected": [
+        "apply_visibility_filter"
+      ],
+      "kind": "values",
+      "line": 106,
+      "test": "test_a_method_call_and_a_scoped_call_are_matched_on_the_bare_name"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "audit.rs"
+      },
+      "capability": "AUTHENTICATION",
+      "expected": [
+        "require_session"
+      ],
+      "kind": "values",
+      "line": 111,
+      "test": "test_a_bare_call_is_matched_on_the_name"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [],
+          "authz": [],
+          "schema": []
+        },
+        "file": "orders_list.rs"
+      },
+      "capability": "AUTHORIZATION",
+      "expected": [],
+      "kind": "values",
+      "line": 116,
+      "test": "test_nothing_is_reported_as_authorization_when_the_repository_named_nothing"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.rs"
+      },
+      "capability": "READS",
+      "expected": [
+        "customers",
+        "orders"
+      ],
+      "kind": "values",
+      "line": 126,
+      "test": "test_a_raw_string_and_a_macro_argument_are_read_as_sql"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.rs"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "unresolved_empty",
+      "line": 127,
+      "test": "test_a_raw_string_and_a_macro_argument_are_read_as_sql"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.rs"
+      },
+      "capability": "WRITES",
+      "expected": [
+        "search_index"
+      ],
+      "kind": "values",
+      "line": 132,
+      "test": "test_concat_joins_the_pieces_before_they_are_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.rs"
+      },
+      "capability": "READS",
+      "expected": "orders",
+      "kind": "value_contains",
+      "line": 133,
+      "test": "test_concat_joins_the_pieces_before_they_are_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.rs"
+      },
+      "capability": "READS",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 138,
+      "test": "test_a_format_hole_keeps_the_table_and_reports_the_hole"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.rs"
+      },
+      "capability": null,
+      "expected": "select_star",
+      "kind": "code_present",
+      "line": 139,
+      "test": "test_a_format_hole_keeps_the_table_and_reports_the_hole"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.rs"
+      },
+      "capability": null,
+      "expected": "dynamic_sql",
+      "kind": "code_present",
+      "line": 140,
+      "test": "test_a_format_hole_keeps_the_table_and_reports_the_hole"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.rs"
+      },
+      "capability": null,
+      "expected": "dynamic_table_name",
+      "kind": "code_present",
+      "line": 147,
+      "test": "test_a_plus_chain_is_never_silently_empty"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.rs"
+      },
+      "capability": "WRITES",
+      "expected": "table",
+      "kind": "value_lacks",
+      "line": 148,
+      "test": "test_a_plus_chain_is_never_silently_empty"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "notes.rs"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 153,
+      "test": "test_prose_that_opens_like_sql_is_not_reported_as_a_table_or_a_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "notes.rs"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "unresolved_empty",
+      "line": 154,
+      "test": "test_prose_that_opens_like_sql_is_not_reported_as_a_table_or_a_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.rs"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 158,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "builder.rs"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 167,
+      "test": "test_a_query_builder_call_is_unresolved_and_names_no_table"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "builder.rs"
+      },
+      "capability": "WRITES",
+      "expected": [],
+      "kind": "values",
+      "line": 168,
+      "test": "test_a_query_builder_call_is_unresolved_and_names_no_table"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "builder.rs"
+      },
+      "capability": null,
+      "expected": "query_builder",
+      "kind": "code_present",
+      "line": 169,
+      "test": "test_a_query_builder_call_is_unresolved_and_names_no_table"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "builder.rs"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "call 'insert_into'",
+      "kind": "detail_contains",
+      "line": 171,
+      "test": "test_a_query_builder_call_is_unresolved_and_names_no_table"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "builder.rs"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "call 'load'",
+      "kind": "detail_contains",
+      "line": 172,
+      "test": "test_a_query_builder_call_is_unresolved_and_names_no_table"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "builder.rs"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "call 'find'",
+      "kind": "detail_contains",
+      "line": 173,
+      "test": "test_a_query_builder_call_is_unresolved_and_names_no_table"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "builder.rs"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "call 'table'",
+      "kind": "detail_lacks",
+      "line": 174,
+      "test": "test_a_query_builder_call_is_unresolved_and_names_no_table"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "audit.rs"
+      },
+      "capability": "READS",
+      "expected": [
+        "audit_log"
+      ],
+      "kind": "values",
+      "line": 181,
+      "test": "test_a_string_passed_to_the_builder_is_read_and_the_call_is_not_a_second_gap"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "audit.rs"
+      },
+      "capability": null,
+      "expected": "query_builder",
+      "kind": "code_absent",
+      "line": 182,
+      "test": "test_a_string_passed_to_the_builder_is_read_and_the_call_is_not_a_second_gap"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "plain.rs"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 187,
+      "test": "test_the_same_call_name_without_the_crate_is_not_a_query_builder"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "plain.rs"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "unresolved_empty",
+      "line": 188,
+      "test": "test_the_same_call_name_without_the_crate_is_not_a_query_builder"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": [
+            "orders",
+            "customers",
+            "search_index"
+          ]
+        },
+        "file": "export.rs"
+      },
+      "capability": null,
+      "expected": "table_not_in_schema",
+      "kind": "code_present",
+      "line": 197,
+      "test": "test_a_table_missing_from_the_snapshot_is_reported"
+    }
+  ],
+  "inputs_dir": "inputs/rust",
+  "not_extracted": [
+    {
+      "reason": "declares the adapter's own capabilities; Python object",
+      "test": "test_the_adapter_declares_only_what_it_can_produce"
+    },
+    {
+      "reason": "calls an internal Python helper, not the adapter on a file",
+      "test": "test_a_query_builder_finding_hides_a_table_reference"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_file_that_does_not_parse_is_unknown_rather_than_partially_reported"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_missing_grammar_becomes_an_unknown_record_not_a_crash"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_counting_invariant_holds_over_a_rust_repository"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_table_reverse_index_names_the_rust_files"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_screen_to_api_column_is_out_of_scope_not_empty"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_a_new_rust_file_with_no_auth_call_fails_the_gate"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_a_rust_file_that_makes_the_calls_passes_the_gate"
+    }
+  ],
+  "source": "tests/test_adapter_rust.py",
+  "tests_extracted": 15,
+  "tests_in_file": 24,
+  "verified_on_python": {
+    "errors": [],
+    "failed": [],
+    "passed": 30
+  }
+}

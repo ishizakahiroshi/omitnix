@@ -1,0 +1,279 @@
+{
+  "adapter": "sql",
+  "claims": [
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "report.sql"
+      },
+      "capability": "READS",
+      "expected": [
+        "customers",
+        "orders"
+      ],
+      "kind": "values",
+      "line": 69,
+      "test": "test_from_and_join_are_reads"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "schema.sql"
+      },
+      "capability": "WRITES",
+      "expected": "orders",
+      "kind": "value_contains",
+      "line": 76,
+      "test": "test_create_table_is_a_write"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "schema.sql"
+      },
+      "capability": "WRITES",
+      "expected": "customers",
+      "kind": "value_contains",
+      "line": 77,
+      "test": "test_create_table_is_a_write"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "schema.sql"
+      },
+      "capability": "WRITES",
+      "expected": "search_index",
+      "kind": "value_contains",
+      "line": 82,
+      "test": "test_a_view_writes_its_own_name_and_reads_what_it_selects_from"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "schema.sql"
+      },
+      "capability": "READS",
+      "expected": "orders",
+      "kind": "value_contains",
+      "line": 83,
+      "test": "test_a_view_writes_its_own_name_and_reads_what_it_selects_from"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "migrate_audit.sql"
+      },
+      "capability": "WRITES",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 88,
+      "test": "test_alter_truncate_and_drop_are_writes"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "migrate_audit.sql"
+      },
+      "capability": "WRITES",
+      "expected": "search_index",
+      "kind": "value_contains",
+      "line": 89,
+      "test": "test_alter_truncate_and_drop_are_writes"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "migrate_audit.sql"
+      },
+      "capability": "READS",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 93,
+      "test": "test_the_select_inside_an_insert_is_still_a_read"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "notes.sql"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 99,
+      "test": "test_a_file_of_comments_touches_nothing_and_reports_no_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "notes.sql"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "unresolved_empty",
+      "line": 100,
+      "test": "test_a_file_of_comments_touches_nothing_and_reports_no_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "salvage.sql"
+      },
+      "capability": "READS",
+      "expected": "orders",
+      "kind": "value_contains",
+      "line": 108,
+      "test": "test_one_unreadable_statement_does_not_cost_the_tables_of_the_others"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "salvage.sql"
+      },
+      "capability": "WRITES",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 109,
+      "test": "test_one_unreadable_statement_does_not_cost_the_tables_of_the_others"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "salvage.sql"
+      },
+      "capability": null,
+      "expected": "sql_unreadable",
+      "kind": "code_present",
+      "line": 110,
+      "test": "test_one_unreadable_statement_does_not_cost_the_tables_of_the_others"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "vendor.sql"
+      },
+      "capability": null,
+      "expected": "sql_unsupported",
+      "kind": "code_present",
+      "line": 117,
+      "test": "test_a_statement_read_only_as_an_opaque_command_is_counted"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "vendor.sql"
+      },
+      "capability": "READS",
+      "expected": [
+        "customers"
+      ],
+      "kind": "values",
+      "line": 118,
+      "test": "test_a_statement_read_only_as_an_opaque_command_is_counted"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "salvage.sql"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 123,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": []
+        },
+        "file": "vendor.sql"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 123,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "schema": [
+            "orders",
+            "customers",
+            "search_index"
+          ]
+        },
+        "file": "migrate_audit.sql"
+      },
+      "capability": null,
+      "expected": "table_not_in_schema",
+      "kind": "code_present",
+      "line": 133,
+      "test": "test_a_table_missing_from_the_snapshot_is_reported"
+    }
+  ],
+  "inputs_dir": "inputs/sql",
+  "not_extracted": [
+    {
+      "reason": "declares the adapter's own capabilities; Python object",
+      "test": "test_the_adapter_claims_tables_and_nothing_else"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_no_tree_sitter_grammar_is_needed"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_counting_invariant_holds_over_a_sql_repository"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_reverse_index_names_the_migration_that_defines_a_table"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_summary_column_is_out_of_scope_not_empty"
+    }
+  ],
+  "source": "tests/test_adapter_sql.py",
+  "tests_extracted": 10,
+  "tests_in_file": 15,
+  "verified_on_python": {
+    "errors": [],
+    "failed": [],
+    "passed": 18
+  }
+}
