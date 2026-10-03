@@ -335,16 +335,23 @@ def _judge(claim: dict[str, Any], record: dict[str, Any] | None) -> bool:
         state = item.get("state")
         if state == "not_configured" and cap in {"AUTHENTICATION", "AUTHORIZATION"}:
             config_key = "authn" if cap == "AUTHENTICATION" else "authz"
-            if claim["call"]["config"].get(config_key) != []:
+            if claim["call"]["config"].get(config_key) != [] or "value" in item:
                 return False
-            value = []  # adapter's empty configured-name result, explicitly unconfigured
-        elif state in {"value", "none_observed"} and "value" in item:
+            value = []  # explicitly unconfigured; the document must omit the value key
+        elif state == "none_observed" and "value" in item:
+            if cap == "SUMMARY" and item["value"] is None:
+                value = ""  # the document serializes an empty scalar observation as null
+            elif cap != "SUMMARY" and item["value"] == []:
+                value = []
+            else:
+                return False  # contradictory state/payload is not an observed empty result
+        elif state == "value" and "value" in item:
             value = item["value"]
+            if not value:
+                return False  # empty observations must use none_observed
         else:
             return False
         if cap == "SUMMARY":
-            if state == "none_observed" and value is None:
-                value = ""  # scalar empty string is serialized as null by the document contract
             if not isinstance(value, str):
                 return False
         elif not isinstance(value, list) or not all(isinstance(v, str) for v in value):

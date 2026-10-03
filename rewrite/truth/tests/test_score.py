@@ -254,3 +254,41 @@ def test_candidate_wrong_mode_is_a_false_positive_not_an_answer():
     g = group(e, record(writes=["orders", "customers"]))
     assert g["false_positives"] == 2
     assert g["honesty"]["candidates_gap_disclosed"]["passed"] == 0
+
+
+@pytest.mark.parametrize("cap,field", [
+    ("READS", {"state": "none_observed", "value": ["orders"]}),
+    ("SUMMARY", {"state": "none_observed", "value": "Orders"}),
+    ("SUMMARY", {"state": "none_observed", "value": ""}),
+    ("READS", {"state": "none_observed", "value": None}),
+    ("READS", {"state": "none_observed"}),
+    ("READS", {"state": "value", "value": []}),
+    ("SUMMARY", {"state": "value", "value": ""}),
+    ("AUTHENTICATION", {"state": "not_configured", "value": ["requireSession"]}),
+    ("AUTHORIZATION", {"state": "not_configured", "value": []}),
+    ("AUTHENTICATION", {"state": "not_configured", "value": None}),
+])
+def test_contradictory_observation_states_never_pass_claims(cap, field):
+    c = claim("values", "Orders" if cap == "SUMMARY" else ["orders"], cap)
+    c["call"]["config"] = {"authn": [], "authz": []}
+    if cap.startswith("AUTH"):
+        c["expected"] = []  # old conversion concealed the supplied payload
+    r = record()
+    r["fields"][cap.lower()] = field
+    assert not score._judge(c, r)
+
+
+@pytest.mark.parametrize("cap,field,expected", [
+    ("READS", {"state": "none_observed", "value": []}, []),
+    ("SUMMARY", {"state": "none_observed", "value": None}, ""),
+    ("READS", {"state": "value", "value": ["orders"]}, ["orders"]),
+    ("SUMMARY", {"state": "value", "value": "Orders"}, "Orders"),
+    ("AUTHENTICATION", {"state": "not_configured"}, []),
+    ("AUTHORIZATION", {"state": "not_configured"}, []),
+])
+def test_valid_observation_state_conversions_are_preserved(cap, field, expected):
+    c = claim("values", expected, cap)
+    c["call"]["config"] = {"authn": [], "authz": []}
+    r = record()
+    r["fields"][cap.lower()] = field
+    assert score._judge(c, r)

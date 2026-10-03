@@ -54,8 +54,8 @@ all extraction claims and exclusions, then record discrepancies and scored limit
 
 All 333 items in answers.json were subsequently compared with the above decisions
 and their source lines/call chains. No expected-answer edit or must/reference move
-was justified. Rust rs06 candidate line 3 identifies the literal array declaration
-(the SQL execution is line 4); other lines likewise follow their generator anchors,
+was justified. Rust rs06 candidate line 3 identifies the SQL execution
+(the literal array is on line 2); other lines likewise follow their generator anchors,
 not a newly invented universal SQL-token-location rule. Finite candidate/closed-corpus
 tracing conventions and unsettled reference policies are discussed in REPORT.md.
 

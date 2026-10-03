@@ -37,7 +37,7 @@ tree-sitter-typescript==0.23.2
 
 `python rewrite/truth/tools/make_synthetic.py --check`
 
-Exit: 0; elapsed 0.072 seconds.
+Exit: 0; elapsed 0.087 seconds.
 
 ```text
 up to date: 189 files
@@ -47,7 +47,7 @@ up to date: 189 files
 
 `python rewrite/truth/tools/extract_from_tests.py --verify`
 
-Exit: 0; elapsed 0.567 seconds.
+Exit: 0; elapsed 0.629 seconds.
 
 ```text
 tests 176  extracted 111  claims 192
@@ -65,7 +65,7 @@ tests 176  extracted 111  claims 192
 
 `python rewrite/truth/tools/score.py --cmd "python -m omitnix" --from-tests --json /workspace/shared/omitnix-truth-evidence/score-1.json`
 
-Exit: 0; elapsed 3.355 seconds.
+Exit: 0; elapsed 3.317 seconds.
 
 ```text
 synthetic: extraction presence only; provenance/lines/candidate certainty unscored
@@ -90,7 +90,7 @@ from-tests: 178/178 claims pass (100.0%); skipped 14
 
 `python -m pytest`
 
-Exit: 0; elapsed 7.081 seconds.
+Exit: 0; elapsed 7.425 seconds.
 
 ```text
 ============================= test session starts ==============================
@@ -122,34 +122,34 @@ tests/test_render.py ...........                                         [ 86%]
 tests/test_workspace.py ......................................           [ 96%]
 tests/test_workspace_status.py ................                          [100%]
 
-======================== 403 passed, 1 skipped in 6.78s ========================
+======================== 403 passed, 1 skipped in 7.10s ========================
 ```
 
 ## Command 5
 
 `python -m pytest rewrite/truth/tests`
 
-Exit: 0; elapsed 0.344 seconds.
+Exit: 0; elapsed 0.351 seconds.
 
 ```text
 ============================= test session starts ==============================
 platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
 rootdir: /workspace/shared/omitnix-truth-review-work
 configfile: pyproject.toml
-collected 57 items
+collected 73 items
 
-rewrite/truth/tests/test_extract.py ..                                   [  3%]
-rewrite/truth/tests/test_score.py ...................................... [ 70%]
-.................                                                        [100%]
+rewrite/truth/tests/test_extract.py ..                                   [  2%]
+rewrite/truth/tests/test_score.py ...................................... [ 54%]
+.................................                                        [100%]
 
-============================== 57 passed in 0.09s ==============================
+============================== 73 passed in 0.09s ==============================
 ```
 
 ## Command 6
 
 `python -m ruff check rewrite/truth/tools rewrite/truth/tests`
 
-Exit: 0; elapsed 0.036 seconds.
+Exit: 0; elapsed 0.04 seconds.
 
 ```text
 All checks passed!
@@ -159,7 +159,7 @@ All checks passed!
 
 `python rewrite/truth/tools/score.py --cmd "python -m omitnix" --from-tests --json /workspace/shared/omitnix-truth-evidence/score-2.json`
 
-Exit: 0; elapsed 3.338 seconds.
+Exit: 0; elapsed 3.577 seconds.
 
 ```text
 synthetic: extraction presence only; provenance/lines/candidate certainty unscored
@@ -184,7 +184,7 @@ from-tests: 178/178 claims pass (100.0%); skipped 14
 
 `python rewrite/truth/tools/audit_population.py --check`
 
-Exit: 0; elapsed 0.089 seconds.
+Exit: 0; elapsed 0.087 seconds.
 
 ```text
 audit population up to date
@@ -197,3 +197,5 @@ Both external score outputs have SHA-256 `91988addb61a8c6f4195edab83463bc661d9b1
 Original score JSON SHA-256: `fc3eca0a811d5ffd303a91f52131150298cb43e4c3f3ba22857d992503ac65fd`.
 
 Additional checks: `git diff --check`, `node scripts/check-claude-md.mjs`, and `python -m ruff check .` all exited 0. The staged structural secrets scan passed; KB_ROOT and FAMILY_ROOT were unavailable, so private-name watchlists were not run. No sensitive fixture data was introduced.
+
+These required commands were rerun after the independent R1 field-state fix; focused tests now include 16 additional positive/negative state/payload controls.

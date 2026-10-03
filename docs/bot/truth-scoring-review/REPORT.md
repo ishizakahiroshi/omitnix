@@ -3,7 +3,7 @@
 Instruction baseline: `1451cae88b7f5f45ebd7077aaf2a880989e47298`.
 Product baseline: `de9c498c62a71d075d570f4829a63801eba52810`.
 Primary audit: 2026-10-03, Linux, separate work branch from the instruction baseline.
-Independent review: pending an independent reader of the published code SHA.
+Independent review: first pass completed on local code SHA `1b2f0545e01d59c1f5126a7125e58e59f4354efb`; two findings fixed, exact published-SHA re-review pending.
 
 ## Conclusion
 
@@ -195,7 +195,7 @@ written outside the repository and compared byte-for-byte. Required checks:
 - score.py twice: 178/178 applicable assertions; 14 explicit skips, deterministic JSON.
 - python -m pytest: **403 passed, 1 skipped** of 404 collected. The skip is
   `test_the_rules_fire_on_the_violating_example_only`: semgrep is not installed.
-- focused tests: **57 passed**; required ruff: passed. Full-repository ruff also passed.
+- focused tests: **73 passed**; required ruff: passed. Full-repository ruff also passed.
 - Initial hand-authored regression run against the original scorer: **36 failed,
   11 passed** (47 tests). This includes incorrect scoring and missing diagnostics.
   Additional regression cases were added after that baseline; they are not falsely
@@ -221,3 +221,16 @@ Independent review is required against the exact published SHA, including re-rev
 of any code changes. Windows behavior, local implementations/private inputs, schema-
 scope skipped claims, semgrep-specific test, line/certainty/provenance scoring and the
 policy disputes above remain explicit limitations/local-owner work. This PR is Draft.
+
+## Independent first-pass findings addressed
+
+The separate reviewer inspected the complete source/answer and extraction populations
+and ran 2,163 controlled category instances, confirming the main results. Its report
+is preserved in INDEPENDENT_REVIEW.md. R1 (medium) found contradictory observation
+states could still pass a literal claim; state/value compatibility is now checked
+before conversion. `none_observed` requires an empty list or documented scalar null,
+`not_configured` must omit its value key, and `value` must have a nonempty correctly
+typed value. Sixteen positive/negative controls preserve legitimate conversions.
+R2 (low) corrected the rs06 source-review sentence: array line 2, SQL line 3. No
+fixture or expected answer changed. Required commands passed again; the score hash
+is unchanged. Independent re-review of the exact publication remains pending.
