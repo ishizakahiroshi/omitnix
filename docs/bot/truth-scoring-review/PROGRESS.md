@@ -8,7 +8,7 @@ PR base: dots/truth-scoring-review. Primary reviewer: dots audit worker. Indepen
 | Package | Local owner | prepared | Synthetic truth and instructions included in this branch |
 | Delivery | Local owner | pending | Confirm actual route and receipt |
 | Acceptance | dots | verified | Exact 1451cae checkout; Python 3.12.14; isolated editable dev install plus ruff succeeded; 6.3 GB initially free |
-| Audit and fixes | dots primary | in progress | All 186 synthetic source files read first; SOURCE_REVIEW.md records decisions before answers/output |
+| Audit and fixes | dots primary | verified, awaiting independent review | Full 333-item/192-claim audit; 57 focused tests; 403 product tests passed and 1 semgrep skip; deterministic scores; REPORT.md / EXECUTION.md |
 | Independent review | dots reviewer | pending | Final reviewed code SHA and findings |
 | Local acceptance | Local owner | pending | PR inspection, Windows and local/private scoring |
 
@@ -21,3 +21,5 @@ Board commit: obtain from history or subsequent receipt, not self-referenced her
 2026-10-03: local owner prepared scoped package. No delivery or cloud success claimed.
 
 2026-10-03: acceptance verified in isolated cloud checkout; no task-number collision. Dependencies installed without persistent package cache. Independent code review remains pending.
+
+2026-10-03: first findings reproduced with controlled records (36 failing checks before fixes); scoped fixes and all six requested commands completed. No product or synthetic answer changes. Independent review pending exact published code SHA.

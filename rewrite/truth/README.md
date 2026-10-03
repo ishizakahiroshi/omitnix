@@ -72,3 +72,23 @@ Python failed would have meant a bug in the extractor or a test that is not what
 These claims are what the author of the tests believed. They are one source of truth, not
 the whole: C1's answers for real repositories and C3's synthetic corpus cover what the
 tests never asked.
+
+## Audited scoring scope (2026-10-03)
+
+See [the #6 audit](../../docs/bot/truth-scoring-review/REPORT.md) and its complete
+population manifest. The same 192 literal claims are preserved. All 58 public fixture
+files are packaged: 49 directly analyzed inputs plus 9 support/context files, explicitly
+listed in each adapter JSON. In particular PHP summary.php needs common/reports.php.
+
+The scorer checks 178 claims across all 11 kinds and reports the remaining 14 individually
+(8 schema-snapshot, 6 scan-scope). Verification of 192 claims at the adapter-helper level
+is different from those 178 document-level checks. A 192/192 extraction pass is not proof
+that the tests define correct product behavior: some deliberately encode current Python
+limits, including one-hop PHP and unresolved Rust builders. Eleven additional assertions
+inside extracted tests, plus 65 entirely unextracted test functions, remain outside the
+192-claim population and are enumerated in the audit.
+
+Synthetic results measure unique file/mode/table presence by expected minimum depth.
+The current flat index cannot score source lines, direct/resolved/traced provenance,
+actual depth or complete candidate certainty. Candidate gap disclosure is separate from
+candidate resolution. Neutral pairs are excluded, not credited, in precision.

@@ -269,6 +269,7 @@
     }
   ],
   "source": "tests/test_adapter_sql.py",
+  "support_inputs": [],
   "tests_extracted": 10,
   "tests_in_file": 15,
   "verified_on_python": {

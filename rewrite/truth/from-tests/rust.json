@@ -629,6 +629,9 @@
     }
   ],
   "source": "tests/test_adapter_rust.py",
+  "support_inputs": [
+    "broken.rs"
+  ],
   "tests_extracted": 15,
   "tests_in_file": 24,
   "verified_on_python": {

@@ -49,3 +49,18 @@ path order, by language; all caller/callee files were read together.
 This records full primary source review, not an independent review of the author's
 fixes. Next: compare every answer item and source line to these decisions, enumerate
 all extraction claims and exclusions, then record discrepancies and scored limits.
+
+## Answer comparison completed
+
+All 333 items in answers.json were subsequently compared with the above decisions
+and their source lines/call chains. No expected-answer edit or must/reference move
+was justified. Rust rs06 candidate line 3 identifies the literal array declaration
+(the SQL execution is line 4); other lines likewise follow their generator anchors,
+not a newly invented universal SQL-token-location rule. Finite candidate/closed-corpus
+tracing conventions and unsettled reference policies are discussed in REPORT.md.
+
+All 49 direct from-tests input files were read before their hand-written test
+assertions/claim data. All 192 claim records and the source of 65 excluded functions
+were inspected; the remaining 11 assertions inside extracted functions were then
+explicitly enumerated. This source review does not make current Python-limit
+assertions the product oracle.
