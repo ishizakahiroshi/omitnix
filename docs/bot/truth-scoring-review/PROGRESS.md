@@ -7,7 +7,7 @@ PR base: dots/truth-scoring-review. Primary and independent reviewers: awaiting 
 |---|---|---|---|
 | Package | Local owner | prepared | Synthetic truth and instructions included in this branch |
 | Delivery | Local owner | sent | Sent to the confirmed task conversation; message read back |
-| Acceptance | dots | pending | Confirm number, instruction revision and environment |
+| Acceptance | dots | acknowledged | #6 accepted, no collision; instruction/environment capability confirmation pending |
 | Audit and fixes | dots primary | pending | REPORT.md, focused tests, commands and code SHA |
 | Independent review | dots reviewer | pending | Final reviewed code SHA and findings |
 | Local acceptance | Local owner | pending | PR inspection, Windows and local/private scoring |
@@ -21,3 +21,6 @@ Board commit: obtain from history or subsequent receipt, not self-referenced her
 2026-10-03: local owner prepared scoped package, published the instruction commit,
 sent #6 to the confirmed task conversation and read back the posted text. Acceptance
 and cloud execution are still pending; the private delivery locator is kept locally.
+2026-10-03: dots replied that #6 is accepted with no collision and it will verify the
+instruction, dependencies, capacity and independent-review availability. No completed
+execution or reviewed result is claimed by that reply.
