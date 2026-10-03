@@ -1,0 +1,1118 @@
+{
+  "adapter": "php",
+  "claims": [
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "SUMMARY",
+      "expected": "List orders for the signed-in customer.",
+      "kind": "values",
+      "line": 89,
+      "test": "test_the_summary_is_the_first_description_line_of_the_docblock"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "SUMMARY",
+      "expected": "@param",
+      "kind": "value_lacks",
+      "line": 94,
+      "test": "test_annotation_lines_are_not_mistaken_for_the_summary"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "notes.php"
+      },
+      "capability": "SUMMARY",
+      "expected": "",
+      "kind": "values",
+      "line": 101,
+      "test": "test_a_file_without_a_docblock_reports_no_summary_rather_than_inventing_one"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "AUTHENTICATION",
+      "expected": [
+        "require_session"
+      ],
+      "kind": "values",
+      "line": 109,
+      "test": "test_configured_authentication_and_authorization_calls_are_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "AUTHORIZATION",
+      "expected": [
+        "apply_visibility_filter"
+      ],
+      "kind": "values",
+      "line": 110,
+      "test": "test_configured_authentication_and_authorization_calls_are_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [],
+          "authz": [],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "AUTHENTICATION",
+      "expected": [],
+      "kind": "values",
+      "line": 117,
+      "test": "test_nothing_is_reported_as_authorization_when_the_repository_named_nothing"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [],
+          "authz": [],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "AUTHORIZATION",
+      "expected": [],
+      "kind": "values",
+      "line": 118,
+      "test": "test_nothing_is_reported_as_authorization_when_the_repository_named_nothing"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "reindex.php"
+      },
+      "capability": "AUTHENTICATION",
+      "expected": [],
+      "kind": "values",
+      "line": 123,
+      "test": "test_a_file_with_no_check_reports_none_rather_than_failing"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "reindex.php"
+      },
+      "capability": "AUTHORIZATION",
+      "expected": [],
+      "kind": "values",
+      "line": 124,
+      "test": "test_a_file_with_no_check_reports_none_rather_than_failing"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "common/queries.php"
+      },
+      "capability": "READS",
+      "expected": [
+        "customers",
+        "orders"
+      ],
+      "kind": "values",
+      "line": 133,
+      "test": "test_from_and_join_are_reads"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "reindex.php"
+      },
+      "capability": "WRITES",
+      "expected": [
+        "search_index"
+      ],
+      "kind": "values",
+      "line": 138,
+      "test": "test_insert_target_is_a_write_and_its_select_is_a_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "reindex.php"
+      },
+      "capability": "READS",
+      "expected": [
+        "orders"
+      ],
+      "kind": "values",
+      "line": 139,
+      "test": "test_insert_target_is_a_write_and_its_select_is_a_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "common/queries.php"
+      },
+      "capability": "WRITES",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 144,
+      "test": "test_delete_is_a_write"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "notes.php"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 151,
+      "test": "test_prose_that_opens_like_sql_is_not_reported_as_a_table_or_a_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "notes.php"
+      },
+      "capability": "WRITES",
+      "expected": [],
+      "kind": "values",
+      "line": 152,
+      "test": "test_prose_that_opens_like_sql_is_not_reported_as_a_table_or_a_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "notes.php"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "unresolved_empty",
+      "line": 153,
+      "test": "test_prose_that_opens_like_sql_is_not_reported_as_a_table_or_a_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "READS",
+      "expected": [
+        "customers",
+        "orders"
+      ],
+      "kind": "values",
+      "line": 163,
+      "test": "test_sql_in_a_required_file_is_found_through_the_call"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "WRITES",
+      "expected": "audit_log",
+      "kind": "value_lacks",
+      "line": 169,
+      "test": "test_a_function_the_file_never_calls_is_not_attributed_to_it"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "READS",
+      "expected": "audit_log",
+      "kind": "value_lacks",
+      "line": 170,
+      "test": "test_a_function_the_file_never_calls_is_not_attributed_to_it"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "summary.php"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 177,
+      "test": "test_a_second_hop_is_counted_rather_than_followed"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "summary.php"
+      },
+      "capability": null,
+      "expected": "indirect_call_depth",
+      "kind": "code_present",
+      "line": 178,
+      "test": "test_a_second_hop_is_counted_rather_than_followed"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "summary.php"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "build_totals_sql",
+      "kind": "detail_contains",
+      "line": 180,
+      "test": "test_a_second_hop_is_counted_rather_than_followed"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "summary.php"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "common/reports.php",
+      "kind": "detail_contains",
+      "line": 194,
+      "test": "test_a_skipped_hop_names_the_file_it_was_found_in"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "router.php"
+      },
+      "capability": null,
+      "expected": "indirect_call_depth",
+      "kind": "code_present",
+      "line": 199,
+      "test": "test_an_include_path_built_at_run_time_is_counted"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "router.php"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "run time",
+      "kind": "detail_contains",
+      "line": 200,
+      "test": "test_an_include_path_built_at_run_time_is_counted"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": [
+            "orders_list.php"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 211,
+      "test": "test_a_required_file_outside_the_scan_is_refused_rather_than_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": [
+            "orders_list.php"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": null,
+      "expected": "indirect_call_depth",
+      "kind": "code_present",
+      "line": 212,
+      "test": "test_a_required_file_outside_the_scan_is_refused_rather_than_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": [
+            "orders_list.php"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "common/queries.php",
+      "kind": "detail_contains",
+      "line": 214,
+      "test": "test_a_required_file_outside_the_scan_is_refused_rather_than_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": [
+            "orders_list.php"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "outside this scan",
+      "kind": "detail_contains",
+      "line": 215,
+      "test": "test_a_required_file_outside_the_scan_is_refused_rather_than_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": [
+            "orders_list.php",
+            "common/queries.php"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": "READS",
+      "expected": [
+        "customers",
+        "orders"
+      ],
+      "kind": "values",
+      "line": 224,
+      "test": "test_a_required_file_inside_the_scan_is_still_followed"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": [
+            "orders_list.php"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.php"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "...",
+      "kind": "detail_lacks",
+      "line": 263,
+      "test": "test_a_reason_never_carries_the_absolute_path_of_the_checkout"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "export.php"
+      },
+      "capability": null,
+      "expected": "dynamic_sql",
+      "kind": "code_present",
+      "line": 271,
+      "test": "test_a_concatenated_statement_is_never_silently_empty"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "export.php"
+      },
+      "capability": null,
+      "expected": "dynamic_table_name",
+      "kind": "code_present",
+      "line": 272,
+      "test": "test_a_concatenated_statement_is_never_silently_empty"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "export.php"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 273,
+      "test": "test_a_concatenated_statement_is_never_silently_empty"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "audit.php"
+      },
+      "capability": "READS",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 280,
+      "test": "test_select_star_keeps_the_table_and_flags_only_the_columns"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "audit.php"
+      },
+      "capability": null,
+      "expected": "select_star",
+      "kind": "code_present",
+      "line": 281,
+      "test": "test_select_star_keeps_the_table_and_flags_only_the_columns"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "audit.php"
+      },
+      "capability": null,
+      "expected": "dynamic_sql",
+      "kind": "code_present",
+      "line": 286,
+      "test": "test_an_interpolated_statement_is_flagged_but_still_yields_its_tables"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "audit.php"
+      },
+      "capability": "WRITES",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 287,
+      "test": "test_an_interpolated_statement_is_flagged_but_still_yields_its_tables"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "legacy_report.php"
+      },
+      "capability": null,
+      "expected": "sql_unreadable",
+      "kind": "code_present",
+      "line": 294,
+      "test": "test_a_statement_the_parser_cannot_read_is_reported_not_skipped"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "legacy_report.php"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 295,
+      "test": "test_a_statement_the_parser_cannot_read_is_reported_not_skipped"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "export.php"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 300,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "audit.php"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 300,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "summary.php"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 300,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "router.php"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 300,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "legacy_report.php"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 300,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": [
+            "orders",
+            "customers",
+            "search_index"
+          ]
+        },
+        "file": "audit.php"
+      },
+      "capability": null,
+      "expected": "table_not_in_schema",
+      "kind": "code_present",
+      "line": 312,
+      "test": "test_a_table_missing_from_the_snapshot_is_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": [
+            "orders",
+            "customers",
+            "search_index"
+          ]
+        },
+        "file": "audit.php"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "audit_log",
+      "kind": "detail_contains",
+      "line": 313,
+      "test": "test_a_table_missing_from_the_snapshot_is_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "audit.php"
+      },
+      "capability": null,
+      "expected": "table_not_in_schema",
+      "kind": "code_absent",
+      "line": 318,
+      "test": "test_nothing_is_reported_against_a_schema_that_was_not_configured"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": [
+            "orders",
+            "customers",
+            "search_index"
+          ]
+        },
+        "file": "reindex.php"
+      },
+      "capability": null,
+      "expected": "table_not_in_schema",
+      "kind": "code_absent",
+      "line": 324,
+      "test": "test_a_table_present_in_the_snapshot_is_not_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "in_scope": null,
+          "schema": []
+        },
+        "file": "declared.php"
+      },
+      "capability": "SUMMARY",
+      "expected": "List orders for the signed-in customer.",
+      "kind": "values",
+      "line": 459,
+      "test": "test_a_declare_statement_does_not_hide_the_docblock_after_it"
+    }
+  ],
+  "inputs_dir": "inputs/php",
+  "not_extracted": [
+    {
+      "reason": "declares the adapter's own capabilities; Python object",
+      "test": "test_the_adapter_declares_only_what_it_can_produce"
+    },
+    {
+      "reason": "compares two analysis results with each other; no literal to extract",
+      "test": "test_the_refusal_reads_the_same_whether_or_not_the_file_is_on_the_disk"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_file_that_does_not_parse_is_unknown_rather_than_partially_reported"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_missing_grammar_becomes_an_unknown_record_not_a_crash"
+    },
+    {
+      "reason": "calls an internal Python helper, not the adapter on a file",
+      "test": "test_a_common_table_expression_is_not_a_table"
+    },
+    {
+      "reason": "calls an internal Python helper, not the adapter on a file",
+      "test": "test_a_run_time_table_name_is_reported_rather_than_recorded_as_a_table"
+    },
+    {
+      "reason": "calls an internal Python helper, not the adapter on a file",
+      "test": "test_backtick_quoting_is_read"
+    },
+    {
+      "reason": "calls an internal Python helper, not the adapter on a file",
+      "test": "test_a_candidate_needs_a_keyword_and_that_keyword_s_own_clause"
+    },
+    {
+      "reason": "calls an internal Python helper, not the adapter on a file",
+      "test": "test_lower_case_prose_that_fits_the_shape_still_needs_evidence_of_a_query"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_counting_invariant_holds_over_a_php_repository"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_table_reverse_index_names_the_php_files"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_core_holds_an_adapter_to_the_files_the_run_selected"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_a_file_with_a_finding_is_unresolved_and_one_without_is_analyzed"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_screen_to_api_column_is_out_of_scope_not_empty"
+    }
+  ],
+  "source": "tests/test_php_adapter.py",
+  "support_inputs": [
+    "broken.php",
+    "common/reports.php",
+    "schema.json"
+  ],
+  "tests_extracted": 27,
+  "tests_in_file": 41,
+  "verified_on_python": {
+    "errors": [],
+    "failed": [],
+    "passed": 50
+  }
+}

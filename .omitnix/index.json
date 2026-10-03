@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "374e5bb337ec0f7e0f4a47d97c70083a306eb1ed",
+    "commit": "aa476b90549bdaace0f52896f994207e5792cd93",
     "dirty": true,
     "tool": "omitnix 0.1.3",
     "partial": false,
@@ -138,11 +138,11 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 88,
-    "analyzed": 62,
-    "unresolved": 2,
+    "discovered": 116,
+    "analyzed": 67,
+    "unresolved": 3,
     "unknown": 0,
-    "unclaimed": 24,
+    "unclaimed": 46,
     "skipped_by_config": 0
   },
   "files": [
@@ -349,6 +349,94 @@
         }
       },
       "unresolved": []
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/COVERAGE.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/EXECUTION.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/HANDOFF.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/INDEPENDENT_FIXED_SHA_REVIEW.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/INDEPENDENT_REVIEW.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/LOCAL_ACCEPTANCE.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/PROGRESS.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/README.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/REPORT.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/REVIEW.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/SOURCE_REVIEW.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
     },
     {
       "path": "lefthook.yml",
@@ -1417,6 +1505,297 @@
       "reason": "no adapter claims '.toml'"
     },
     {
+      "path": "rewrite/truth/README.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "rewrite/truth/from-tests/go.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/from-tests/html.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/from-tests/minimal.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/from-tests/php.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/from-tests/python.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/from-tests/rust.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/from-tests/sql.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/from-tests/tsjs.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/synthetic/README.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "rewrite/truth/synthetic/answers.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/tests/test_extract.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Regression tests for public fixture context and verification failure signalling."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "rewrite/truth/tests/test_score.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Hand-authored controls: do not generate expected values from implementation output."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "rewrite/truth/tools/audit_population.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Enumerate the public audit population; no analyzer output supplies any answer."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "rewrite/truth/tools/extract_from_tests.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Pull the expectations people wrote by hand out of the adapter tests."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "rewrite/truth/tools/make_synthetic.py",
+      "adapter": "python",
+      "status": "unresolved",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Generate the synthetic ground-truth corpus (rewrite/truth/synthetic/)."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "value",
+          "value": [
+            "invoices",
+            "orders",
+            "payments",
+            "tables"
+          ]
+        },
+        "writes": {
+          "state": "value",
+          "value": [
+            "audit_log",
+            "counters",
+            "invoices",
+            "payments",
+            "search_index",
+            "sessions"
+          ]
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": [
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: INSERT INTO (id"
+        },
+        {
+          "code": "sql_unsupported",
+          "detail": "sqlglot read this only as an opaque command, so its tables are not in this index: REPLACE INTO settings"
+        },
+        {
+          "code": "sql_unreadable",
+          "detail": "sqlglot could not read: SELECT * FROM"
+        },
+        {
+          "code": "select_star",
+          "detail": "the tables are known, the columns are not: INSERT INTO search_index (order_id, total) SELECT id, total FROM order..."
+        }
+      ]
+    },
+    {
+      "path": "rewrite/truth/tools/score.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Score an implementation of omitnix against the truth data."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
       "path": "scripts/check-claude-md.mjs",
       "adapter": "tsjs",
       "status": "analyzed",
@@ -2216,6 +2595,28 @@
   ],
   "tables": [
     {
+      "name": "audit_log",
+      "read_by": [],
+      "written_by": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ]
+    },
+    {
+      "name": "counters",
+      "read_by": [],
+      "written_by": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ]
+    },
+    {
       "name": "customers",
       "read_by": [
         ".semgrep/examples/orders_export.php"
@@ -2225,25 +2626,87 @@
       "unresolved_in": []
     },
     {
+      "name": "invoices",
+      "read_by": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ],
+      "written_by": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ]
+    },
+    {
       "name": "orders",
       "read_by": [
         ".semgrep/examples/orders_export.php",
         ".semgrep/examples/orders_list.php",
+        "rewrite/truth/tools/make_synthetic.py",
         "tests/test_php_adapter.py"
       ],
       "written_by": [],
       "in_schema_snapshot": false,
       "unresolved_in": [
+        "rewrite/truth/tools/make_synthetic.py",
         "tests/test_php_adapter.py"
+      ]
+    },
+    {
+      "name": "payments",
+      "read_by": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ],
+      "written_by": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ]
+    },
+    {
+      "name": "search_index",
+      "read_by": [],
+      "written_by": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ]
+    },
+    {
+      "name": "sessions",
+      "read_by": [],
+      "written_by": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ]
+    },
+    {
+      "name": "tables",
+      "read_by": [
+        "rewrite/truth/tools/make_synthetic.py"
+      ],
+      "written_by": [],
+      "in_schema_snapshot": false,
+      "unresolved_in": [
+        "rewrite/truth/tools/make_synthetic.py"
       ]
     }
   ],
   "table_gaps": {
     "files": [
+      "rewrite/truth/tools/make_synthetic.py",
       "tests/test_install_hints.py",
       "tests/test_php_adapter.py"
     ],
-    "unresolved_count": 3,
-    "note": "3 statements in 2 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
+    "unresolved_count": 6,
+    "note": "6 statements in 3 files could not be read, so the table list may be incomplete: a table mentioned only there is missing from it entirely, and a table that is listed may be touched in more places than it names."
   }
 }

@@ -1,0 +1,721 @@
+{
+  "adapter": "python",
+  "claims": [
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.py"
+      },
+      "capability": "SUMMARY",
+      "expected": "List orders for the signed-in customer.",
+      "kind": "values",
+      "line": 83,
+      "test": "test_the_summary_is_the_first_line_of_the_module_docstring"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.py"
+      },
+      "capability": "SUMMARY",
+      "expected": ":param",
+      "kind": "value_lacks",
+      "line": 88,
+      "test": "test_annotation_lines_are_not_mistaken_for_the_summary"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "reindex.py"
+      },
+      "capability": "SUMMARY",
+      "expected": "Nightly reindex of the order search table.",
+      "kind": "values",
+      "line": 93,
+      "test": "test_a_module_without_a_docstring_falls_back_to_its_header_comment"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "notes.py"
+      },
+      "capability": "SUMMARY",
+      "expected": "",
+      "kind": "values",
+      "line": 100,
+      "test": "test_a_file_with_neither_reports_no_summary_rather_than_inventing_one"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "client.pyi"
+      },
+      "capability": "SUMMARY",
+      "expected": "Type stubs",
+      "kind": "value_starts_with",
+      "line": 107,
+      "test": "test_a_sentence_that_begins_with_a_directive_word_is_still_a_summary"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.py"
+      },
+      "capability": "AUTHENTICATION",
+      "expected": [
+        "require_session"
+      ],
+      "kind": "values",
+      "line": 115,
+      "test": "test_configured_authentication_and_authorization_calls_are_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.py"
+      },
+      "capability": "AUTHORIZATION",
+      "expected": [
+        "apply_visibility_filter"
+      ],
+      "kind": "values",
+      "line": 116,
+      "test": "test_configured_authentication_and_authorization_calls_are_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [],
+          "authz": [],
+          "schema": []
+        },
+        "file": "orders_list.py"
+      },
+      "capability": "AUTHENTICATION",
+      "expected": [],
+      "kind": "values",
+      "line": 121,
+      "test": "test_nothing_is_reported_as_authorization_when_the_repository_named_nothing"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [],
+          "authz": [],
+          "schema": []
+        },
+        "file": "orders_list.py"
+      },
+      "capability": "AUTHORIZATION",
+      "expected": [],
+      "kind": "values",
+      "line": 122,
+      "test": "test_nothing_is_reported_as_authorization_when_the_repository_named_nothing"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "reindex.py"
+      },
+      "capability": "AUTHENTICATION",
+      "expected": [],
+      "kind": "values",
+      "line": 127,
+      "test": "test_a_file_with_no_check_reports_none_rather_than_failing"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.py"
+      },
+      "capability": "READS",
+      "expected": [
+        "customers",
+        "orders"
+      ],
+      "kind": "values",
+      "line": 139,
+      "test": "test_adjacent_string_literals_are_read_as_one_statement"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "reindex.py"
+      },
+      "capability": "WRITES",
+      "expected": [
+        "search_index"
+      ],
+      "kind": "values",
+      "line": 144,
+      "test": "test_insert_target_is_a_write_and_its_select_is_a_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "reindex.py"
+      },
+      "capability": "READS",
+      "expected": [
+        "orders"
+      ],
+      "kind": "values",
+      "line": 145,
+      "test": "test_insert_target_is_a_write_and_its_select_is_a_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "notes.py"
+      },
+      "capability": "READS",
+      "expected": [],
+      "kind": "values",
+      "line": 150,
+      "test": "test_prose_that_opens_like_sql_is_not_reported_as_a_table_or_a_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "notes.py"
+      },
+      "capability": "WRITES",
+      "expected": [],
+      "kind": "values",
+      "line": 151,
+      "test": "test_prose_that_opens_like_sql_is_not_reported_as_a_table_or_a_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "notes.py"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "unresolved_empty",
+      "line": 152,
+      "test": "test_prose_that_opens_like_sql_is_not_reported_as_a_table_or_a_finding"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.py"
+      },
+      "capability": null,
+      "expected": "dynamic_sql",
+      "kind": "code_absent",
+      "line": 163,
+      "test": "test_a_parameterised_query_is_not_reported_as_assembled_at_run_time"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "orders_list.py"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "unresolved_empty",
+      "line": 164,
+      "test": "test_a_parameterised_query_is_not_reported_as_assembled_at_run_time"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "legacy_report.py"
+      },
+      "capability": null,
+      "expected": "dynamic_sql",
+      "kind": "code_present",
+      "line": 170,
+      "test": "test_the_percent_operator_is_reported_as_assembled_at_run_time"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "legacy_report.py"
+      },
+      "capability": "READS",
+      "expected": "orders",
+      "kind": "value_contains",
+      "line": 171,
+      "test": "test_the_percent_operator_is_reported_as_assembled_at_run_time"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "legacy_report.py"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "audit_log",
+      "kind": "detail_contains",
+      "line": 177,
+      "test": "test_str_format_is_reported_as_assembled_at_run_time"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "legacy_report.py"
+      },
+      "capability": "READS",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 178,
+      "test": "test_str_format_is_reported_as_assembled_at_run_time"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.py"
+      },
+      "capability": null,
+      "expected": "dynamic_sql",
+      "kind": "code_present",
+      "line": 186,
+      "test": "test_a_concatenated_statement_is_never_silently_empty"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.py"
+      },
+      "capability": null,
+      "expected": "dynamic_table_name",
+      "kind": "code_present",
+      "line": 187,
+      "test": "test_a_concatenated_statement_is_never_silently_empty"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.py"
+      },
+      "capability": "WRITES",
+      "expected": [],
+      "kind": "values",
+      "line": 188,
+      "test": "test_a_concatenated_statement_is_never_silently_empty"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "audit.py"
+      },
+      "capability": null,
+      "expected": "dynamic_sql",
+      "kind": "code_present",
+      "line": 195,
+      "test": "test_an_f_string_is_flagged_but_still_yields_its_tables"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "audit.py"
+      },
+      "capability": "WRITES",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 196,
+      "test": "test_an_f_string_is_flagged_but_still_yields_its_tables"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "audit.py"
+      },
+      "capability": "READS",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 201,
+      "test": "test_select_star_keeps_the_table_and_flags_only_the_columns"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "audit.py"
+      },
+      "capability": null,
+      "expected": "select_star",
+      "kind": "code_present",
+      "line": 202,
+      "test": "test_select_star_keeps_the_table_and_flags_only_the_columns"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "export.py"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 207,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "audit.py"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 207,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "legacy_report.py"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 207,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": [
+            "orders",
+            "customers",
+            "search_index"
+          ]
+        },
+        "file": "audit.py"
+      },
+      "capability": null,
+      "expected": "table_not_in_schema",
+      "kind": "code_present",
+      "line": 217,
+      "test": "test_a_table_missing_from_the_snapshot_is_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": [
+            "orders",
+            "customers",
+            "search_index"
+          ]
+        },
+        "file": "audit.py"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "audit_log",
+      "kind": "detail_contains",
+      "line": 218,
+      "test": "test_a_table_missing_from_the_snapshot_is_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "require_session"
+          ],
+          "authz": [
+            "apply_visibility_filter"
+          ],
+          "schema": []
+        },
+        "file": "audit.py"
+      },
+      "capability": null,
+      "expected": "table_not_in_schema",
+      "kind": "code_absent",
+      "line": 222,
+      "test": "test_nothing_is_reported_against_a_schema_that_was_not_configured"
+    }
+  ],
+  "inputs_dir": "inputs/python",
+  "not_extracted": [
+    {
+      "reason": "declares the adapter's own capabilities; Python object",
+      "test": "test_the_adapter_declares_only_what_it_can_produce"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_file_that_does_not_parse_is_unknown_rather_than_partially_reported"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_missing_grammar_becomes_an_unknown_record_not_a_crash"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_counting_invariant_holds_over_a_python_repository"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_table_reverse_index_names_the_python_files"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_screen_to_api_column_is_out_of_scope_not_empty"
+    }
+  ],
+  "source": "tests/test_adapter_python.py",
+  "support_inputs": [
+    "broken.py"
+  ],
+  "tests_extracted": 20,
+  "tests_in_file": 26,
+  "verified_on_python": {
+    "errors": [],
+    "failed": [],
+    "passed": 35
+  }
+}

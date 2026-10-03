@@ -88,7 +88,7 @@ target-version = "py311"
 # Python fixtures are input to the analyzer, not source code. One of them does not parse
 # on purpose, and two build SQL the unsafe way on purpose -- that is the behaviour under
 # test. Linting them would mean either deleting the cases or annotating away the point.
-extend-exclude = ["tests/fixtures/python"]
+extend-exclude = ["tests/fixtures/python", "rewrite/truth/from-tests/inputs", "rewrite/truth/synthetic/corpus"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]

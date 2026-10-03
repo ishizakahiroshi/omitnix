@@ -1,0 +1,103 @@
+{
+  "adapter": "minimal",
+  "claims": [
+    {
+      "call": {
+        "config": {},
+        "file": "deploy.sh"
+      },
+      "capability": "SUMMARY",
+      "expected": "Copy the built assets to the fictional staging host.",
+      "kind": "values",
+      "line": 95,
+      "test": "test_a_shebang_is_not_mistaken_for_the_summary"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "banner.sh"
+      },
+      "capability": "SUMMARY",
+      "expected": "Rotate the fictional staging logs once a day.",
+      "kind": "values",
+      "line": 104,
+      "test": "test_a_rule_of_punctuation_is_not_mistaken_for_the_summary"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "deploy.ps1"
+      },
+      "capability": "SUMMARY",
+      "expected": "Copy the built assets to the fictional staging host.",
+      "kind": "values",
+      "line": 110,
+      "test": "test_a_powershell_help_marker_is_not_mistaken_for_the_summary"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "panel.vue"
+      },
+      "capability": "SUMMARY",
+      "expected": "The order panel",
+      "kind": "value_starts_with",
+      "line": 116,
+      "test": "test_a_single_file_component_is_summarised_from_its_leading_comment"
+    }
+  ],
+  "inputs_dir": "inputs/minimal",
+  "not_extracted": [
+    {
+      "reason": "parametrized: the inputs come from a table in the decorator",
+      "test": "test_the_minimal_tier_claims_a_summary_and_nothing_else"
+    },
+    {
+      "reason": "declares the adapter's own capabilities; Python object",
+      "test": "test_the_stylesheet_adapter_claims_nothing_at_all"
+    },
+    {
+      "reason": "parametrized: the inputs come from a table in the decorator",
+      "test": "test_no_minimal_adapter_extracts_a_table"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_no_grammar_package_is_needed_by_the_minimal_tier"
+    },
+    {
+      "reason": "writes its own input file inside the test (tmp_path); no fixture file to copy",
+      "test": "test_a_file_with_no_header_comment_reports_no_summary_rather_than_inventing_one"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_every_file_of_the_minimal_tier_is_counted_as_analyzed"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_a_new_stylesheet_does_not_fail_the_gate"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_gate_asks_a_minimal_adapter_only_for_what_it_declared"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_a_stylesheet_row_reads_as_out_of_scope_rather_than_as_a_missing_check"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_an_extension_nobody_claims_is_counted_as_unclaimed"
+    }
+  ],
+  "source": "tests/test_adapter_minimal.py",
+  "support_inputs": [
+    "styles.css"
+  ],
+  "tests_extracted": 4,
+  "tests_in_file": 14,
+  "verified_on_python": {
+    "errors": [],
+    "failed": [],
+    "passed": 4
+  }
+}

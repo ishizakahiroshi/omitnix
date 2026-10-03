@@ -1,0 +1,422 @@
+{
+  "adapter": "tsjs",
+  "claims": [
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "panel.tsx"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": [
+        "/api/customers/*"
+      ],
+      "kind": "values",
+      "line": 96,
+      "test": "test_jsx_is_parsed_by_the_tsx_grammar_rather_than_failing"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "orders_list.ts"
+      },
+      "capability": "AUTHENTICATION",
+      "expected": [
+        "requireSession"
+      ],
+      "kind": "values",
+      "line": 104,
+      "test": "test_configured_authentication_and_authorization_calls_are_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "orders_list.ts"
+      },
+      "capability": "AUTHORIZATION",
+      "expected": [
+        "applyVisibilityFilter"
+      ],
+      "kind": "values",
+      "line": 105,
+      "test": "test_configured_authentication_and_authorization_calls_are_reported"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "reindex.mjs"
+      },
+      "capability": "WRITES",
+      "expected": [
+        "search_index"
+      ],
+      "kind": "values",
+      "line": 113,
+      "test": "test_insert_target_is_a_write_and_its_select_is_a_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "reindex.mjs"
+      },
+      "capability": "READS",
+      "expected": [
+        "orders"
+      ],
+      "kind": "values",
+      "line": 114,
+      "test": "test_insert_target_is_a_write_and_its_select_is_a_read"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "audit.js"
+      },
+      "capability": null,
+      "expected": "dynamic_sql",
+      "kind": "code_present",
+      "line": 119,
+      "test": "test_a_template_literal_is_flagged_but_still_yields_its_tables"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "audit.js"
+      },
+      "capability": null,
+      "expected": "select_star",
+      "kind": "code_present",
+      "line": 120,
+      "test": "test_a_template_literal_is_flagged_but_still_yields_its_tables"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "audit.js"
+      },
+      "capability": "READS",
+      "expected": "audit_log",
+      "kind": "value_contains",
+      "line": 121,
+      "test": "test_a_template_literal_is_flagged_but_still_yields_its_tables"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "audit.js"
+      },
+      "capability": null,
+      "detail_code": null,
+      "expected": "draft",
+      "kind": "detail_lacks",
+      "line": 130,
+      "test": "test_a_like_wildcard_is_not_mistaken_for_a_value_filled_in_elsewhere"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "orders_list.ts"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": "/api/orders",
+      "kind": "value_contains",
+      "line": 137,
+      "test": "test_a_literal_fetch_address_is_recorded"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "audit.js"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": "/api/audit",
+      "kind": "value_contains",
+      "line": 141,
+      "test": "test_an_axios_call_is_recorded"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "orders_list.ts"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": "/api/orders/*",
+      "kind": "value_contains",
+      "line": 146,
+      "test": "test_a_partly_known_address_keeps_the_part_that_is_known_and_is_flagged"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "orders_list.ts"
+      },
+      "capability": null,
+      "expected": "dynamic_endpoint",
+      "kind": "code_present",
+      "line": 147,
+      "test": "test_a_partly_known_address_keeps_the_part_that_is_known_and_is_flagged"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "client.cjs"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": [],
+      "kind": "values",
+      "line": 154,
+      "test": "test_an_address_that_is_a_variable_is_counted_rather_than_dropped"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "client.cjs"
+      },
+      "capability": null,
+      "expected": "dynamic_endpoint",
+      "kind": "code_present",
+      "line": 155,
+      "test": "test_an_address_that_is_a_variable_is_counted_rather_than_dropped"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "reindex.mjs"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": [],
+      "kind": "values",
+      "line": 162,
+      "test": "test_an_ordinary_method_call_is_not_recorded_as_a_request"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "reindex.mjs"
+      },
+      "capability": null,
+      "expected": "dynamic_endpoint",
+      "kind": "code_absent",
+      "line": 163,
+      "test": "test_an_ordinary_method_call_is_not_recorded_as_a_request"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "audit.js"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 168,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "client.cjs"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 168,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    },
+    {
+      "call": {
+        "config": {
+          "authn": [
+            "requireSession"
+          ],
+          "authz": [
+            "applyVisibilityFilter"
+          ]
+        },
+        "file": "orders_list.ts"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "details_nonempty",
+      "line": 168,
+      "test": "test_no_reason_code_is_ever_recorded_without_a_detail"
+    }
+  ],
+  "inputs_dir": "inputs/tsjs",
+  "not_extracted": [
+    {
+      "reason": "declares the adapter's own capabilities; Python object",
+      "test": "test_one_adapter_covers_the_five_extensions_of_the_family"
+    },
+    {
+      "reason": "declares the adapter's own capabilities; Python object",
+      "test": "test_the_adapter_declares_the_screen_to_api_direction"
+    },
+    {
+      "reason": "parametrized: the inputs come from a table in the decorator",
+      "test": "test_each_extension_is_parsed_rather_than_reported_unknown"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_file_that_does_not_parse_is_unknown_rather_than_partially_reported"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_missing_grammar_becomes_an_unknown_record_not_a_crash"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_counting_invariant_holds_over_a_tsjs_repository"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_every_extension_of_the_family_is_routed_to_this_adapter"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_a_file_that_touches_no_table_is_analyzed_not_unresolved"
+    }
+  ],
+  "source": "tests/test_adapter_tsjs.py",
+  "support_inputs": [
+    "broken.js"
+  ],
+  "tests_extracted": 11,
+  "tests_in_file": 19,
+  "verified_on_python": {
+    "errors": [],
+    "failed": [],
+    "passed": 20
+  }
+}

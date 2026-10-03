@@ -1,0 +1,250 @@
+{
+  "adapter": "html",
+  "claims": [
+    {
+      "call": {
+        "config": {},
+        "file": "orders.html"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": "/api/orders",
+      "kind": "value_contains",
+      "line": 66,
+      "test": "test_a_form_action_is_a_request_the_screen_makes"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "orders.html"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": "/static/orders.js",
+      "kind": "value_contains",
+      "line": 70,
+      "test": "test_a_script_src_is_recorded"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "orders.html"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": "/api/customers",
+      "kind": "value_contains",
+      "line": 77,
+      "test": "test_a_fetch_inside_an_inline_script_is_recorded"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "orders.html"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": "/api/audit",
+      "kind": "value_contains",
+      "line": 81,
+      "test": "test_an_axios_call_inside_an_inline_script_is_recorded"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "orders.html"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": "/help",
+      "kind": "value_lacks",
+      "line": 87,
+      "test": "test_a_link_is_not_recorded_as_a_request"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "about.htm"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": [],
+      "kind": "values",
+      "line": 92,
+      "test": "test_a_page_that_requests_nothing_reports_none_observed_rather_than_failing"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "about.htm"
+      },
+      "capability": null,
+      "expected": null,
+      "kind": "unresolved_empty",
+      "line": 93,
+      "test": "test_a_page_that_requests_nothing_reports_none_observed_rather_than_failing"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "templated.html"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": [],
+      "kind": "values",
+      "line": 98,
+      "test": "test_a_templated_action_is_counted_rather_than_dropped"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "templated.html"
+      },
+      "capability": null,
+      "expected": "dynamic_endpoint",
+      "kind": "code_present",
+      "line": 99,
+      "test": "test_a_templated_action_is_counted_rather_than_dropped"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "orders.html"
+      },
+      "capability": "SUMMARY",
+      "expected": "Orders",
+      "kind": "values",
+      "line": 108,
+      "test": "test_the_title_wins_over_a_leading_comment"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "about.htm"
+      },
+      "capability": "SUMMARY",
+      "expected": "About this fictional shop",
+      "kind": "values",
+      "line": 112,
+      "test": "test_the_title_is_the_summary_when_there_is_no_comment"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "notes.html"
+      },
+      "capability": "SUMMARY",
+      "expected": "A fragment with no head",
+      "kind": "value_starts_with",
+      "line": 117,
+      "test": "test_the_leading_comment_is_the_summary_when_there_is_no_title"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "interpolated.html"
+      },
+      "capability": "SCREEN_TO_API",
+      "expected": [
+        "/api/orders"
+      ],
+      "kind": "values",
+      "line": 127,
+      "test": "test_a_bare_angle_bracket_in_text_does_not_discard_the_page"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "interpolated.html"
+      },
+      "capability": null,
+      "expected": "unescaped_text",
+      "kind": "code_present",
+      "line": 128,
+      "test": "test_a_bare_angle_bracket_in_text_does_not_discard_the_page"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "interpolated.html"
+      },
+      "capability": null,
+      "detail_code": "unescaped_text",
+      "expected": "7",
+      "kind": "detail_contains",
+      "line": 136,
+      "test": "test_the_note_names_the_lines_the_grammar_could_not_read"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "interpolated.html"
+      },
+      "capability": null,
+      "detail_code": "unescaped_text",
+      "expected": "8",
+      "kind": "detail_contains",
+      "line": 136,
+      "test": "test_the_note_names_the_lines_the_grammar_could_not_read"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "interpolated.html"
+      },
+      "capability": null,
+      "detail_code": "unescaped_text",
+      "expected": "9",
+      "kind": "detail_contains",
+      "line": 136,
+      "test": "test_the_note_names_the_lines_the_grammar_could_not_read"
+    },
+    {
+      "call": {
+        "config": {},
+        "file": "interpolated_escaped.html"
+      },
+      "capability": null,
+      "expected": [],
+      "kind": "codes_exactly",
+      "line": 153,
+      "test": "test_the_recovered_page_reads_the_same_as_its_escaped_twin"
+    }
+  ],
+  "inputs_dir": "inputs/html",
+  "not_extracted": [
+    {
+      "reason": "declares the adapter's own capabilities; Python object",
+      "test": "test_the_adapter_claims_neither_authorization_nor_tables"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_bare_less_than_in_text_is_still_refused"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_a_missing_grammar_becomes_an_unknown_record_not_a_crash"
+    },
+    {
+      "reason": "needs a stubbed or missing grammar, or checks Python's reason text",
+      "test": "test_an_unreadable_inline_script_is_reported_rather_than_passed_over"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_counting_invariant_holds_over_an_html_repository"
+    },
+    {
+      "reason": "builds a report through Python objects (covered by the golden cases)",
+      "test": "test_the_columns_outside_this_tier_are_out_of_scope_not_empty"
+    },
+    {
+      "reason": "a timing ratio on generated input, not an expectation about a file",
+      "test": "test_cost_grows_with_the_page_rather_than_with_its_square"
+    }
+  ],
+  "source": "tests/test_adapter_html.py",
+  "support_inputs": [
+    "stray_open_bracket.html"
+  ],
+  "tests_extracted": 13,
+  "tests_in_file": 20,
+  "verified_on_python": {
+    "errors": [],
+    "failed": [],
+    "passed": 18
+  }
+}

@@ -1,0 +1,6068 @@
+{
+  "conventions": {
+    "argument_decided_table": "own of the callee with certainty traced, plus a depth-1 via for each caller",
+    "certainty": "direct | resolved (same-file constant or literal) | traced (argument decided by call sites)",
+    "commented_out": "not counted as a read or write",
+    "create_table_like": "the source table is a read",
+    "depth": "via depth 1 = the callee holds the SQL; up to 3 required, deeper is beyond_depth",
+    "set": "must = one correct answer; reference = answer fixed but policy or dialect leaves room",
+    "system": "catalogue tables are listed apart from business tables",
+    "text_only": "SQL built as text and only checked; a statement sent to a stubbed DB function is counted"
+  },
+  "corpus": "synthetic",
+  "files": [
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go01_select",
+      "category": "select",
+      "commented_out": [],
+      "file": "go/go01_select/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go02_raw_string",
+      "category": "select",
+      "commented_out": [],
+      "file": "go/go02_raw_string/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go03_write",
+      "category": "write",
+      "commented_out": [],
+      "file": "go/go03_write/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "payments"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "invoices"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "sessions"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "write",
+          "table": "search_index"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go04_sprintf_argument",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "go/go04_sprintf_argument/a.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 CountRows() -> go/go04_sprintf_argument/lib.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go04_sprintf_argument",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "go/go04_sprintf_argument/b.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 CountRows() -> go/go04_sprintf_argument/lib.go",
+          "line": 4,
+          "mode": "read",
+          "table": "customers"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go04_sprintf_argument",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "go/go04_sprintf_argument/lib.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "traced",
+          "how": "a.go passes \"orders\"",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "traced",
+          "how": "b.go passes \"customers\"",
+          "line": 4,
+          "mode": "read",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go05_constant",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "go/go05_constant/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "resolved",
+          "line": 6,
+          "mode": "read",
+          "table": "ledger_entries"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 5,
+          "mode": "read",
+          "tables": [
+            "customers",
+            "orders"
+          ],
+          "why": "literal slice loop"
+        }
+      ],
+      "case": "go06_slice_loop",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "go/go06_slice_loop/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 7,
+          "mode": "read",
+          "tables": [
+            "invoices",
+            "orders"
+          ],
+          "why": "constant map values"
+        }
+      ],
+      "case": "go07_map_dictionary",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "go/go07_map_dictionary/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [
+        {
+          "line": 4,
+          "mode": "read",
+          "why": "table name comes from the request"
+        }
+      ],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go08_request_table",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "go/go08_request_table/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go09_unknown_origin",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "go/go09_unknown_origin/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "dynamic",
+          "line": 4,
+          "why": "parameter with no call site in the corpus"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go10_comments",
+      "category": "comment",
+      "commented_out": [
+        {
+          "line": 3,
+          "tables": [
+            "sessions"
+          ]
+        },
+        {
+          "line": 5,
+          "tables": [
+            "payments"
+          ]
+        },
+        {
+          "line": 7,
+          "tables": [
+            "ledger_entries"
+          ]
+        }
+      ],
+      "file": "go/go10_comments/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go11_ddl",
+      "category": "ddl",
+      "commented_out": [],
+      "file": "go/go11_ddl/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "shipments"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "archive_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "legacy_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "write",
+          "table": "order_copy"
+        },
+        {
+          "certainty": "direct",
+          "line": 8,
+          "mode": "write",
+          "table": "tmp_orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:plain_ddl_command"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go12_system_cte",
+      "category": "select",
+      "commented_out": [],
+      "file": "go/go12_system_cte/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [
+        {
+          "line": 4,
+          "what": "CTE name recent"
+        }
+      ],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [
+        {
+          "line": 5,
+          "mode": "read",
+          "table": "information_schema.tables"
+        }
+      ],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go13_test_text_only",
+      "category": "test_sql",
+      "commented_out": [],
+      "file": "go/go13_test_text_only/orders_sql_test.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 12,
+          "mode": "write",
+          "table": "audit_log"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go14_prose",
+      "category": "not_sql",
+      "commented_out": [],
+      "file": "go/go14_prose/a.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [
+        {
+          "line": 3,
+          "what": "prose"
+        },
+        {
+          "line": 4,
+          "what": "prose"
+        },
+        {
+          "line": 5,
+          "what": "prose"
+        }
+      ],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go15_broken",
+      "category": "unreadable",
+      "commented_out": [],
+      "file": "go/go15_broken/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "broken",
+          "line": 4,
+          "why": "no table can be taken"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go16_dynamic_where",
+      "category": "dynamic_clause",
+      "commented_out": [],
+      "file": "go/go16_dynamic_where/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go90_ref_merge",
+      "category": "dialect",
+      "commented_out": [],
+      "file": "go/go90_ref_merge/a.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "Dialect statement; parsers differ.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "staging_customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "customers"
+        }
+      ],
+      "set": "reference",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "go/go_chain1/l0.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 F1() -> go/go_chain1/l1.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "go/go_chain1/l1.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "go/go_chain2/l0.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 F1() -> go/go_chain2/l1.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "go/go_chain2/l1.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 F2() -> go/go_chain2/l2.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "go/go_chain2/l2.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "go/go_chain3/l0.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 4 F1() -> go/go_chain3/l1.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "go/go_chain3/l1.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 F2() -> go/go_chain3/l2.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "go/go_chain3/l2.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 F3() -> go/go_chain3/l3.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "go/go_chain3/l3.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [
+        {
+          "depth": 4,
+          "how": "line 4 F1() -> go/go_chain4/l1.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "candidates": [],
+      "case": "go_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "go/go_chain4/l0.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "go/go_chain4/l1.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 4 F2() -> go/go_chain4/l2.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "go/go_chain4/l2.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 F3() -> go/go_chain4/l3.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "go/go_chain4/l3.go",
+      "has_sql": false,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 F4() -> go/go_chain4/l4.go",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "go_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "go/go_chain4/l4.go",
+      "has_sql": true,
+      "lang": "go",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php01_select",
+      "category": "select",
+      "commented_out": [],
+      "file": "php/php01_select/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php02_join",
+      "category": "select",
+      "commented_out": [],
+      "file": "php/php02_join/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "read",
+          "table": "coupons"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php03_insert_select",
+      "category": "write",
+      "commented_out": [],
+      "file": "php/php03_insert_select/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "search_index"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php04_update_delete",
+      "category": "write",
+      "commented_out": [],
+      "file": "php/php04_update_delete/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "invoices"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "sessions"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "invoices"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php05_escaped_quotes",
+      "category": "escape",
+      "commented_out": [],
+      "file": "php/php05_escaped_quotes/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "A PHP backslash-escaped quote must be unescaped before the SQL is read.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "read",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:php_escape"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php06_heredoc_comment",
+      "category": "comment",
+      "commented_out": [
+        {
+          "line": 6,
+          "tables": [
+            "coupons"
+          ]
+        }
+      ],
+      "file": "php/php06_heredoc_comment/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php07_comments",
+      "category": "comment",
+      "commented_out": [
+        {
+          "line": 2,
+          "tables": [
+            "coupons"
+          ]
+        },
+        {
+          "line": 3,
+          "tables": [
+            "sessions"
+          ]
+        },
+        {
+          "line": 4,
+          "tables": [
+            "ledger_entries"
+          ]
+        },
+        {
+          "line": 6,
+          "tables": [
+            "payments"
+          ]
+        }
+      ],
+      "file": "php/php07_comments/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php08_comment_markers_in_strings",
+      "category": "comment",
+      "commented_out": [],
+      "file": "php/php08_comment_markers_in_strings/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "Comment markers inside a string are not comments; excluding these would hide live code.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "invoices"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [
+        {
+          "line": 4,
+          "mode": "read",
+          "why": "table name comes from $_GET"
+        }
+      ],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php09_backtick_any",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php09_backtick_any/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "A backticked dynamic name must not come out as a table; it is reported as any table.",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:backtick_placeholder"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 4,
+          "mode": "read",
+          "tables": [
+            "customers",
+            "invoices",
+            "orders"
+          ],
+          "why": "literal array loop"
+        }
+      ],
+      "case": "php10_backtick_array_loop",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php10_backtick_array_loop/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:backtick_placeholder"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 4,
+          "mode": "read",
+          "tables": [
+            "customers",
+            "orders"
+          ],
+          "why": "literal array loop"
+        }
+      ],
+      "case": "php11_array_loop",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php11_array_loop/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php12_named_constant",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php12_named_constant/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "resolved",
+          "line": 5,
+          "mode": "read",
+          "table": "ledger_entries"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 6,
+          "mode": "read",
+          "tables": [
+            "invoices",
+            "orders"
+          ],
+          "why": "constant dictionary values"
+        }
+      ],
+      "case": "php13_constant_dictionary",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php13_constant_dictionary/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php14_argument_traced",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php14_argument_traced/a.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "Convention: the table decided by an argument is the callee's own, certainty traced; each caller gets a depth-1 via.",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 3 countRows() -> php/php14_argument_traced/lib.php",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php14_argument_traced",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php14_argument_traced/b.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "Convention: the table decided by an argument is the callee's own, certainty traced; each caller gets a depth-1 via.",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 3 countRows() -> php/php14_argument_traced/lib.php",
+          "line": 3,
+          "mode": "read",
+          "table": "customers"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php14_argument_traced",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php14_argument_traced/lib.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "Convention: the table decided by an argument is the callee's own, certainty traced; each caller gets a depth-1 via.",
+      "own": [
+        {
+          "certainty": "traced",
+          "how": "a.php passes 'orders'",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "traced",
+          "how": "b.php passes 'customers'",
+          "line": 3,
+          "mode": "read",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [
+        {
+          "line": 4,
+          "mode": "read",
+          "why": "table name comes from $_POST"
+        }
+      ],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php15_request_table",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php15_request_table/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php16_wrapped_literal",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php16_wrapped_literal/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "resolved",
+          "line": 8,
+          "mode": "read",
+          "table": "shipments"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php17_unknown_origin",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "php/php17_unknown_origin/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "dynamic",
+          "line": 3,
+          "why": "parameter with no call site in the corpus"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php18_dynamic_where",
+      "category": "dynamic_clause",
+      "commented_out": [],
+      "file": "php/php18_dynamic_where/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "A dynamic value does not hide a table that is written in the statement.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php19_ddl",
+      "category": "ddl",
+      "commented_out": [],
+      "file": "php/php19_ddl/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "Plain DDL names its table. CREATE TABLE ... LIKE reads its source (decision 2026-10-03).",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "shipments"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "archive_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "legacy_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "order_copy"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "write",
+          "table": "tmp_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 8,
+          "mode": "write",
+          "table": "payments"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:plain_ddl_command"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php20_system_table",
+      "category": "system",
+      "commented_out": [],
+      "file": "php/php20_system_table/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [
+        {
+          "line": 3,
+          "mode": "read",
+          "table": "information_schema.tables"
+        }
+      ],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php21_cte",
+      "category": "select",
+      "commented_out": [],
+      "file": "php/php21_cte/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [
+        {
+          "line": 3,
+          "what": "CTE name recent"
+        }
+      ],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php22_test_text_only",
+      "category": "test_sql",
+      "commented_out": [],
+      "file": "php/php22_test_text_only/OrderSqlTest.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "A string only checked as text is text_only; a statement sent to a stubbed DB function is a written path and counts.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 9,
+          "mode": "write",
+          "table": "audit_log"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php23_prose",
+      "category": "not_sql",
+      "commented_out": [],
+      "file": "php/php23_prose/a.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [
+        {
+          "line": 2,
+          "what": "prose"
+        },
+        {
+          "line": 3,
+          "what": "prose"
+        },
+        {
+          "line": 4,
+          "what": "prose"
+        }
+      ],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php24_broken",
+      "category": "unreadable",
+      "commented_out": [],
+      "file": "php/php24_broken/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "broken",
+          "line": 3,
+          "why": "no table can be taken"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php25_rich",
+      "category": "mixed",
+      "commented_out": [],
+      "file": "php/php25_rich/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "payments"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "write",
+          "table": "audit_log"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php26_duplicate_key",
+      "category": "write",
+      "commented_out": [],
+      "file": "php/php26_duplicate_key/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "counters"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "settings"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php90_ref_partial",
+      "category": "partial_read",
+      "commented_out": [],
+      "file": "php/php90_ref_partial/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "Table written, the rest assembled at run time. Policy 2026-10-02 (partial read, 'candidate' certainty) is not settled for scoring.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "reference",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php91_ref_merge",
+      "category": "dialect",
+      "commented_out": [],
+      "file": "php/php91_ref_merge/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "Dialect statement; parsers differ.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "staging_customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "customers"
+        }
+      ],
+      "set": "reference",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php92_ref_foreign_key",
+      "category": "dialect",
+      "commented_out": [],
+      "file": "php/php92_ref_foreign_key/a.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "Whether the foreign-key target counts as a read is undecided; only the written table is fixed.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "order_items"
+        }
+      ],
+      "set": "reference",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "php/php_chain1/l0.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f1() -> php/php_chain1/l1.php",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "php/php_chain1/l1.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "php/php_chain2/l0.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 f1() -> php/php_chain2/l1.php",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "php/php_chain2/l1.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 5 f2() -> php/php_chain2/l2.php",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "php/php_chain2/l2.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "php/php_chain3/l0.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 4 f1() -> php/php_chain3/l1.php",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "php/php_chain3/l1.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 5 f2() -> php/php_chain3/l2.php",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "php/php_chain3/l2.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 5 f3() -> php/php_chain3/l3.php",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "php/php_chain3/l3.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [
+        {
+          "depth": 4,
+          "how": "line 4 f1() -> php/php_chain4/l1.php",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "candidates": [],
+      "case": "php_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "php/php_chain4/l0.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "php/php_chain4/l1.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 5 f2() -> php/php_chain4/l2.php",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "php/php_chain4/l2.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 5 f3() -> php/php_chain4/l3.php",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "php/php_chain4/l3.php",
+      "has_sql": false,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 5 f4() -> php/php_chain4/l4.php",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "php_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "php/php_chain4/l4.php",
+      "has_sql": true,
+      "lang": "php",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:depth"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py01_select",
+      "category": "select",
+      "commented_out": [],
+      "file": "python/py01_select/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py02_adjacent_literals",
+      "category": "select",
+      "commented_out": [],
+      "file": "python/py02_adjacent_literals/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py03_fstring_value",
+      "category": "dynamic_clause",
+      "commented_out": [],
+      "file": "python/py03_fstring_value/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 8,
+          "mode": "read",
+          "table": "invoices"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 3,
+          "mode": "read",
+          "tables": [
+            "customers",
+            "orders"
+          ],
+          "why": "literal tuple loop"
+        }
+      ],
+      "case": "py04_fstring_loop",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py04_fstring_loop/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py05_named_constant",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py05_named_constant/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "resolved",
+          "line": 4,
+          "mode": "read",
+          "table": "ledger_entries"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py06_class_constant_wrapped",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py06_class_constant_wrapped/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "resolved",
+          "line": 5,
+          "mode": "read",
+          "table": "invoices"
+        },
+        {
+          "certainty": "resolved",
+          "line": 11,
+          "mode": "read",
+          "table": "shipments"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 5,
+          "mode": "read",
+          "tables": [
+            "invoices",
+            "orders"
+          ],
+          "why": "constant dictionary values"
+        }
+      ],
+      "case": "py07_dictionary",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py07_dictionary/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 4,
+          "mode": "read",
+          "tables": [
+            "customers",
+            "orders"
+          ],
+          "why": "Literal type"
+        }
+      ],
+      "case": "py08_literal_type",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py08_literal_type/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py09_argument_traced",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py09_argument_traced/a.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 3 count_rows() -> python/py09_argument_traced/lib.py",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py09_argument_traced",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py09_argument_traced/b.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 3 count_rows() -> python/py09_argument_traced/lib.py",
+          "line": 3,
+          "mode": "read",
+          "table": "customers"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py09_argument_traced",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py09_argument_traced/lib.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "traced",
+          "how": "a.py passes 'orders'",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "traced",
+          "how": "b.py passes 'customers'",
+          "line": 2,
+          "mode": "read",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [
+        {
+          "line": 5,
+          "mode": "read",
+          "why": "table name comes from the command line"
+        }
+      ],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py10_external_table",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py10_external_table/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:backtick_placeholder"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py11_unknown_origin",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "python/py11_unknown_origin/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "dynamic",
+          "line": 2,
+          "why": "parameter with no call site in the corpus"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py12_comments",
+      "category": "comment",
+      "commented_out": [
+        {
+          "line": 1,
+          "tables": [
+            "coupons"
+          ]
+        },
+        {
+          "line": 3,
+          "tables": [
+            "payments"
+          ]
+        },
+        {
+          "line": 5,
+          "tables": [
+            "sessions"
+          ]
+        }
+      ],
+      "file": "python/py12_comments/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py13_write",
+      "category": "write",
+      "commented_out": [],
+      "file": "python/py13_write/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "write",
+          "table": "payments"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "invoices"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "sessions"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "search_index"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py14_ddl",
+      "category": "ddl",
+      "commented_out": [],
+      "file": "python/py14_ddl/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "write",
+          "table": "shipments"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "archive_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "legacy_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "order_copy"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "tmp_orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:plain_ddl_command"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py15_cte_system",
+      "category": "select",
+      "commented_out": [],
+      "file": "python/py15_cte_system/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [
+        {
+          "line": 2,
+          "what": "CTE name recent"
+        }
+      ],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [
+        {
+          "line": 3,
+          "mode": "read",
+          "table": "information_schema.columns"
+        }
+      ],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py16_test_text_only",
+      "category": "test_sql",
+      "commented_out": [],
+      "file": "python/py16_test_text_only/test_orders.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "audit_log"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py17_prose",
+      "category": "not_sql",
+      "commented_out": [],
+      "file": "python/py17_prose/a.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [
+        {
+          "line": 1,
+          "what": "prose"
+        },
+        {
+          "line": 2,
+          "what": "prose"
+        },
+        {
+          "line": 3,
+          "what": "prose"
+        }
+      ],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py18_broken",
+      "category": "unreadable",
+      "commented_out": [],
+      "file": "python/py18_broken/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "broken",
+          "line": 2,
+          "why": "no table can be taken"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py19_escaped_quotes",
+      "category": "escape",
+      "commented_out": [],
+      "file": "python/py19_escaped_quotes/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py20_sqlalchemy_text",
+      "category": "select",
+      "commented_out": [],
+      "file": "python/py20_sqlalchemy_text/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "py90_ref_update_from",
+      "category": "dialect",
+      "commented_out": [],
+      "file": "python/py90_ref_update_from/a.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "PostgreSQL UPDATE ... FROM; parsers differ.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "staging_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "write",
+          "table": "orders"
+        }
+      ],
+      "set": "reference",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "python/python_chain1/l0.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 3 f1() -> python/python_chain1/l1.py",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "python/python_chain1/l1.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "python/python_chain2/l0.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 3 f1() -> python/python_chain2/l1.py",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "python/python_chain2/l1.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f2() -> python/python_chain2/l2.py",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "python/python_chain2/l2.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "python/python_chain3/l0.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 3 f1() -> python/python_chain3/l1.py",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "python/python_chain3/l1.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 f2() -> python/python_chain3/l2.py",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "python/python_chain3/l2.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f3() -> python/python_chain3/l3.py",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "python/python_chain3/l3.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [
+        {
+          "depth": 4,
+          "how": "line 3 f1() -> python/python_chain4/l1.py",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "candidates": [],
+      "case": "python_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "python/python_chain4/l0.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "python/python_chain4/l1.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 4 f2() -> python/python_chain4/l2.py",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "python/python_chain4/l2.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 f3() -> python/python_chain4/l3.py",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "python/python_chain4/l3.py",
+      "has_sql": false,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f4() -> python/python_chain4/l4.py",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "python_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "python/python_chain4/l4.py",
+      "has_sql": true,
+      "lang": "python",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "limit:no_import_follow"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs01_select",
+      "category": "select",
+      "commented_out": [],
+      "file": "rust/rs01_select/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs02_raw_string",
+      "category": "select",
+      "commented_out": [],
+      "file": "rust/rs02_raw_string/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs03_write",
+      "category": "write",
+      "commented_out": [],
+      "file": "rust/rs03_write/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "write",
+          "table": "payments"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "invoices"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "sessions"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "search_index"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs04_format_argument",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "rust/rs04_format_argument/a.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 count_rows() -> rust/rs04_format_argument/lib.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs04_format_argument",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "rust/rs04_format_argument/b.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 count_rows() -> rust/rs04_format_argument/lib.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "customers"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs04_format_argument",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "rust/rs04_format_argument/lib.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "traced",
+          "how": "a.rs passes \"orders\"",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "traced",
+          "how": "b.rs passes \"customers\"",
+          "line": 2,
+          "mode": "read",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs05_constant",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "rust/rs05_constant/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "resolved",
+          "line": 4,
+          "mode": "read",
+          "table": "ledger_entries"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 3,
+          "mode": "read",
+          "tables": [
+            "customers",
+            "orders"
+          ],
+          "why": "literal array loop"
+        }
+      ],
+      "case": "rs06_array_loop",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "rust/rs06_array_loop/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [
+        {
+          "line": 3,
+          "mode": "read",
+          "why": "table name comes from the command line"
+        }
+      ],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs07_external_table",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "rust/rs07_external_table/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs08_unknown_origin",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "rust/rs08_unknown_origin/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "dynamic",
+          "line": 2,
+          "why": "parameter with no call site in the corpus"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs09_comments",
+      "category": "comment",
+      "commented_out": [
+        {
+          "line": 1,
+          "tables": [
+            "sessions"
+          ]
+        },
+        {
+          "line": 2,
+          "tables": [
+            "coupons"
+          ]
+        },
+        {
+          "line": 4,
+          "tables": [
+            "payments"
+          ]
+        },
+        {
+          "line": 6,
+          "tables": [
+            "ledger_entries"
+          ]
+        }
+      ],
+      "file": "rust/rs09_comments/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs10_ddl",
+      "category": "ddl",
+      "commented_out": [],
+      "file": "rust/rs10_ddl/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "write",
+          "table": "shipments"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "archive_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "legacy_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "order_copy"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "tmp_orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:plain_ddl_command"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs11_system_cte",
+      "category": "select",
+      "commented_out": [],
+      "file": "rust/rs11_system_cte/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [
+        {
+          "line": 2,
+          "what": "CTE name recent"
+        }
+      ],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [
+        {
+          "line": 3,
+          "mode": "read",
+          "table": "information_schema.tables"
+        }
+      ],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs12_test_text_only",
+      "category": "test_sql",
+      "commented_out": [],
+      "file": "rust/rs12_test_text_only/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 14,
+          "mode": "write",
+          "table": "audit_log"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [
+        {
+          "certainty": "direct",
+          "line": 7,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs13_prose",
+      "category": "not_sql",
+      "commented_out": [],
+      "file": "rust/rs13_prose/a.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [
+        {
+          "line": 1,
+          "what": "prose"
+        },
+        {
+          "line": 2,
+          "what": "prose"
+        },
+        {
+          "line": 3,
+          "what": "prose"
+        }
+      ],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs14_broken",
+      "category": "unreadable",
+      "commented_out": [],
+      "file": "rust/rs14_broken/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "broken",
+          "line": 2,
+          "why": "no table can be taken"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs15_sqlx_macro",
+      "category": "select",
+      "commented_out": [],
+      "file": "rust/rs15_sqlx_macro/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rs90_ref_builder",
+      "category": "query_builder",
+      "commented_out": [],
+      "file": "rust/rs90_ref_builder/a.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "Query builder, no SQL string. Decided 2026-10-03: a builder that names the table counts as a table (the Rust adapter leaves it unresolved today).",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 11,
+          "mode": "write",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "rust/rust_chain1/l0.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f1() -> rust/rust_chain1/l1.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "rust/rust_chain1/l1.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "rust/rust_chain2/l0.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 f1() -> rust/rust_chain2/l1.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "rust/rust_chain2/l1.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f2() -> rust/rust_chain2/l2.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "rust/rust_chain2/l2.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "rust/rust_chain3/l0.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 4 f1() -> rust/rust_chain3/l1.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "rust/rust_chain3/l1.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 f2() -> rust/rust_chain3/l2.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "rust/rust_chain3/l2.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f3() -> rust/rust_chain3/l3.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "rust/rust_chain3/l3.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [
+        {
+          "depth": 4,
+          "how": "line 4 f1() -> rust/rust_chain4/l1.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "candidates": [],
+      "case": "rust_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "rust/rust_chain4/l0.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "rust/rust_chain4/l1.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 4 f2() -> rust/rust_chain4/l2.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "rust/rust_chain4/l2.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 f3() -> rust/rust_chain4/l3.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "rust/rust_chain4/l3.rs",
+      "has_sql": false,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f4() -> rust/rust_chain4/l4.rs",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "rust_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "rust/rust_chain4/l4.rs",
+      "has_sql": true,
+      "lang": "rust",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "sql01_ddl",
+      "category": "ddl",
+      "commented_out": [],
+      "file": "sql/sql01_ddl/a.sql",
+      "has_sql": true,
+      "lang": "sql",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 1,
+          "mode": "write",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "write",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "archive_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "legacy_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "order_copy"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "tmp_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "payments"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:plain_ddl_command"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "sql02_comments",
+      "category": "comment",
+      "commented_out": [
+        {
+          "line": 1,
+          "tables": [
+            "coupons"
+          ]
+        },
+        {
+          "line": 2,
+          "tables": [
+            "ledger_entries"
+          ]
+        },
+        {
+          "line": 3,
+          "tables": [
+            "payments"
+          ]
+        }
+      ],
+      "file": "sql/sql02_comments/a.sql",
+      "has_sql": true,
+      "lang": "sql",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "sql03_statements",
+      "category": "mixed",
+      "commented_out": [],
+      "file": "sql/sql03_statements/a.sql",
+      "has_sql": true,
+      "lang": "sql",
+      "not_a_table": [
+        {
+          "line": 5,
+          "what": "CTE name recent"
+        }
+      ],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 1,
+          "mode": "write",
+          "table": "search_index"
+        },
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "payments"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "invoices"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "sessions"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [
+        {
+          "line": 6,
+          "mode": "read",
+          "table": "information_schema.tables"
+        }
+      ],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "sql90_ref_procedure",
+      "category": "unsupported",
+      "commented_out": [],
+      "file": "sql/sql90_ref_procedure/a.sql",
+      "has_sql": true,
+      "lang": "sql",
+      "not_a_table": [],
+      "note": "Client directive and stored-procedure body; parsers differ widely.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "orders"
+        }
+      ],
+      "set": "reference",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "sql91_ref_hash_comment",
+      "category": "comment",
+      "commented_out": [
+        {
+          "line": 1,
+          "tables": [
+            "sessions"
+          ]
+        }
+      ],
+      "file": "sql/sql91_ref_hash_comment/a.sql",
+      "has_sql": true,
+      "lang": "sql",
+      "not_a_table": [],
+      "note": "A hash line is a comment in MySQL only; other dialects read it differently.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "reference",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts01_select",
+      "category": "select",
+      "commented_out": [],
+      "file": "ts/ts01_select/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts02_template_value",
+      "category": "dynamic_clause",
+      "commented_out": [],
+      "file": "ts/ts02_template_value/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 8,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 9,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts03_write",
+      "category": "write",
+      "commented_out": [],
+      "file": "ts/ts03_write/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "write",
+          "table": "payments"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "invoices"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "sessions"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "search_index"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts04_argument_traced",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "ts/ts04_argument_traced/a.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 3 countRows() -> ts/ts04_argument_traced/lib.ts",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts04_argument_traced",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "ts/ts04_argument_traced/b.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 3 countRows() -> ts/ts04_argument_traced/lib.ts",
+          "line": 3,
+          "mode": "read",
+          "table": "customers"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts04_argument_traced",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "ts/ts04_argument_traced/lib.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "traced",
+          "how": "a.ts passes \"orders\"",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "traced",
+          "how": "b.ts passes \"customers\"",
+          "line": 2,
+          "mode": "read",
+          "table": "customers"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts05_constant",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "ts/ts05_constant/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "resolved",
+          "line": 4,
+          "mode": "read",
+          "table": "ledger_entries"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 4,
+          "mode": "read",
+          "tables": [
+            "customers",
+            "orders"
+          ],
+          "why": "literal union type"
+        }
+      ],
+      "case": "ts06_union_type",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "ts/ts06_union_type/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 5,
+          "mode": "read",
+          "tables": [
+            "invoices",
+            "orders"
+          ],
+          "why": "constant dictionary values"
+        }
+      ],
+      "case": "ts07_dictionary",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "ts/ts07_dictionary/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [
+        {
+          "line": 3,
+          "mode": "read",
+          "tables": [
+            "customers",
+            "orders"
+          ],
+          "why": "literal array loop"
+        }
+      ],
+      "case": "ts08_array_loop",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "ts/ts08_array_loop/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [
+        {
+          "line": 2,
+          "mode": "read",
+          "why": "table name comes from the request"
+        }
+      ],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts09_request_table",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "ts/ts09_request_table/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts10_unknown_origin",
+      "category": "dynamic_table",
+      "commented_out": [],
+      "file": "ts/ts10_unknown_origin/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "dynamic",
+          "line": 2,
+          "why": "parameter with no call site in the corpus"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts11_comments",
+      "category": "comment",
+      "commented_out": [
+        {
+          "line": 1,
+          "tables": [
+            "coupons"
+          ]
+        },
+        {
+          "line": 3,
+          "tables": [
+            "payments"
+          ]
+        },
+        {
+          "line": 5,
+          "tables": [
+            "ledger_entries"
+          ]
+        }
+      ],
+      "file": "ts/ts11_comments/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "read",
+          "table": "customers"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts12_ddl",
+      "category": "ddl",
+      "commented_out": [],
+      "file": "ts/ts12_ddl/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "write",
+          "table": "shipments"
+        },
+        {
+          "certainty": "direct",
+          "line": 3,
+          "mode": "write",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "archive_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 4,
+          "mode": "write",
+          "table": "legacy_orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "read",
+          "table": "orders"
+        },
+        {
+          "certainty": "direct",
+          "line": 5,
+          "mode": "write",
+          "table": "order_copy"
+        },
+        {
+          "certainty": "direct",
+          "line": 6,
+          "mode": "write",
+          "table": "tmp_orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [
+        "defect:plain_ddl_command"
+      ],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts13_system_cte",
+      "category": "select",
+      "commented_out": [],
+      "file": "ts/ts13_system_cte/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [
+        {
+          "line": 2,
+          "what": "CTE name recent"
+        }
+      ],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [
+        {
+          "line": 3,
+          "mode": "read",
+          "table": "information_schema.tables"
+        }
+      ],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts14_test_text_only",
+      "category": "test_sql",
+      "commented_out": [],
+      "file": "ts/ts14_test_text_only/orders.test.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 8,
+          "mode": "write",
+          "table": "audit_log"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts15_prose",
+      "category": "not_sql",
+      "commented_out": [],
+      "file": "ts/ts15_prose/a.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [
+        {
+          "line": 1,
+          "what": "prose"
+        },
+        {
+          "line": 2,
+          "what": "prose"
+        },
+        {
+          "line": 3,
+          "what": "prose"
+        }
+      ],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts16_broken",
+      "category": "unreadable",
+      "commented_out": [],
+      "file": "ts/ts16_broken/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [
+        {
+          "cls": "broken",
+          "line": 2,
+          "why": "no table can be taken"
+        }
+      ],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts17_escaped_quotes",
+      "category": "escape",
+      "commented_out": [],
+      "file": "ts/ts17_escaped_quotes/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts90_ref_builder",
+      "category": "query_builder",
+      "commented_out": [],
+      "file": "ts/ts90_ref_builder/a.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "Query builder, no SQL string. Decided 2026-10-03: a builder that names the table counts as a table.",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "ts/ts_chain1/l0.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 3 f1() -> ts/ts_chain1/l1.ts",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain1",
+      "category": "call_depth_1",
+      "commented_out": [],
+      "file": "ts/ts_chain1/l1.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "ts/ts_chain2/l0.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 3 f1() -> ts/ts_chain2/l1.ts",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "ts/ts_chain2/l1.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f2() -> ts/ts_chain2/l2.ts",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain2",
+      "category": "call_depth_2",
+      "commented_out": [],
+      "file": "ts/ts_chain2/l2.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "ts/ts_chain3/l0.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 3 f1() -> ts/ts_chain3/l1.ts",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "ts/ts_chain3/l1.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 f2() -> ts/ts_chain3/l2.ts",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "ts/ts_chain3/l2.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f3() -> ts/ts_chain3/l3.ts",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain3",
+      "category": "call_depth_3",
+      "commented_out": [],
+      "file": "ts/ts_chain3/l3.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [
+        {
+          "depth": 4,
+          "how": "line 3 f1() -> ts/ts_chain4/l1.ts",
+          "line": 3,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "candidates": [],
+      "case": "ts_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "ts/ts_chain4/l0.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "ts/ts_chain4/l1.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 3,
+          "how": "line 4 f2() -> ts/ts_chain4/l2.ts",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "ts/ts_chain4/l2.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 2,
+          "how": "line 4 f3() -> ts/ts_chain4/l3.ts",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "ts/ts_chain4/l3.ts",
+      "has_sql": false,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": [
+        {
+          "depth": 1,
+          "how": "line 4 f4() -> ts/ts_chain4/l4.ts",
+          "line": 4,
+          "mode": "read",
+          "table": "orders"
+        }
+      ]
+    },
+    {
+      "any_table": [],
+      "beyond_depth": [],
+      "candidates": [],
+      "case": "ts_chain4",
+      "category": "call_depth_4",
+      "commented_out": [],
+      "file": "ts/ts_chain4/l4.ts",
+      "has_sql": true,
+      "lang": "ts",
+      "not_a_table": [],
+      "note": "",
+      "own": [
+        {
+          "certainty": "direct",
+          "line": 2,
+          "mode": "read",
+          "table": "orders"
+        }
+      ],
+      "set": "must",
+      "system": [],
+      "tags": [],
+      "text_only": [],
+      "unreadable": [],
+      "via": []
+    }
+  ],
+  "generated_by": "rewrite/truth/tools/make_synthetic.py",
+  "note": "Answers are fixed by construction (the generator writes each file together with what it touches); no implementation was run to produce them.",
+  "root": "corpus"
+}
