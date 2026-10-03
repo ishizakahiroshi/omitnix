@@ -90,6 +90,9 @@
     }
   ],
   "source": "tests/test_adapter_minimal.py",
+  "support_inputs": [
+    "styles.css"
+  ],
   "tests_extracted": 4,
   "tests_in_file": 14,
   "verified_on_python": {

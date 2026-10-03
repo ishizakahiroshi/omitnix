@@ -708,6 +708,9 @@
     }
   ],
   "source": "tests/test_adapter_python.py",
+  "support_inputs": [
+    "broken.py"
+  ],
   "tests_extracted": 20,
   "tests_in_file": 26,
   "verified_on_python": {

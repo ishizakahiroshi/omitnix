@@ -518,16 +518,20 @@ def main() -> int:
     for path in TEST_FILES:
         doc = extract_file(path)
         fx = fixtures_dir(doc["adapter"])
-        copied = set()
+        # A claim's file can include another fixture without that helper itself
+        # having an analyze() assertion (PHP summary.php -> common/reports.php).
+        # Preserve the public fixture context, never the product's inferred output.
+        copied = []
+        claimed = {claim["call"]["file"] for claim in doc["claims"]}
         if fx is not None:
-            for claim in doc["claims"]:
-                rel = claim["call"]["file"]
-                src = fx / rel
-                if src.is_file() and rel not in copied:
+            for src in sorted(fx.rglob("*")):
+                if src.is_file():
+                    rel = src.relative_to(fx).as_posix()
                     dest = OUT / "inputs" / doc["adapter"] / rel
                     dest.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copyfile(src, dest)
-                    copied.add(rel)
+                    copied.append(rel)
+        doc["support_inputs"] = sorted(set(copied) - claimed)
         doc["inputs_dir"] = f"inputs/{doc['adapter']}"
         if args.verify:
             doc["verified_on_python"] = verify(path, doc)
@@ -550,6 +554,9 @@ def main() -> int:
             v = d["verified_on_python"]
             line += f"  python pass {v['passed']} fail {len(v['failed'])} error {len(v['errors'])}"
         print(line)
+    if args.verify and any(d["verified_on_python"]["failed"]
+                           or d["verified_on_python"]["errors"] for d in summary):
+        return 1
     return 0
 
 

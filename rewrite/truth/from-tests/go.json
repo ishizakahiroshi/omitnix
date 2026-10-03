@@ -364,6 +364,9 @@
     }
   ],
   "source": "tests/test_adapter_go.py",
+  "support_inputs": [
+    "broken.go"
+  ],
   "tests_extracted": 11,
   "tests_in_file": 17,
   "verified_on_python": {

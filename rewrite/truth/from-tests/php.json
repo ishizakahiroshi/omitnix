@@ -1103,6 +1103,11 @@
     }
   ],
   "source": "tests/test_php_adapter.py",
+  "support_inputs": [
+    "broken.php",
+    "common/reports.php",
+    "schema.json"
+  ],
   "tests_extracted": 27,
   "tests_in_file": 41,
   "verified_on_python": {

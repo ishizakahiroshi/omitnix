@@ -9,23 +9,15 @@ with ``--from-tests``, the claims people wrote by hand in the adapter tests
     python rewrite/truth/tools/score.py --cmd "python -m omitnix"
     python rewrite/truth/tools/score.py --cmd ./omitnix --from-tests --json out.json
 
-What is scored on the synthetic corpus. The implementation is run on a copy of
-``corpus/`` and its ``index.json`` is read; per file, the reported (mode, table) pairs
-are compared with the expected ones.
-
-* required: ``own`` (depth 0) and ``via`` up to depth 3. Recall is found / required.
-* precision: reported pairs that are required or neutral / reported pairs. Neutral (never
-  a false positive, never required): candidates' tables, ``beyond_depth``, ``text_only``,
-  ``system`` and a via deeper than the depth being viewed. ``commented_out`` tables and
-  CTE names (``not_a_table``) are forbidden: a hit is a false positive and is also counted
-  as a leak.
-* depth: recall for depth 0 (own), 1, 2, 3 separately; recall and precision cumulative
-  for "own only", "up to 1", "up to 2", "up to 3".
-* honesty: an item the file cannot give as a plain table (``any_table``, ``unreadable``,
-  ``candidates``) passes when the file reports something unresolved (or, for candidates,
-  all the candidate tables). Silently giving nothing fails.
-* sets: ``must`` and ``reference`` are always reported apart; also per defect tag, per
-  language and per category.
+The synthetic metric is unique file/mode/table extraction presence, grouped by
+expected minimum depth, not proof of source lines, call provenance or certainty.
+The public index has no structured representation for those dimensions. Candidates
+are never credited as proven answers; relevant reasons count only gap disclosure.
+Neutral mode/table pairs (candidate possibilities, text-only, system, beyond-depth)
+are excluded from precision, not added as true positives. Forbidden names take
+precedence. Missing, unknown and unclaimed files remain visible. Must/reference
+sets are separate. From-tests results measure literal assertion fidelity only;
+the original assertions can encode product limitations rather than correct behavior.
 
 Only counts, case names and the invented table names of the answer files are printed;
 the implementation's own output is never echoed. The answers must live under
@@ -42,7 +34,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -50,15 +42,8 @@ TRUTH = Path(__file__).resolve().parent.parent
 SYNTHETIC = TRUTH / "synthetic"
 FROM_TESTS = TRUTH / "from-tests"
 
-Key = tuple[str, str, str]  # (file, mode, table)
-
-
 def _norm(name: str) -> str:
     return name.strip().strip('`"[]').lower()
-
-
-def _short(name: str) -> str:
-    return _norm(name).rsplit(".", 1)[-1]
 
 
 def run_implementation(command: list[str], root: Path) -> dict[str, Any]:
@@ -76,12 +61,18 @@ def run_implementation(command: list[str], root: Path) -> dict[str, Any]:
 
 
 def _records(index: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    return {record["path"]: record for record in index.get("files", [])}
+    records = {}
+    for record in index.get("files", []):
+        path = record["path"]
+        if path in records:
+            raise ValueError(f"duplicate file record: {path}")
+        records[path] = record
+    return records
 
 
 def _reported(record: dict[str, Any] | None) -> set[tuple[str, str]]:
     found: set[tuple[str, str]] = set()
-    if not record:
+    if not record or record.get("status") not in {"analyzed", "unresolved"}:
         return found
     for field, mode in (("reads", "read"), ("writes", "write")):
         item = record.get("fields", {}).get(field, {})
@@ -91,10 +82,16 @@ def _reported(record: dict[str, Any] | None) -> set[tuple[str, str]]:
     return found
 
 
-def _unresolved(record: dict[str, Any] | None) -> bool:
-    if not record:
+def _reason(record: dict[str, Any] | None, code: str) -> bool:
+    """A relevant, explained gap, not a file-level flag or unrelated column warning.
+
+    This checks reason-code fidelity only. The current index has no structured
+    source locations or per-statement identities, so attribution remains unscored.
+    """
+    if not record or record.get("status") not in {"analyzed", "unresolved"}:
         return False
-    return bool(record.get("unresolved")) or record.get("status") in {"unresolved", "unknown"}
+    return any(u.get("code") == code and isinstance(u.get("detail"), str)
+               and bool(u["detail"].strip()) for u in record.get("unresolved", []))
 
 
 def _expected(entry: dict[str, Any]) -> dict[str, Any]:
@@ -104,13 +101,19 @@ def _expected(entry: dict[str, Any]) -> dict[str, Any]:
         required[(item["mode"], _norm(item["table"]))] = 0
     for item in entry["via"]:
         key = (item["mode"], _norm(item["table"]))
+        if not 1 <= item["depth"] <= 3:
+            raise ValueError("via depth must be 1..3; use beyond_depth for deeper calls")
         required[key] = min(required.get(key, 9), item["depth"])
-    neutral: set[str] = set()
+    neutral: set[tuple[str, str]] = set()
     for item in entry["candidates"]:
-        neutral.update(_norm(t) for t in item["tables"])
+        neutral.update((item["mode"], _norm(t)) for t in item["tables"])
     for item in entry["beyond_depth"] + entry["text_only"] + entry["system"]:
         name = _norm(item["table"])
-        neutral.update({name, name.rsplit(".", 1)[-1]})
+        neutral.add((item["mode"], name))
+        # The public index convention normalizes catalogue tables to bare names.
+        # Do not extend that alias to arbitrary schema-qualified extra tables.
+        if item in entry["system"]:
+            neutral.add((item["mode"], name.rsplit(".", 1)[-1]))
     forbidden: set[str] = set()
     for item in entry["commented_out"]:
         forbidden.update(_norm(t) for t in item["tables"])
@@ -130,6 +133,7 @@ class Tally:
         self.required = defaultdict(int)  # depth -> n
         self.found = defaultdict(int)  # depth -> n
         self.reported_ok = defaultdict(int)  # cumulative k -> true positives
+        self.neutral_reported = defaultdict(int)
         self.reported_fp = 0
         self.leaks = 0
         self.honesty = defaultdict(lambda: [0, 0])  # class -> [passed, total]
@@ -162,6 +166,9 @@ class Tally:
                 "found": fnd,
                 "recall": ratio(fnd, req),
                 "precision": ratio(tp, tp + self.reported_fp),
+                "precision_numerator": tp,
+                "precision_denominator": tp + self.reported_fp,
+                "neutral_reported": self.neutral_reported[k],
             }
         out["cumulative"] = cumulative
         out["false_positives"] = self.reported_fp
@@ -177,12 +184,12 @@ def score_synthetic(index: dict[str, Any], answers: dict[str, Any]) -> dict[str,
     records = _records(index)
     groups: dict[str, Tally] = defaultdict(Tally)
     per_file: list[dict[str, Any]] = []
-    missing = 0
+    missing_paths = []
 
     for entry in answers["files"]:
         record = records.get(entry["file"])
         if record is None:
-            missing += 1
+            missing_paths.append(entry["file"])
         reported = _reported(record)
         exp = _expected(entry)
         required = exp["required"]
@@ -207,8 +214,14 @@ def score_synthetic(index: dict[str, Any], answers: dict[str, Any]) -> dict[str,
                 for k in range(depth, 4):
                     for t in tallies:
                         t.reported_ok[k] += 1
+                for k in range(depth):
+                    for t in tallies:
+                        t.neutral_reported[k] += 1
                 continue
-            if table in exp["neutral"] or _short(table) in exp["neutral"]:
+            if (mode, table) in exp["neutral"] and table not in exp["forbidden"]:
+                for t in tallies:
+                    for k in range(4):
+                        t.neutral_reported[k] += 1
                 continue
             fp.append(f"{mode}:{table}")
             forbidden = table in exp["forbidden"]
@@ -217,23 +230,21 @@ def score_synthetic(index: dict[str, Any], answers: dict[str, Any]) -> dict[str,
                 t.reported_fp += 1
                 t.leaks += forbidden
 
-        unresolved = _unresolved(record)
+        honesty = []
         for _item in entry["any_table"]:
-            for t in tallies:
-                t.honesty["any_table"][1] += 1
-                t.honesty["any_table"][0] += unresolved
+            honesty.append(("any_table", _reason(record, "dynamic_table_name")))
         for item in entry["unreadable"]:
-            label = f"unreadable_{item['cls']}"
+            code = {"dynamic": "dynamic_table_name", "broken": "sql_unreadable",
+                    "unsupported": "sql_unsupported"}[item["cls"]]
+            honesty.append((f"unreadable_{item['cls']}", _reason(record, code)))
+        for _item in entry["candidates"]:
+            # Plain table fields cannot encode candidate certainty. A relevant gap
+            # is useful disclosure, but never proof that all candidates were found.
+            honesty.append(("candidates_gap_disclosed", _reason(record, "dynamic_table_name")))
+        for label, ok in honesty:
             for t in tallies:
                 t.honesty[label][1] += 1
-                t.honesty[label][0] += unresolved
-        for item in entry["candidates"]:
-            ok = unresolved or all(
-                any((m, _norm(c)) in reported for m in ("read", "write")) for c in item["tables"]
-            )
-            for t in tallies:
-                t.honesty["candidates"][1] += 1
-                t.honesty["candidates"][0] += ok
+                t.honesty[label][0] += ok
 
         per_file.append(
             {
@@ -244,12 +255,29 @@ def score_synthetic(index: dict[str, Any], answers: dict[str, Any]) -> dict[str,
                 "missed": missed,
                 "false_positives": fp,
                 "leaks": leaks,
-                "reported_unresolved": unresolved,
+                "reported_unresolved": bool(record and record.get("unresolved")),
+                "status": record.get("status") if record else "missing",
+                "honesty": [{"kind": label, "passed": ok} for label, ok in honesty],
             }
         )
 
     return {
-        "missing_files": missing,
+        "missing_files": len(missing_paths),
+        "missing_file_paths": sorted(missing_paths),
+        "unknown_files": sorted(p for p, r in records.items() if r.get("status") == "unknown"),
+        "unclaimed_files": sorted(p for p, r in records.items() if r.get("status") == "unclaimed"),
+        "unknown_without_reason": sorted(p for p, r in records.items()
+                                         if r.get("status") == "unknown"
+                                         and not str(r.get("reason") or "").strip()),
+        "unexpected_files": sorted(set(records) - {e["file"] for e in answers["files"]}),
+        "measurement_limits": {
+            "recall": "unique file/mode/table presence, grouped by expected minimum depth",
+            "depth_and_certainty_provenance": "not scored: absent from index schema",
+            "source_lines": "not scored: absent from index schema",
+            "candidate_resolution": "not scored",
+            "reason_attribution": "file-level code/detail only; not per source statement",
+            "neutral": "mode-matched pairs excluded from precision, never rewarded",
+        },
         "groups": {name: groups[name].summary() for name in sorted(groups)},
         "per_file": per_file,
     }
@@ -268,49 +296,99 @@ def _config_yaml(config: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+VALUE_KINDS = {"values", "value_contains", "value_lacks", "value_starts_with"}
+REASON_KINDS = {"code_present", "code_absent", "codes_exactly", "unresolved_empty",
+                "detail_contains", "detail_lacks", "details_nonempty"}
+CAPABILITIES = {"READS", "WRITES", "SUMMARY", "AUTHENTICATION", "AUTHORIZATION", "SCREEN_TO_API"}
+
+
 def _applicable(claim: dict[str, Any]) -> str | None:
-    """None when the claim can be checked here, else the reason it is skipped."""
+    """None when the claim can be checked here, else the visible skip reason."""
     config = claim["call"]["config"]
     if config.get("schema"):
         return "needs a schema snapshot"
-    if config.get("in_scope"):
+    if config.get("in_scope") is not None:
         return "needs a file scope"
-    cap = claim.get("capability")
-    kind = claim["kind"]
-    if cap in {"READS", "WRITES"} and kind in {"values", "value_contains", "value_lacks"}:
+    if claim.get("capability") in CAPABILITIES and claim["kind"] in VALUE_KINDS:
         return None
-    if cap is None and kind in {
-        "code_present",
-        "code_absent",
-        "codes_exactly",
-        "unresolved_empty",
-    }:
+    if claim.get("capability") is None and claim["kind"] in REASON_KINDS:
         return None
-    return "not about tables or reasons"
+    return "unsupported claim kind or capability"
 
 
 def _judge(claim: dict[str, Any], record: dict[str, Any] | None) -> bool:
-    if record is None:
+    """Reproduce the literal assertion, including case, list order and multiplicity.
+
+    Extraction fidelity is not the synthetic product contract. Empty assertions
+    require a readable record and an observed field, never unknown/out-of-scope.
+    """
+    kind, cap = claim["kind"], claim.get("capability")
+    if kind not in VALUE_KINDS | REASON_KINDS:
+        raise ValueError(f"unsupported claim kind: {kind}")
+    if not record or record.get("status") not in {"analyzed", "unresolved"}:
         return False
-    kind = claim["kind"]
-    if claim.get("capability") in {"READS", "WRITES"}:
-        field = "reads" if claim["capability"] == "READS" else "writes"
-        item = record.get("fields", {}).get(field, {})
-        value = sorted(_norm(str(t)) for t in (item.get("value") or []))
-        expected = claim["expected"]
+    expected = claim["expected"]
+    if kind in VALUE_KINDS:
+        if cap not in CAPABILITIES:
+            raise ValueError(f"unsupported capability: {cap}")
+        item = record.get("fields", {}).get(cap.lower(), {})
+        state = item.get("state")
+        if state == "not_configured" and cap in {"AUTHENTICATION", "AUTHORIZATION"}:
+            config_key = "authn" if cap == "AUTHENTICATION" else "authz"
+            if claim["call"]["config"].get(config_key) != [] or "value" in item:
+                return False
+            value = []  # explicitly unconfigured; the document must omit the value key
+        elif state == "none_observed" and "value" in item:
+            if cap == "SUMMARY" and item["value"] is None:
+                value = ""  # the document serializes an empty scalar observation as null
+            elif cap != "SUMMARY" and item["value"] == []:
+                value = []
+            else:
+                return False  # contradictory state/payload is not an observed empty result
+        elif state == "value" and "value" in item:
+            value = item["value"]
+            if not value:
+                return False  # empty observations must use none_observed
+        else:
+            return False
+        if cap == "SUMMARY":
+            if not isinstance(value, str):
+                return False
+        elif not isinstance(value, list) or not all(isinstance(v, str) for v in value):
+            return False
         if kind == "values":
-            return value == sorted(_norm(str(t)) for t in expected)
+            return value == expected
         if kind == "value_contains":
-            return _norm(str(expected)) in value
-        return _norm(str(expected)) not in value
-    codes = sorted({u["code"] for u in record.get("unresolved", [])})
+            return expected in value
+        if kind == "value_lacks":
+            return expected not in value
+        return isinstance(value, str) and value.startswith(expected)
+    reasons = record.get("unresolved")
+    if not isinstance(reasons, list) or any(
+        not isinstance(u, dict) or not isinstance(u.get("code"), str)
+        or not isinstance(u.get("detail"), str) for u in reasons
+    ):
+        return False
+    codes = {u["code"] for u in reasons}
     if kind == "code_present":
-        return claim["expected"] in codes
+        return expected in codes
     if kind == "code_absent":
-        return claim["expected"] not in codes
+        return expected not in codes
     if kind == "codes_exactly":
-        return codes == sorted(set(claim["expected"]))
-    return not codes
+        return codes == set(expected)
+    if kind == "unresolved_empty":
+        return not reasons
+    if kind == "details_nonempty":
+        return all(u["detail"].strip() for u in reasons)  # source assert is vacuous on []
+    code = claim.get("detail_code")
+    if code is None:
+        text = " ".join(u["detail"] for u in reasons)
+    else:
+        selected = next((u for u in reasons if u["code"] == code), None)
+        if selected is None:
+            return False
+        text = selected["detail"]
+    return (expected in text) == (kind == "detail_contains")
 
 
 def score_from_tests(command: list[str]) -> dict[str, Any]:
@@ -318,11 +396,16 @@ def score_from_tests(command: list[str]) -> dict[str, Any]:
     skipped: dict[str, int] = defaultdict(int)
     failed: list[str] = []
     total = 0
+    population = []
     for path in sorted(FROM_TESTS.glob("*.json")):
         data = json.loads(path.read_text(encoding="utf-8"))
         groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
-        for claim in data["claims"]:
+        for number, claim in enumerate(data["claims"], 1):
             reason = _applicable(claim)
+            population.append({"id": f"{data['adapter']}:{number}", "source": data["source"],
+                               "test": claim["test"], "line": claim["line"],
+                               "file": claim["call"]["file"], "kind": claim["kind"],
+                               "capability": claim.get("capability"), "skip_reason": reason})
             if reason:
                 skipped[reason] += 1
                 continue
@@ -345,7 +428,12 @@ def score_from_tests(command: list[str]) -> dict[str, Any]:
                     failed.append(f"{data['adapter']}/{claim['call']['file']}:{claim['line']}")
     passed = sum(v[0] for v in by_kind.values())
     return {
+        "claims_population": len(population),
         "claims_checked": total,
+        "claims_skipped": sum(skipped.values()),
+        "population_by_kind": dict(sorted(Counter(c["kind"] for c in population).items())),
+        "population": population,
+        "interpretation": "literal test-assertion fidelity, not product correctness",
         "passed": passed,
         "rate": round(passed / total, 4) if total else None,
         "skipped": dict(sorted(skipped.items())),
@@ -361,7 +449,11 @@ def _pct(value: float | None) -> str:
 def text_report(result: dict[str, Any]) -> str:
     lines = []
     syn = result["synthetic"]
+    lines.append("synthetic: extraction presence only; "
+                 "provenance/lines/candidate certainty unscored")
     lines.append(f"synthetic: files missing from the index: {syn['missing_files']}")
+    lines.append(f"unknown files: {len(syn['unknown_files'])}; "
+                 f"unclaimed files: {len(syn['unclaimed_files'])}")
     lines.append("group                          files  recall d0/d1/d2/d3        "
                  "<=3 recall  <=3 prec  leaks")
     for name, g in syn["groups"].items():

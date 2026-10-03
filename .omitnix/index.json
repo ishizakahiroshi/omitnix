@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "fb4f199e4ad42151178130567924932e326a8adb",
+    "commit": "aa476b90549bdaace0f52896f994207e5792cd93",
     "dirty": true,
     "tool": "omitnix 0.1.3",
     "partial": false,
@@ -138,11 +138,11 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 106,
-    "analyzed": 64,
+    "discovered": 116,
+    "analyzed": 67,
     "unresolved": 3,
     "unknown": 0,
-    "unclaimed": 39,
+    "unclaimed": 46,
     "skipped_by_config": 0
   },
   "files": [
@@ -351,7 +351,47 @@
       "unresolved": []
     },
     {
+      "path": "docs/bot/truth-scoring-review/COVERAGE.json",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/EXECUTION.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
       "path": "docs/bot/truth-scoring-review/HANDOFF.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/INDEPENDENT_FIXED_SHA_REVIEW.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/INDEPENDENT_REVIEW.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/LOCAL_ACCEPTANCE.md",
       "adapter": null,
       "status": "unclaimed",
       "fields": {},
@@ -375,7 +415,23 @@
       "reason": "no adapter claims '.md'"
     },
     {
+      "path": "docs/bot/truth-scoring-review/REPORT.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
       "path": "docs/bot/truth-scoring-review/REVIEW.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/SOURCE_REVIEW.md",
       "adapter": null,
       "status": "unclaimed",
       "fields": {},
@@ -1535,6 +1591,93 @@
       "fields": {},
       "unresolved": [],
       "reason": "no adapter claims '.json'"
+    },
+    {
+      "path": "rewrite/truth/tests/test_extract.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Regression tests for public fixture context and verification failure signalling."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "rewrite/truth/tests/test_score.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Hand-authored controls: do not generate expected values from implementation output."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
+    },
+    {
+      "path": "rewrite/truth/tools/audit_population.py",
+      "adapter": "python",
+      "status": "analyzed",
+      "fields": {
+        "summary": {
+          "state": "value",
+          "value": "Enumerate the public audit population; no analyzer output supplies any answer."
+        },
+        "authentication": {
+          "state": "not_configured"
+        },
+        "authorization": {
+          "state": "not_configured"
+        },
+        "reads": {
+          "state": "none_observed",
+          "value": []
+        },
+        "writes": {
+          "state": "none_observed",
+          "value": []
+        },
+        "screen_to_api": {
+          "state": "out_of_scope"
+        }
+      },
+      "unresolved": []
     },
     {
       "path": "rewrite/truth/tools/extract_from_tests.py",

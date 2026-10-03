@@ -409,6 +409,9 @@
     }
   ],
   "source": "tests/test_adapter_tsjs.py",
+  "support_inputs": [
+    "broken.js"
+  ],
   "tests_extracted": 11,
   "tests_in_file": 19,
   "verified_on_python": {
