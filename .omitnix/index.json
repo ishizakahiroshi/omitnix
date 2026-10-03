@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "de9c498c62a71d075d570f4829a63801eba52810",
+    "commit": "0acd2d5665198cd2d75334fb037faed6c90dfb9a",
     "dirty": true,
     "tool": "omitnix 0.1.3",
     "partial": false,
@@ -138,11 +138,11 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 105,
+    "discovered": 106,
     "analyzed": 64,
     "unresolved": 3,
     "unknown": 0,
-    "unclaimed": 38,
+    "unclaimed": 39,
     "skipped_by_config": 0
   },
   "files": [
@@ -349,6 +349,14 @@
         }
       },
       "unresolved": []
+    },
+    {
+      "path": "docs/bot/truth-scoring-review/HANDOFF.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
     },
     {
       "path": "docs/bot/truth-scoring-review/PROGRESS.md",
