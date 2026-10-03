@@ -82,7 +82,7 @@ tag:limit:depth                   12  100.0%/100.0%/0.0%/0.0%   54.5%  100.0%  0
 tag:limit:no_import_follow        17  66.7%/0.0%/0.0%/0.0%      23.5%  100.0%  0
 honesty all: any_table 3/6, candidates_gap_disclosed 11/12, unreadable_broken 5/5, unreadable_dynamic 5/5
 honesty set:must: any_table 3/6, candidates_gap_disclosed 11/12, unreadable_broken 5/5, unreadable_dynamic 5/5
-honesty set:reference: 
+honesty set:reference:
 from-tests: 178/178 claims pass (100.0%); skipped 14
 ```
 
@@ -176,7 +176,7 @@ tag:limit:depth                   12  100.0%/100.0%/0.0%/0.0%   54.5%  100.0%  0
 tag:limit:no_import_follow        17  66.7%/0.0%/0.0%/0.0%      23.5%  100.0%  0
 honesty all: any_table 3/6, candidates_gap_disclosed 11/12, unreadable_broken 5/5, unreadable_dynamic 5/5
 honesty set:must: any_table 3/6, candidates_gap_disclosed 11/12, unreadable_broken 5/5, unreadable_dynamic 5/5
-honesty set:reference: 
+honesty set:reference:
 from-tests: 178/178 claims pass (100.0%); skipped 14
 ```
 
