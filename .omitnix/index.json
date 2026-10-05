@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated": {
-    "commit": "aa476b90549bdaace0f52896f994207e5792cd93",
+    "commit": "3feb28dc5a57e1609e0923f972980131fd7f392b",
     "dirty": true,
     "tool": "omitnix 0.1.3",
     "partial": false,
@@ -138,11 +138,11 @@
     "discovery_note": ""
   },
   "coverage": {
-    "discovered": 116,
+    "discovered": 119,
     "analyzed": 67,
     "unresolved": 3,
     "unknown": 0,
-    "unclaimed": 46,
+    "unclaimed": 49,
     "skipped_by_config": 0
   },
   "files": [
@@ -349,6 +349,30 @@
         }
       },
       "unresolved": []
+    },
+    {
+      "path": "docs/bot/truth-miss-triage/PROGRESS.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-miss-triage/README.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
+    },
+    {
+      "path": "docs/bot/truth-miss-triage/REVIEW.md",
+      "adapter": null,
+      "status": "unclaimed",
+      "fields": {},
+      "unresolved": [],
+      "reason": "no adapter claims '.md'"
     },
     {
       "path": "docs/bot/truth-scoring-review/COVERAGE.json",
