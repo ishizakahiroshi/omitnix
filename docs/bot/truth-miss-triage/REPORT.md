@@ -227,8 +227,9 @@ The three false positives form separate group `A_QUOTED_PLACEHOLDER_FP`:
 `php09_backtick_any`, `php10_backtick_array_loop`, and `py10_external_table`.
 Interpolated holes are padded with spaces; sqlglot preserves padding inside
 backticks. `_sql.py:204–211` compares that padded name to the unpadded sentinel,
-then emits it as a definite table. The scorer correctly normalizes its spelling
-and counts it as an extra. A focused probe reports `reads=(' omitnix_placeholder ',)`
+then emits it as a table. Product field normalization in `omitnix/analyze.py:109`
+strips padding before index serialization; the scorer subsequently normalizes
+the already-unpadded spelling and correctly counts it as an extra. A focused probe reports `reads=(' omitnix_placeholder ',)`
 and `dynamic_table=False`; the unpadded quoted form reports no table and
 `dynamic_table=True`. Proposal: preserve explicit hole identity through SQL
 extraction, suppress only the synthetic hole, and emit `dynamic_table_name`.
