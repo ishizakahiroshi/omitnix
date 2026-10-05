@@ -1,5 +1,8 @@
 # #20261005-008 Independent review
 
+**Latest disposition: passed at `066464fa30b805ef1f3553aa4f80df3f6058994d`.
+M1 is closed; no outstanding findings. See Correction verification below.**
+
 ## Revision and disposition
 
 - Review date: 2026-10-05.
@@ -188,3 +191,41 @@ programs, install alternate parser versions, implement any proposal, or validate
 precision after hypothetical changes. I did not independently rerun the full
 pytest suite or verify remote PR/CI publication; those remain investigator
 submission responsibilities. No decision on product scope or fix order is made.
+
+
+## Correction verification
+
+Corrected analysis SHA: **`066464fa30b805ef1f3553aa4f80df3f6058994d`**.
+Recheck date: 2026-10-05. **Disposition: passed; M1 closed; no outstanding
+high, medium or low findings in the reviewed investigation.**
+
+I inspected the complete delta from `7c3c204` to this fixed SHA, re-opened the
+three affected corpus sources and the corrected evidence, and checked the
+host-specific extractor, shared SQL sentinel check, `analyze.py:109`, retained
+index values and scorer handling. CSV lines 28, 29 and 60 now correctly identify
+product normalization before serialization; the Python row now cites its own
+adapter. REPORT's corresponding explanation is also correct.
+
+The remaining 124 ledger rows, all class/group/count fields, both helper scripts,
+and all product/truth/scorer/dependency/CI paths are unchanged. I nevertheless
+repeated the all-127-row independent audit, the published ledger audit and two
+full baseline scoring runs. No earlier pass was simply assumed for the corrected
+cells or report text.
+
+| Recheck command | Exit | Result |
+|---|---:|---|
+| `python "$OUT/audit_final_ledger.py"` with its SHA guard set to `066464fa30b805ef1f3553aa4f80df3f6058994d` | 0 | All 127 keys, metadata, classes, disclosure and source-line checks pass |
+| `python docs/bot/truth-miss-triage/scripts/audit_ledger.py --score-json "$OUT/final-score-1.json"` | 0 | 124 misses + 3 FP; all projections unchanged |
+| `cmp "$OUT/final-ledger-audit.json" "$OUT/corrected-ledger-audit.json"` | 0 | Byte-identical aggregate audit |
+| `python rewrite/truth/tools/score.py --cmd 'python -m omitnix' --json "$OUT/corrected-score-1.json"` | 0 | 118/242, 3 FP |
+| `python rewrite/truth/tools/score.py --cmd 'python -m omitnix' --json "$OUT/corrected-score-2.json"` | 0 | 118/242, 3 FP |
+| `cmp "$OUT/corrected-score-1.json" "$OUT/corrected-score-2.json"` | 0 | Byte-identical |
+| `cmp "$OUT/corrected-score-1.json" "$OUT/score-1.json"` | 0 | Same independent original baseline and SHA-256 |
+| `git diff --exit-code 7c3c2049a78029df1c5d37fd4532673422f9e2ef..066464fa30b805ef1f3553aa4f80df3f6058994d -- omitnix rewrite/truth pyproject.toml .github docs/bot/truth-miss-triage/scripts` | 0 | No implementation, truth, CI or helper changes |
+| `git diff --check 7c3c2049a78029df1c5d37fd4532673422f9e2ef..066464fa30b805ef1f3553aa4f80df3f6058994d` | 0 | No whitespace error |
+| `git status --short` | 0 | Clean checkout |
+
+The historical M1 finding above is retained for traceability and does not describe
+an outstanding defect at the corrected SHA. The previously recorded review scope
+and limitations still apply. A later metadata-only commit still requires its
+own delta/identity check; this receipt does not certify an unseen future SHA.

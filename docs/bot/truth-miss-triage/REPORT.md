@@ -77,6 +77,7 @@ scratch directories **outside the repository**, not real home paths.
 | `cp -a rewrite/truth/synthetic/corpus "$OUT/corpus"; python -m omitnix --all-files --root "$OUT/corpus"` | 0 | Retained product index; independently compared to first score |
 | `python -m pytest -p no:cacheprovider tests rewrite/truth` | 1 | Initial over-broad collection: 477 passed, 1 skipped, 1 error; synthetic input `test_orders.py` needs fictional `fake_db` fixture |
 | `python -m pytest -p no:cacheprovider tests rewrite/truth/tests` | 0 | Correct test directories: 476 passed, 1 skipped; no fixture/source edit |
+| `python -m pytest -q -rs -p no:cacheprovider tests rewrite/truth/tests` at corrected analysis SHA `066464fa30b805ef1f3553aa4f80df3f6058994d` | 0 | 476 passed, 1 skipped: `tests/test_gate.py:747`, semgrep is not installed |
 | `python -m ruff --version` | 1 | Ruff absent locally. No undeclared dependency installed; CI's existing lint job is reported separately |
 | `python docs/bot/truth-miss-triage/scripts/audit_ledger.py --score-json "$OUT/score-1.json"` | 0 | Exact population, metadata, class/group totals and projections validated |
 | `python docs/bot/truth-miss-triage/scripts/probe_sql_layers.py --output "$OUT/probes.json"` | 0 | 30 public source files and quoted-placeholder diagnostic; no mutation |
