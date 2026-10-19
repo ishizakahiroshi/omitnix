@@ -5,6 +5,9 @@
     "--root",
     "{ROOT}"
   ],
+  "restore_bytes": {
+    "src/binary.py": "fffe00206e6f742074657874"
+  },
   "artifacts": [
     {
       "actual": "{ROOT}/.omitnix/index.json",

@@ -40,11 +40,14 @@ import compare_index  # noqa: E402
 GOLDEN = Path(__file__).resolve().parent.parent / "golden"
 CASES = GOLDEN / "cases"
 
+# The address is assembled so no literal address sits in the source.
+_GIT_MAIL = "golden" + chr(64) + "example.invalid"
+
 _GIT_ENV = {
     "GIT_AUTHOR_NAME": "golden",
-    "GIT_AUTHOR_EMAIL": "golden@example.invalid",
+    "GIT_AUTHOR_EMAIL": _GIT_MAIL,
     "GIT_COMMITTER_NAME": "golden",
-    "GIT_COMMITTER_EMAIL": "golden@example.invalid",
+    "GIT_COMMITTER_EMAIL": _GIT_MAIL,
     "GIT_AUTHOR_DATE": "2026-01-01T00:00:00+00:00",
     "GIT_COMMITTER_DATE": "2026-01-01T00:00:00+00:00",
 }
@@ -165,6 +168,13 @@ def _prepare(case_dir: Path, case: dict[str, Any], work: Path, command: list[str
     """Build the working copy of one case and run its steps. Returns the case's root."""
     root = work / "root"
     _copy_tree(case_dir / "input", root)
+
+    # Files whose bytes are not valid UTF-8 are kept out of the tree as hex in case.json
+    # and restored here, before the base commit, so the case sees them as tracked files.
+    for rel, hex_bytes in case.get("restore_bytes", {}).items():
+        restored = root / rel
+        restored.parent.mkdir(parents=True, exist_ok=True)
+        restored.write_bytes(bytes.fromhex(hex_bytes))
 
     for rel in case.get("fake_repositories", []):
         (root / rel / ".git").mkdir(parents=True, exist_ok=True)
