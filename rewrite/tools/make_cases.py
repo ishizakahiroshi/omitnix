@@ -72,6 +72,7 @@ def add(
     git: list[str] | None = None,
     fake_repositories: list[str] | None = None,
     streams: list[str] | None = None,
+    restore_bytes: dict[str, bytes] | None = None,
 ) -> None:
     directory = CASES / name
     directory.mkdir(parents=True, exist_ok=True)
@@ -91,6 +92,8 @@ def add(
         case["fake_repositories"] = fake_repositories
     if steps:
         case["steps"] = steps
+    if restore_bytes:
+        case["restore_bytes"] = {rel: data.hex() for rel, data in restore_bytes.items()}
     case["artifacts"] = [INDEX] if artifacts is None and mode == "repo" else (artifacts or [])
     if absent:
         case["absent"] = absent
@@ -161,7 +164,6 @@ def build() -> None:
         "LICENSE": "Example licence text.\n",
         ".gitignore": "__pycache__/\n",
         "src/legacy.inc": fx("php/reindex.php"),
-        "src/binary.py": b"\xff\xfe\x00 not text",
         "src/bom.php": b"\xef\xbb\xbf" + fx("php/reindex.php"),
         "src/注文_list.py": '"""List orders (a non-ASCII file name)."""\n',
         "src/with space.py": '"""A file name with a space."""\n',
@@ -171,7 +173,9 @@ def build() -> None:
         "Makefile": "all:\n\techo done\n",
     }
     add("c12_mixed", "All adapters, unclaimed files, a binary .py, a BOM, an override, "
-        "non-ASCII and spaced names, default exclusions.", files=mixed)
+        "non-ASCII and spaced names, default exclusions.", files=mixed,
+        # Not valid UTF-8, so it is restored by the runner instead of stored in the tree.
+        restore_bytes={"src/binary.py": b"\xff\xfe\x00 not text"})
     add("c13_no_config", "No .omitnix.yaml: authentication and authorization are not_configured.",
         files={**PHP_FILES, "vendor/skipped.php": fx("php/reindex.php"),
                **fixtures("src/py", "python")})
