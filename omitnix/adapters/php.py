@@ -36,6 +36,7 @@ from ..reasons import (
     SQL_UNREADABLE,
     TABLE_NOT_IN_SCHEMA,
 )
+from ._extract import syntax_error_reason
 from ._sql import (
     FORMAT_SPEC,
     PLACEHOLDER,
@@ -399,10 +400,7 @@ class PhpAdapter(Adapter):
 
         parsed = grammar.parse(request.text.encode("utf-8"))
         if parsed.has_error:
-            return AnalysisResult.unknown(
-                "tree-sitter reported a syntax error, so the file was not analyzed. "
-                "Anything read from a partial parse would be a guess."
-            )
+            return AnalysisResult.unknown(syntax_error_reason(parsed))
 
         unit = _Unit.of(request.absolute_path, parsed)
         findings = _Findings()

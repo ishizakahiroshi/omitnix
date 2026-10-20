@@ -7,6 +7,13 @@ and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Changed
 
+- A PHP file that tree-sitter cannot parse now says where: the reason reads
+  `tree-sitter reported a syntax error at line 168, column 33, so the file was not
+  analyzed. ...`. The position is the first `ERROR` or missing node in source order,
+  1-based, with the column counted in characters. A valid file that the grammar cannot
+  read (for example a `match` expression right after a cast) is no longer a search
+  through the whole file. Only the PHP wording changed; the other adapters keep the
+  sentence they had. The golden cases that hold a PHP reason were recorded again.
 - The Rust adapter is full tier. A `.rs` file reports its summary, the configured
   authentication and authorization calls, and the tables named by SQL that is written
   out as text: string literals, raw strings, and the string arguments of macros such as

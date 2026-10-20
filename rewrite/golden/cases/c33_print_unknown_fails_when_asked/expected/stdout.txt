@@ -4,5 +4,5 @@
   "status": "unknown",
   "fields": {},
   "unresolved": [],
-  "reason": "tree-sitter reported a syntax error, so the file was not analyzed. Anything read from a partial parse would be a guess."
+  "reason": "tree-sitter reported a syntax error at line 6, column 26, so the file was not analyzed. Anything read from a partial parse would be a guess."
 }
