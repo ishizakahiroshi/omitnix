@@ -45,7 +45,7 @@ fresh public clone でも有効な内容に保つこと。 -->
 
 ## 主要コマンド
 
-- secrets-scan（手動）: `node scripts/secrets-scan.mjs --staged --block`
+- secrets-scan（手動・doxguard）: `node scripts/secrets-scan.dual.mjs --native-only --staged`
 - CLAUDE.md 検査: `node scripts/check-claude-md.mjs`
 - テスト: `python -m pytest`（リポジトリ直下で実行する）
 - lint: `python -m ruff check .`
@@ -67,7 +67,7 @@ fresh public clone でも有効な内容に保つこと。 -->
 | 同じソースからは同じ生成物（捕捉は文書順・set を経由しない。走査集合の外は追わず、理由もディスクの有無で変えない） | `omitnix/adapters/_treesitter.py` / `omitnix/adapters/base.py`（`AnalysisRequest.in_scope`） | `tests/test_determinism.py` / `tests/test_php_adapter.py` |
 | 生成物に OS を出さない（改行は LF 固定・プラットフォーム分岐を書かない） | `omitnix/cli.py` | `tests/test_cli.py` |
 | 参照 0 件を「未使用」と書かない | `README.md` の Why it exists 節 | なし（レビューで見る） |
-| README・設定サンプル・fixture に実在するテーブル名や関数名を書かない | `docs/local/plan_progmap-oss_c1_naming-init.md` | `scripts/secrets-scan.mjs`（layer 2/3） |
+| README・設定サンプル・fixture に実在するテーブル名や関数名を書かない | `docs/local/plan_progmap-oss_c1_naming-init.md` | doxguard（layer 2/3） |
 
 **新しいルールを足す前に、まずこの表に 1 行足せる形にできないかを考える。** できないもの
 （機械検査も、決まったファイルも無いもの）だけが本文を持ってよい。
@@ -89,9 +89,9 @@ path and do not silently fall back to `docs/local` when the entry is missing.
 
 書く瞬間の責務（固有名詞の一般化・fixture は合成データ等）は上記「AI 作業共通ルール」の参照先に従う。このリポジトリ固有の配線は以下:
 
-- scanner: `scripts/secrets-scan.mjs`（手動実行: `node scripts/secrets-scan.mjs --staged --block`）
+- scanner: doxguard と gitleaks（手動実行: `node scripts/secrets-scan.dual.mjs --native-only --staged`）
 - layer 2: pre-commit hook（husky or `.githooks/`）/ layer 3: `.github/workflows/secrets-scan.yml` / layer 4: release ゲート
-- env (full coverage に必要・未設定なら構造 regex のみで継続): `KB_ROOT` / `FAMILY_ROOT`。設定詳細は `scripts/secrets-scan.mjs` の冒頭コメント
+- 作者環境の full coverage は gitignored な私的設定を `DOXGUARD_CONFIG` で参照する。未設定なら構造 regex のみで継続
 - 参照実装・設計詳細: `worklog-bridge` リポの `docs/local/secrets-scan-design/`（gitignored・公開しない）
 
 ## 関連ドキュメント
