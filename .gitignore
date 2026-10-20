@@ -87,8 +87,6 @@ secrets.*
 .npmrc
 .pypirc
 
-# === secrets-scan exception ===
-!scripts/secrets-scan.mjs
 # === obsidian-link: managed ===
 /docs/obsidian/
 # === /obsidian-link: managed ===

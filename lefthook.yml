@@ -14,7 +14,7 @@
 #
 # This repository's own hook entry point stays `.githooks/pre-commit`, which calls
 # `lefthook run pre-commit`. lefthook is deliberately NOT installed with `lefthook
-# install`: that writes its own hook files, and it would overwrite the secrets scan and
+# install`: that writes its own hook files, and it would overwrite the doxguard opt-in block and
 # the CLAUDE.md check that already run there.
 
 pre-commit:
