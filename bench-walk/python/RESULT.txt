@@ -1,0 +1,4 @@
+walk python S 825 339900 825 14.5
+walk python N 4200 421900 200 15.5
+walk python M 4000 7998000 4000 328.3
+parse python ok 110 4104 334231 3881 14.6
