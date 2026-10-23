@@ -1,0 +1,4 @@
+walk typescript S 825 339900 825 0.5
+walk typescript N 4200 421900 200 0.5
+walk typescript M 4000 7998000 4000 10.4
+parse typescript BINDING_FAILED
