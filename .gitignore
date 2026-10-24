@@ -6,6 +6,16 @@ __pycache__/
 .eggs/
 *.egg
 build/
+# Keep only the synthetic glob-case inputs under their deliberately named build directory.
+!/rewrite/golden/cases/c22_globs/input/build/
+/rewrite/golden/cases/c22_globs/input/build/*
+!/rewrite/golden/cases/c22_globs/input/build/a.dat
+!/rewrite/golden/cases/c22_globs/input/build/sub/
+/rewrite/golden/cases/c22_globs/input/build/sub/*
+!/rewrite/golden/cases/c22_globs/input/build/sub/b.dat
+!/rewrite/golden/cases/c22_globs/input/build/sub/deep/
+/rewrite/golden/cases/c22_globs/input/build/sub/deep/*
+!/rewrite/golden/cases/c22_globs/input/build/sub/deep/c.dat
 dist/
 .venv/
 venv/

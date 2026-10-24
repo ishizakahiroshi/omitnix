@@ -5,6 +5,8 @@ and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.htm
 
 ## Unreleased
 
+## 0.1.4 — 2026-10-25
+
 ### Changed
 
 - A PHP file that tree-sitter cannot parse now says where: the reason reads
@@ -26,6 +28,9 @@ and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.htm
   the same summary and auth calls it asks of a new Go file.
 
 ### Fixed
+
+- Generated documents stay within the selected repository or workspace output root.
+  Output paths that escape that root, including through symbolic links, are rejected.
 
 - `--gate` and `--files` refused or under-reported a file whose facts live one `require`
   away, while the full index recorded them. A partial run held its adapters to the listed

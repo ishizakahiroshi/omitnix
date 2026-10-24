@@ -5,6 +5,6 @@ adapter under ``omitnix/adapters/`` and is found by the discovery mechanism in
 ``omitnix.registry``.
 """
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 __all__ = ["__version__"]

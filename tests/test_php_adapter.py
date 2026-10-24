@@ -345,11 +345,20 @@ _CAST_MATCH = (
 _POSITION = re.compile(r"at line (\d+), column (\d+),")
 
 
+def _invalid_php_reason(tmp_path: Path, prefix: str = "") -> str:
+    """Permanently invalid PHP, independent of whether cast/match gets fixed upstream."""
+    source = "<?php\nfunction f() {\n    " + prefix + "$x = ;\n}\n"
+    (tmp_path / "invalid.php").write_text(source, encoding="utf-8", newline="\n")
+    result = analyze("invalid.php", root=tmp_path)
+    assert result.unknown_reason is not None, "an assignment without a value must be unknown"
+    return result.unknown_reason
+
+
 def _cast_match_reason(tmp_path: Path, prefix: str = "") -> str:
     """The unknown reason for the invented ``_CAST_MATCH`` file.
 
     Skips, rather than passes or fails, when the installed grammar reads the file: the
-    premise of these tests is that it does not, and a grammar that has been fixed is news
+    premise of this regression is that it does not, and a fixed grammar is news
     about the grammar, not a defect here.
     """
     (tmp_path / "cast_match.php").write_text(
@@ -359,20 +368,20 @@ def _cast_match_reason(tmp_path: Path, prefix: str = "") -> str:
     if result.unknown_reason is None:
         pytest.skip(
             "the installed tree-sitter-php now parses a match expression after a cast; "
-            "the premise of this test no longer holds, so pick another input that it "
-            "rejects"
+            "the cast-specific premise no longer holds; generic error coverage uses "
+            "permanently invalid PHP"
         )
     return result.unknown_reason
 
 
 def test_a_syntax_error_names_the_line_and_column_where_it_starts(tmp_path: Path) -> None:
-    reason = _cast_match_reason(tmp_path)
+    reason = _invalid_php_reason(tmp_path)
     found = _POSITION.search(reason)
     assert found is not None, reason
     line, column = int(found.group(1)), int(found.group(2))
     assert line == 3, reason
-    # 1-based, and inside the offending line (4 spaces of indent, 54 characters in all).
-    assert 5 <= column <= 55, reason
+    # 1-based, and inside the offending line (4 spaces of indent, 10 characters in all).
+    assert 5 <= column <= 11, reason
     assert reason.startswith("tree-sitter reported a syntax error at line 3, column ")
     assert reason.endswith(
         ", so the file was not analyzed. Anything read from a partial parse would be a guess."
@@ -380,14 +389,17 @@ def test_a_syntax_error_names_the_line_and_column_where_it_starts(tmp_path: Path
 
 
 def test_the_syntax_error_reason_is_the_same_on_every_run(tmp_path: Path) -> None:
-    assert _cast_match_reason(tmp_path) == _cast_match_reason(tmp_path)
+    reason = _invalid_php_reason(tmp_path)
+    assert _POSITION.search(reason) is not None, reason
+    assert reason == _invalid_php_reason(tmp_path)
 
 
 def test_the_column_counts_characters_rather_than_bytes(tmp_path: Path) -> None:
     """tree-sitter counts bytes. 'ü' is two, so a byte count would put the same error one
     column further right than an editor does."""
-    plain = _cast_match_reason(tmp_path, prefix="$a = 'u'; ")
-    accented = _cast_match_reason(tmp_path, prefix="$a = 'ü'; ")
+    plain = _invalid_php_reason(tmp_path, prefix="$a = 'u'; ")
+    accented = _invalid_php_reason(tmp_path, prefix="$a = 'ü'; ")
+    assert _POSITION.search(plain) is not None, plain
     assert plain == accented
 
 
@@ -398,7 +410,14 @@ def test_a_syntax_error_without_a_position_keeps_the_wording_it_always_had(
     from omitnix.adapters._treesitter import Parsed
 
     monkeypatch.setattr(Parsed, "first_error_position", lambda self: None)
-    assert _cast_match_reason(tmp_path) == SYNTAX_ERROR_REASON
+    assert _invalid_php_reason(tmp_path) == SYNTAX_ERROR_REASON
+
+
+def test_a_cast_match_grammar_error_names_its_position(tmp_path: Path) -> None:
+    reason = _cast_match_reason(tmp_path)
+    found = _POSITION.search(reason)
+    assert found is not None, reason
+    assert int(found.group(1)) == 3, reason
 
 
 def test_a_missing_grammar_becomes_an_unknown_record_not_a_crash(
