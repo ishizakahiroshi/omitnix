@@ -67,6 +67,7 @@ __all__ = [
     "preview",
     "sql_text",
     "summary_from_leading_comments",
+    "syntax_error_reason",
     "value_of",
 ]
 
@@ -81,6 +82,26 @@ SYNTAX_ERROR_REASON = (
     "tree-sitter reported a syntax error, so the file was not analyzed. "
     "Anything read from a partial parse would be a guess."
 )
+
+
+def syntax_error_reason(parsed: Parsed) -> str:
+    """:data:`SYNTAX_ERROR_REASON`, with the position of the first error when it is known.
+
+    ``... a syntax error at line 168, column 33, so the file was not analyzed. ...``
+    A reason with no position leaves the reader to bisect the file by hand, and a valid
+    file the grammar cannot read looks the same as a broken one. When the tree gives no
+    position the wording stays exactly what it was.
+
+    The sentence is built from :data:`SYNTAX_ERROR_REASON` itself, so the two wordings
+    cannot drift apart.
+    """
+    position = parsed.first_error_position()
+    if position is None:
+        return SYNTAX_ERROR_REASON
+    line, column = position
+    opening, closing = SYNTAX_ERROR_REASON.split(", so the file", 1)
+    return f"{opening} at line {line}, column {column}, so the file{closing}"
+
 
 _MAX_DETAIL = 70
 

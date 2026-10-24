@@ -60,6 +60,31 @@ class Parsed:
     def has_error(self) -> bool:
         return bool(self.root.has_error)
 
+    def first_error_position(self) -> tuple[int, int] | None:
+        """Where the first syntax error starts, as 1-based ``(line, column)``.
+
+        "First" is the first ``ERROR`` or missing node met walking the tree depth first in
+        source order, a node before its children. tree-sitter reports 0-based rows and a
+        column counted in *bytes*; the answer is shifted to 1-based and the column is
+        counted in characters, because that is what an editor shows the person who has to
+        go and look. ``None`` when the tree holds no such node, which is not expected after
+        ``has_error`` said otherwise but must not be a crash.
+
+        Deterministic: it reads the tree and the source only, so one input gives one
+        answer, which the generated document needs (see the note on ``_document_order``).
+        """
+        stack = [self.root]
+        while stack:
+            node = stack.pop()
+            if not node.has_error:
+                continue
+            if node.is_error or node.is_missing:
+                line_start = self.source.rfind(b"\n", 0, node.start_byte) + 1
+                prefix = self.source[line_start : node.start_byte]
+                return node.start_point.row + 1, len(prefix.decode("utf-8", "replace")) + 1
+            stack.extend(reversed(node.children))
+        return None
+
     def get(self, capture: str) -> tuple[Any, ...]:
         return self.captures.get(capture, ())
 

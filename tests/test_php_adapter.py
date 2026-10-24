@@ -7,6 +7,7 @@ fictional schema the rest of this repository already uses.
 
 from __future__ import annotations
 
+import re
 import shutil
 from pathlib import Path
 
@@ -331,6 +332,92 @@ def test_a_file_that_does_not_parse_is_unknown_rather_than_partially_reported() 
     result = analyze("broken.php")
     assert result.unknown_reason is not None
     assert "syntax error" in result.unknown_reason
+
+
+#: Valid PHP that tree-sitter-php 0.24.1 cannot parse: a ``match`` expression directly
+#: after a cast. The code is invented; only its shape matters. The error lands on line 3.
+_CAST_MATCH = (
+    "<?php\n"
+    "function f($u) {{\n"
+    "    {prefix}return (int)match ($u) {{ 'g' => 1, default => 2 }};\n"
+    "}}\n"
+)
+_POSITION = re.compile(r"at line (\d+), column (\d+),")
+
+
+def _invalid_php_reason(tmp_path: Path, prefix: str = "") -> str:
+    """Permanently invalid PHP, independent of whether cast/match gets fixed upstream."""
+    source = "<?php\nfunction f() {\n    " + prefix + "$x = ;\n}\n"
+    (tmp_path / "invalid.php").write_text(source, encoding="utf-8", newline="\n")
+    result = analyze("invalid.php", root=tmp_path)
+    assert result.unknown_reason is not None, "an assignment without a value must be unknown"
+    return result.unknown_reason
+
+
+def _cast_match_reason(tmp_path: Path, prefix: str = "") -> str:
+    """The unknown reason for the invented ``_CAST_MATCH`` file.
+
+    Skips, rather than passes or fails, when the installed grammar reads the file: the
+    premise of this regression is that it does not, and a fixed grammar is news
+    about the grammar, not a defect here.
+    """
+    (tmp_path / "cast_match.php").write_text(
+        _CAST_MATCH.format(prefix=prefix), encoding="utf-8", newline="\n"
+    )
+    result = analyze("cast_match.php", root=tmp_path)
+    if result.unknown_reason is None:
+        pytest.skip(
+            "the installed tree-sitter-php now parses a match expression after a cast; "
+            "the cast-specific premise no longer holds; generic error coverage uses "
+            "permanently invalid PHP"
+        )
+    return result.unknown_reason
+
+
+def test_a_syntax_error_names_the_line_and_column_where_it_starts(tmp_path: Path) -> None:
+    reason = _invalid_php_reason(tmp_path)
+    found = _POSITION.search(reason)
+    assert found is not None, reason
+    line, column = int(found.group(1)), int(found.group(2))
+    assert line == 3, reason
+    # 1-based, and inside the offending line (4 spaces of indent, 10 characters in all).
+    assert 5 <= column <= 11, reason
+    assert reason.startswith("tree-sitter reported a syntax error at line 3, column ")
+    assert reason.endswith(
+        ", so the file was not analyzed. Anything read from a partial parse would be a guess."
+    )
+
+
+def test_the_syntax_error_reason_is_the_same_on_every_run(tmp_path: Path) -> None:
+    reason = _invalid_php_reason(tmp_path)
+    assert _POSITION.search(reason) is not None, reason
+    assert reason == _invalid_php_reason(tmp_path)
+
+
+def test_the_column_counts_characters_rather_than_bytes(tmp_path: Path) -> None:
+    """tree-sitter counts bytes. 'ü' is two, so a byte count would put the same error one
+    column further right than an editor does."""
+    plain = _invalid_php_reason(tmp_path, prefix="$a = 'u'; ")
+    accented = _invalid_php_reason(tmp_path, prefix="$a = 'ü'; ")
+    assert _POSITION.search(plain) is not None, plain
+    assert plain == accented
+
+
+def test_a_syntax_error_without_a_position_keeps_the_wording_it_always_had(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    from omitnix.adapters._extract import SYNTAX_ERROR_REASON
+    from omitnix.adapters._treesitter import Parsed
+
+    monkeypatch.setattr(Parsed, "first_error_position", lambda self: None)
+    assert _invalid_php_reason(tmp_path) == SYNTAX_ERROR_REASON
+
+
+def test_a_cast_match_grammar_error_names_its_position(tmp_path: Path) -> None:
+    reason = _cast_match_reason(tmp_path)
+    found = _POSITION.search(reason)
+    assert found is not None, reason
+    assert int(found.group(1)) == 3, reason
 
 
 def test_a_missing_grammar_becomes_an_unknown_record_not_a_crash(
