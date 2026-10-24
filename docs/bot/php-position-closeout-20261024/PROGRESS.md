@@ -3,8 +3,8 @@
 Instructions: README.md, FACTS.md, REVIEW.md in this directory.
 The local conductor owns this file. Dots must not edit it.
 
-Current phase: instruction preparation; not yet sent or acknowledged.
-Management issue: to be linked before dispatch.
+Current phase: instructions published; not yet sent or acknowledged.
+Management issue: https://github.com/ishizakahiroshi/omitnix/issues/14
 
 Required acceptance: code submission from the bot identity; independent review of the
 submitted SHA; focused and full local Python checks; tracked-only golden acceptance;

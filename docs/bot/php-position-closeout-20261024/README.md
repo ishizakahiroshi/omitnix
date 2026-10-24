@@ -1,6 +1,7 @@
 # P-20261024-004 omitnix: finish PHP syntax-error location validation
 
 Read FACTS.md, REVIEW.md and PROGRESS.md at this same instruction revision.
+Management issue: https://github.com/ishizakahiroshi/omitnix/issues/14
 The owner authorized the remaining integration, validation and Python distribution.
 The owner decided to keep a file with a syntax error wholly `unknown`. Do not add
 partial analysis or source rewriting. The local conductor handles merge and release.
