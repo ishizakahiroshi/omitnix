@@ -79,11 +79,10 @@ exclude:
   #
   # Emptied of extensions on 2026-09-08: the Python, JS/TS, PowerShell, shell and HTML
   # adapters shipped, so `*.py` `*.mjs` `*.ps1` `*.sh` `*.html` came back into scope on
-  # the same day. Only one entry is left, and it is not an extension:
-  #
-  # A shell script with no extension. Adapters are selected by extension, so the shell
-  # adapter does not pick this up; it would need a rule for reading the shebang line.
-  - ".githooks/pre-commit"
+  # the same day. The last entry was `.githooks/pre-commit`, a shell script with no
+  # extension, and it left when adapters began claiming a file by the interpreter its
+  # shebang names. This block is now empty on purpose, not deleted: it exists to say
+  # there is currently no real program source outside the inventory.
 
 # Left unset on purpose:
 #

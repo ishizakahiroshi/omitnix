@@ -1,0 +1,14 @@
+{
+  "description": "A #! naming an interpreter no adapter claims is still unclaimed -- but the reason names the interpreter. No #! at all keeps the old reason.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

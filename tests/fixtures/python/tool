@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+"""Export orders for the nightly job."""
+
+from example import db
+
+db.execute("SELECT id, customer_id FROM orders")
+db.execute("UPDATE customers SET exported = 1 WHERE exported = 0")

@@ -13,7 +13,9 @@ from pathlib import Path
 
 import pytest
 
+from omitnix.analyze import build_report
 from omitnix.cli import EXIT_ERROR, EXIT_OK, EXIT_UNKNOWN, main
+from omitnix.config import load_config
 from omitnix.workspace import (
     WORKSPACE_DEFAULT_EXCLUDE,
     discover_repositories,
@@ -199,6 +201,27 @@ function handle($db) {
     assert same_bytes == (tmp_path / "beta/src/handler.php").read_bytes()
     assert alpha.fields[list(alpha.fields)[3]].value == ["orders"]
     assert beta.fields[list(beta.fields)[3]].value == ["customers"]
+
+
+def test_an_extensionless_file_routes_the_same_way_in_a_workspace(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """A workspace run and a single-repository run must reach the same answer.
+
+    Both go through ``analyze_file``, and this keeps it true now that the first line
+    of a file can decide its adapter.
+    """
+    make_repo(
+        tmp_path,
+        "alpha",
+        {"tools/deploy": "#!/usr/bin/env flowrun\nsummary: Deploy\nreads: orders\n"},
+    )
+
+    [row] = [r for r in run(tmp_path).records() if r["path"] == "tools/deploy"]
+    assert row["adapter"] == "flow"
+
+    single = build_report(load_config(tmp_path / "alpha"))
+    assert single.file("tools/deploy").adapter == row["adapter"]
 
 
 def test_the_same_table_name_in_two_repositories_is_not_one_row(

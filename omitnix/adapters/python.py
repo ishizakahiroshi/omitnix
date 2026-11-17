@@ -129,6 +129,8 @@ class PythonAdapter(Adapter):
     #: no checks, and reporting that honestly -- observed none -- is better than leaving
     #: the extension unclaimed, which would fail every run that meets one.
     extensions = (".py", ".pyi")
+    #: ``python3`` and ``python3.11`` both normalise to this name on the way here.
+    interpreters = ("python",)
     capabilities = frozenset(
         {
             Capability.SUMMARY,

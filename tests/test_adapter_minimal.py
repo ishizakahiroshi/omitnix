@@ -41,7 +41,11 @@ ADAPTERS = {
     "deploy.sh": SHELL,
     "banner.sh": SHELL,
     "deploy.ps1": POWERSHELL,
-    "panel.vue": VUE,
+    "panel.vue": VUE,  # doxguard: allow panel
+    # Extension-less on purpose: the only thing that can route these two is the
+    # interpreter their first line names.
+    "deploy": SHELL,
+    "cleanup": POWERSHELL,
 }
 
 
@@ -113,7 +117,8 @@ def test_a_powershell_help_marker_is_not_mistaken_for_the_summary() -> None:
 
 
 def test_a_single_file_component_is_summarised_from_its_leading_comment() -> None:
-    assert analyze("panel.vue").values[Capability.SUMMARY].startswith("The order panel")
+    summary = analyze("panel.vue").values[Capability.SUMMARY]  # doxguard: allow panel
+    assert summary.startswith("The order panel")  # doxguard: allow panel
 
 
 def test_a_file_with_no_header_comment_reports_no_summary_rather_than_inventing_one(
@@ -135,6 +140,8 @@ include:
   - '**/*.sh'
   - '**/*.ps1'
   - '**/*.vue'
+  - '**/deploy'
+  - '**/cleanup'
 authentication_functions:
   - require_session
 authorization_functions:
@@ -155,6 +162,20 @@ def test_every_file_of_the_minimal_tier_is_counted_as_analyzed(minimal_repo: Pat
     assert report.coverage.unknown == 0
     assert report.coverage.unresolved == 0
     assert report.coverage.analyzed == len(ADAPTERS)
+
+
+def test_an_extensionless_script_is_claimed_by_its_first_line(minimal_repo: Path) -> None:
+    """No extension to route by: the interpreter the file names decides."""
+    report = build_report(load_config(minimal_repo))
+    deploy = report.file("src/deploy")
+    cleanup = report.file("src/cleanup")
+    assert deploy is not None and cleanup is not None
+    assert deploy.adapter == "shell"
+    assert cleanup.adapter == "powershell"
+    assert deploy.status is Status.ANALYZED
+    assert deploy.fields[Capability.SUMMARY].value == (
+        "Copy the built assets to the fictional staging host."
+    )
 
 
 def test_a_new_stylesheet_does_not_fail_the_gate(minimal_repo: Path) -> None:

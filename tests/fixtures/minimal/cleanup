@@ -1,0 +1,4 @@
+#!/usr/bin/env pwsh
+# Remove the fictional staging logs once a day.
+
+Write-Output "nothing to do"

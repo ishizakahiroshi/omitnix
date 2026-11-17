@@ -324,6 +324,90 @@ def test_print_on_a_missing_file_is_a_usage_error(
     assert "no such file" in err
 
 
+def test_print_on_an_extensionless_file_routes_by_its_first_line(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The same question, asked of one file rather than a whole run."""
+    root = clean_repo(tmp_path)
+    write_repo(
+        root,
+        {"tools/deploy": "#!/usr/bin/env flowrun\nsummary: Deploy\nreads: orders\n"},
+    )
+    code, out, _ = run(["--root", str(root), "--print", "tools/deploy"])
+    assert code == EXIT_OK
+    record = json.loads(out)
+    assert record["adapter"] == "flow"
+    assert record["status"] == "analyzed"
+    assert record["fields"]["reads"]["value"] == ["orders"]
+
+
+PHP_AUTH_YAML = """
+authentication_functions:
+  - require_session
+authorization_functions:
+  - apply_visibility_filter
+"""
+
+PHP_TOOL = (
+    "#!/usr/bin/env php\n"
+    "<?php\n"
+    "/**\n * Export orders for the nightly job.\n */\n"
+    "$db->query('SELECT id, customer_id FROM orders');\n"
+    "$db->query('UPDATE customers SET exported = 1 WHERE exported = 0');\n"
+)
+
+
+def _needs_php() -> None:
+    pytest.importorskip("tree_sitter", reason="the PHP adapter needs the tree-sitter binding")
+    pytest.importorskip("tree_sitter_php", reason="the PHP adapter needs the PHP grammar")
+    pytest.importorskip("sqlglot", reason="the PHP adapter reads SQL with sqlglot")
+
+
+def test_print_gives_an_extensionless_php_script_the_same_record_as_its_extension(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """``tool`` and ``tool.php`` are one file to the analyzer, once the first line
+    names it -- identical except for the path the record is filed under."""
+    _needs_php()
+    write_repo(
+        tmp_path,
+        {
+            ".omitnix.yaml": PHP_AUTH_YAML,
+            "tools/tool": PHP_TOOL,
+            "tools/tool.php": PHP_TOOL,
+        },
+    )
+
+    code, out, _ = run(["--root", str(tmp_path), "--print", "tools/tool"])
+    assert code == EXIT_OK
+    bare = json.loads(out)
+    assert bare["adapter"] == "php"
+    assert bare["fields"]["reads"]["value"] == ["orders"]
+    assert bare["fields"]["writes"]["value"] == ["customers"]
+
+    code, out, _ = run(["--root", str(tmp_path), "--print", "tools/tool.php"])
+    assert code == EXIT_OK
+    sibling = json.loads(out)
+    assert {**bare, "path": "tools/tool.php"} == sibling
+
+
+def test_a_table_touched_by_an_extensionless_script_lists_it(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The reason the routing exists: a file nothing claimed could never reach a
+    table's ``read_by``, however central it is to that table."""
+    _needs_php()
+    write_repo(
+        tmp_path,
+        {".omitnix.yaml": PHP_AUTH_YAML, "tools/tool": PHP_TOOL},
+    )
+
+    assert run(["--root", str(tmp_path)])[0] == EXIT_OK
+    index = json.loads((tmp_path / ".omitnix" / "index.json").read_text(encoding="utf-8"))
+    orders = next(table for table in index["tables"] if table["name"] == "orders")
+    assert orders["read_by"] == ["tools/tool"]
+
+
 def test_partial_run_does_not_overwrite_the_full_index(
     tmp_path: Path, with_test_adapters: None
 ) -> None:

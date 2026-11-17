@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+// Export orders for the nightly job.
+
+import { db } from "./db.mjs";
+
+await db.execute("SELECT id, customer_id FROM orders");

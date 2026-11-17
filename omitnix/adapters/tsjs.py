@@ -157,6 +157,9 @@ class TsJsAdapter(Adapter):
 
     name = EXTRA
     extensions = (".ts", ".tsx", ".js", ".mjs", ".cjs")
+    #: ``deno`` and ``bun`` are deliberately not declared: either may run TypeScript,
+    #: and an extension-less file always parses with the JavaScript grammar.
+    interpreters = ("node", "nodejs")
     capabilities = frozenset(
         {
             Capability.SUMMARY,

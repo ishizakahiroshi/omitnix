@@ -1,0 +1,2 @@
+omitnix: 1 discovered file(s) are claimed by no adapter, so nothing tried to read them. They are counted, and each one is in the generated document by name:
+  .yaml x1

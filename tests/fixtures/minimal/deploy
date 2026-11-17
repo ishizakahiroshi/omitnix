@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Copy the built assets to the fictional staging host.
+
+set -euo pipefail
+echo "nothing to do"

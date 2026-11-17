@@ -5,6 +5,22 @@ and the project follows [semantic versioning](https://semver.org/spec/v2.0.0.htm
 
 ## Unreleased
 
+### Changed
+
+- A file with no extension is now claimed by the interpreter its first line
+  names. A `tools/deploy` that starts `#!/bin/bash` is read by the `shell`
+  adapter, `#!/usr/bin/php` by `php`, `#!/usr/bin/env node` by `tsjs`, and the
+  matching `python`, `pwsh` and `powershell` forms by theirs; a shebang nobody
+  declares (`#!/usr/bin/perl`), or no shebang at all, still counts as
+  `unclaimed`. Where a name does carry an extension it routes exactly as
+  before — a `tricky.py` that opens `#!/bin/bash` is still Python. On a run
+  the difference is that `unclaimed` may drop and `analyzed`, `unresolved`
+  and `unknown` may rise, so a committed `index.json` or an exclusion list
+  built on the old counts will differ until regenerated; `--gate` also
+  reaches new executable scripts it used to pass over, and may refuse or
+  record as `unknown` a shebang file it never claimed before. Regenerating
+  is one `omitnix` run.
+
 ## 0.1.4 — 2026-10-25
 
 ### Changed

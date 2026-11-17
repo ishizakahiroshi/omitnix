@@ -19,6 +19,9 @@ from ._minimal import MinimalAdapter
 class ShellAdapter(MinimalAdapter):
     name = "shell"
     extensions = (".sh",)
+    #: Whatever a bare script header names. The minimal tier reads the first comment
+    #: the same way for all of them, so they share the one adapter.
+    interpreters = ("sh", "bash", "dash", "ksh", "zsh")
     line_comment = ("#",)
 
 

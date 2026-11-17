@@ -378,6 +378,9 @@ class PhpAdapter(Adapter):
     #: ``.inc`` is deliberately not claimed: it belongs to no language in particular, and
     #: a repository that uses it for PHP says so under ``adapters:`` in .omitnix.yaml.
     extensions = (".php", ".phtml")
+    #: A PHP entry point installed without an extension -- ``#!/usr/bin/env php`` --
+    #: still names this language on its first line.
+    interpreters = ("php",)
     capabilities = frozenset(
         {
             Capability.SUMMARY,
