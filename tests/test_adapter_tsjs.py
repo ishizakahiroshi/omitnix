@@ -63,6 +63,20 @@ def values(result: AnalysisResult, capability: Capability) -> list[str]:
 
 def test_one_adapter_covers_the_five_extensions_of_the_family() -> None:
     assert ADAPTER.extensions == (".ts", ".tsx", ".js", ".mjs", ".cjs")
+    assert ADAPTER.interpreters == ("node", "nodejs")
+
+
+def test_an_extensionless_entry_point_parses_as_javascript() -> None:
+    """The grammar fallback the routing change depends on, pinned.
+
+    ``request.path`` has no extension to spell, so the adapter must land on the
+    JavaScript grammar rather than crash or guess TypeScript: pinned because the
+    current line merely happens to do that, not because it was designed to.
+    """
+    result = analyze("tool")
+    assert result.unknown_reason is None, result.unknown_reason
+    assert result.values[Capability.SUMMARY] == "Export orders for the nightly job."
+    assert values(result, Capability.READS) == ["orders"]
 
 
 def test_the_adapter_declares_the_screen_to_api_direction() -> None:
@@ -76,7 +90,7 @@ def test_the_adapter_declares_the_screen_to_api_direction() -> None:
     ("rel", "summary"),
     [
         ("orders_list.ts", "List orders for the signed-in customer."),
-        ("panel.tsx", "The customer panel screen."),
+        ("panel.tsx", "The customer panel screen."),  # doxguard: allow panel
         ("audit.js", "Read and stamp the audit trail."),
         ("reindex.mjs", "Nightly reindex of the order search table."),
         ("client.cjs", "A request whose address is decided at run time."),
@@ -91,7 +105,7 @@ def test_each_extension_is_parsed_rather_than_reported_unknown(rel: str, summary
 
 
 def test_jsx_is_parsed_by_the_tsx_grammar_rather_than_failing() -> None:
-    result = analyze("panel.tsx")
+    result = analyze("panel.tsx")  # doxguard: allow panel
     assert result.unknown_reason is None
     assert values(result, Capability.SCREEN_TO_API) == ["/api/customers/*"]
 

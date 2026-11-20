@@ -42,6 +42,7 @@ def _print_record(path: Path, hash_seed: str) -> str:
     "relative",
     [
         "php/orders_list.php",
+        "php/tool",
         "python/orders_list.py",
         "rust/orders_list.rs",
         "tsjs/orders_list.ts",

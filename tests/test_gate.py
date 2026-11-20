@@ -260,6 +260,70 @@ def test_the_gate_exit_code_is_distinct_from_the_unknown_exit_code(
     assert gate(root)[0] == EXIT_GATE == 4
 
 
+PHP_SHEBANG_YAML = """
+authentication_functions:
+  - require_session
+authorization_functions:
+  - apply_visibility_filter
+"""
+
+PHP_DEPLOY = (
+    "#!/usr/bin/env php\n"
+    "<?php\n"
+    "/**\n * Deploy the fictional staging build.\n */\n"
+    "$db->query('SELECT id FROM orders');\n"
+)
+
+
+def _needs_php() -> None:
+    pytest.importorskip("tree_sitter", reason="the PHP adapter needs the tree-sitter binding")
+    pytest.importorskip("tree_sitter_php", reason="the PHP adapter needs the PHP grammar")
+    pytest.importorskip("sqlglot", reason="the PHP adapter reads SQL with sqlglot")
+
+
+def test_a_new_extensionless_script_is_gated_by_the_adapter_its_first_line_names(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """What used to arrive as an "unclaimed" notice is a file the gate asks things of.
+
+    An extension-less PHP entry point that calls no authentication function fails the
+    same checks a ``.php`` file fails -- which is the whole point of claiming it.
+    """
+    _needs_php()
+    root = baseline(tmp_path, config=PHP_SHEBANG_YAML)
+    (root / "tools").mkdir()
+    (root / "tools" / "deploy").write_text(PHP_DEPLOY, encoding="utf-8")
+
+    code, out, err = gate(root)
+    assert code == EXIT_GATE, (out, err)
+    assert "tools/deploy: no authentication call" in err
+    assert "tools/deploy: no authorization call" in err
+
+
+def test_a_gate_exemption_reaches_an_extensionless_script_the_same_way(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The escape hatch is the file's path, not its extension: the same exemption a
+    ``.php`` file would get."""
+    _needs_php()
+    config = (
+        PHP_SHEBANG_YAML
+        + "gate_exemptions:\n"
+        + "  - paths: ['tools/deploy']\n"
+        + "    skip: [authentication, authorization]\n"
+        + "    reason: Runs unattended; there is no session to check.\n"
+    )
+    root = baseline(tmp_path, config=config)
+    (root / "tools").mkdir()
+    (root / "tools" / "deploy").write_text(PHP_DEPLOY, encoding="utf-8")
+
+    code, out, err = gate(root)
+    assert code == EXIT_OK, err
+    assert "gate passed" in out
+    assert "exemption applied" in err
+    assert "no session to check" in err
+
+
 # --------------------------------------------------------------------------------------
 # What the gate must not refuse
 # --------------------------------------------------------------------------------------

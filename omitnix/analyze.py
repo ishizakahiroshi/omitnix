@@ -29,6 +29,7 @@ from .gitmeta import commit_of, working_tree_is_dirty
 from .model import (
     CAPABILITY_KINDS,
     CAPABILITY_ORDER,
+    NO_EXTENSION,
     Capability,
     Coverage,
     Field,
@@ -44,7 +45,12 @@ from .model import (
     extension_of,
 )
 from .reasons import hides_a_table_reference
-from .registry import AdapterSet, build_adapter_set
+from .registry import (
+    SHEBANG_PROBE_BYTES,
+    AdapterSet,
+    build_adapter_set,
+    interpreter_of,
+)
 from .scan import SelectionResult, discover_repository_files, select_files
 from .schema import load_schema_tables
 
@@ -128,14 +134,36 @@ def analyze_file(
     """Analyze one file. Never raises for a file it cannot handle -- it reports it."""
     adapter = adapter_set.for_path(rel)
     if adapter is None:
-        # Not a failure: nothing was attempted. Counted all the same, and the reason is
-        # kept on the record so that one file printed on its own still explains itself.
-        return FileRecord(
-            path=rel,
-            adapter=None,
-            status=Status.UNCLAIMED,
-            reason=f"no adapter claims '{extension_of(rel)}'",
-        )
+        reason = f"no adapter claims '{extension_of(rel)}'"
+        if extension_of(rel) == NO_EXTENSION:
+            # No extension to route by. The only thing left that can name an adapter
+            # is the interpreter the file asks for on its first line -- a ``.cgi``-style
+            # unclaimed extension is settled by configuration instead, and probing its
+            # contents would make two rules decide one thing.
+            try:
+                with (config.root / rel).open("rb") as handle:
+                    head = handle.read(SHEBANG_PROBE_BYTES)
+            except OSError as exc:
+                reason = (
+                    f"file could not be read: {exc.strerror or exc}; "
+                    f"no adapter claims '{extension_of(rel)}'"
+                )
+            else:
+                interpreter = interpreter_of(head)
+                if interpreter is not None:
+                    adapter = adapter_set.for_interpreter(interpreter)
+                    if adapter is None:
+                        reason = f"no adapter claims interpreter '{interpreter}'"
+        if adapter is None:
+            # Not a failure: nothing was attempted. Counted all the same, and the
+            # reason is kept on the record so that one file printed on its own still
+            # explains itself.
+            return FileRecord(
+                path=rel,
+                adapter=None,
+                status=Status.UNCLAIMED,
+                reason=reason,
+            )
 
     absolute = config.root / rel
     text, failure = _read_text(absolute)

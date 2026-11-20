@@ -80,6 +80,21 @@ def test_the_adapter_declares_only_what_it_can_produce() -> None:
     assert Capability.SCREEN_TO_API not in ADAPTER.capabilities
     assert Capability.READS in ADAPTER.capabilities
     assert ADAPTER.extensions == (".php", ".phtml")
+    assert ADAPTER.interpreters == ("php",)
+
+
+def test_an_extensionless_entry_point_is_read_the_same_way() -> None:
+    """The ``#!`` line is just text before ``<?php`` to the grammar.
+
+    Routing the file here is the core's job; what the adapter owes is not choking on
+    the line -- and reporting the same tables the same statements would carry in a
+    ``.php`` file.
+    """
+    result = analyze("tool")
+    assert result.unknown_reason is None, result.unknown_reason
+    assert result.values[Capability.SUMMARY] == "Export orders for the nightly job."
+    assert values(result, Capability.READS) == ["orders"]
+    assert values(result, Capability.WRITES) == ["customers"]
 
 
 # --- summary ----------------------------------------------------------------------

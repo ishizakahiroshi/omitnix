@@ -40,9 +40,23 @@ def fx(rel: str) -> bytes:
     return (FIXTURES / rel).read_bytes()
 
 
+#: Extension-less fixtures added for the adapter tests. They stay out of the existing
+#: case inputs on purpose: a case's ``expected/`` was recorded against its input set,
+#: and changing the input would make every existing record change for a reason that
+#: has nothing to do with the behaviour the case pins. The shebang cases below cover
+#: the new routing.
+_EXTENSIONLESS = {
+    "php": ("tool",),
+    "python": ("tool",),
+    "tsjs": ("tool",),
+    "minimal": ("deploy", "cleanup"),
+}
+
+
 def fixtures(prefix: str, directory: str, *, skip: tuple[str, ...] = ()) -> dict[str, Content]:
     """Every file under ``tests/fixtures/<directory>``, placed under ``<prefix>/``."""
     base = FIXTURES / directory
+    skip = skip + _EXTENSIONLESS.get(directory, ())
     return {
         f"{prefix}/{path.relative_to(base).as_posix()}": path.read_bytes()
         for path in sorted(base.rglob("*"))
@@ -106,7 +120,7 @@ def add(
 
 # --- shared pieces ------------------------------------------------------------------
 
-PHP_FILES = fixtures("src", "php", skip=())
+PHP_FILES = fixtures("src", "php")
 PHP_CONFIG = "include:\n  - '**/*.php'\n" + AUTH_CONFIG
 SRC_FILES: dict[str, Content] = {}
 for _directory, _prefix in (
@@ -292,6 +306,33 @@ def build() -> None:
     add("c50_version", "--version prints the tool name and version.", files=small,
         args=["--version"], artifacts=[], streams=["stdout"])
 
+    # --- extension-less scripts routed by their first line --------------------------
+    add("c51_shebang_claims", "No extension, a #! line: the interpreter the file names "
+        "decides, through env, a direct path, or a versioned name.",
+        files={".omitnix.yaml": AUTH_CONFIG,
+               "tools/deploy": "#!/usr/bin/env bash\n"
+                   "# Deploy the fictional staging build.\n\n"
+                   "set -euo pipefail\necho \"nothing to do\"\n",
+               "tools/export": "#!/usr/bin/php8.2\n<?php\n"
+                   "/**\n * Export orders for the nightly job.\n */\n"
+                   "$db->query('SELECT id, customer_id FROM orders');\n",
+               "tools/report": "#!/usr/bin/env -S PATH=/usr/bin python3\n"
+                   '"""Report on orders."""\n\nprint("nothing to do")\n'})
+    add("c52_shebang_unclaimed", "A #! naming an interpreter no adapter claims is still "
+        "unclaimed -- but the reason names the interpreter. No #! at all keeps the old "
+        "reason.",
+        files={".omitnix.yaml": AUTH_CONFIG,
+               "tools/legacy": "#!/usr/bin/env perl\nprint qq(nothing to do\\n);\n",
+               "VERSION": "1.2.3\n",
+               "tools/plain": "notes without a first-line interpreter\n"})
+    add("c53_shebang_extension_wins", "A #! line never overrides an extension: a .php "
+        "starting #!/bin/sh is PHP, a .py starting #!/usr/bin/env php is Python.",
+        files={".omitnix.yaml": AUTH_CONFIG,
+               "src/odd.php": "#!/bin/sh\n<?php\n/**\n * List orders.\n */\n"
+                   "$db->query('SELECT id FROM orders');\n",
+               "src/tricky.py": "#!/usr/bin/env php\n"
+                   '"""List orders (despite the first line)."""\n'})
+
     # --- the gate -------------------------------------------------------------------
     gate_base = {".omitnix.yaml": AUTH_CONFIG, "src/old.py": '"""An existing module."""\n'}
     good = (
@@ -449,7 +490,12 @@ def build_data() -> None:
     (data / "workspace_default_exclude.txt").write_text(
         "\n".join(WORKSPACE_DEFAULT_EXCLUDE) + "\n", encoding="utf-8"
     )
-    adapters = [adapter.to_json() for adapter in build_adapter_set().info()]
+    adapters = [
+        {**info.to_json(), "interpreters": list(adapter.interpreters)}
+        for info, adapter in zip(
+            build_adapter_set().info(), build_adapter_set().adapters, strict=True
+        )
+    ]
     (data / "adapters.json").write_text(
         json.dumps(adapters, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )

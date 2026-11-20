@@ -432,3 +432,77 @@ def test_capability_outside_the_declaration_is_an_adapter_defect(tmp_path: Path)
     with adapter_path(BAD_ADAPTER_FIXTURES):
         with pytest.raises(AdapterContractError, match="without declaring the capability"):
             build_report(load_config(tmp_path))
+
+
+def test_an_extensionless_file_is_claimed_by_its_first_line(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """``tools/deploy`` with ``#!/usr/bin/env flowrun`` belongs to the flow adapter.
+
+    The record it produces is identical to the same content reached through the
+    extension, everywhere except the path it is filed under.
+    """
+    write_repo(
+        tmp_path,
+        {
+            "tools/deploy": "#!/usr/bin/env flowrun\nsummary: Deploy\nreads: orders\n",
+            "tools/deploy.flow": "summary: Deploy\nreads: orders\n",
+        },
+    )
+    report = build_report(load_config(tmp_path))
+
+    bare = report.file("tools/deploy")
+    sibling = report.file("tools/deploy.flow")
+    assert bare is not None and sibling is not None
+    assert bare.status is Status.ANALYZED
+    assert bare.adapter == sibling.adapter == "flow"
+    assert bare.fields == sibling.fields
+    assert report.coverage.holds
+
+
+def test_an_unclaimed_interpreter_keeps_the_file_unclaimed(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """A first line nobody declares still counts as unclaimed -- by extension, as
+    before -- but the reason names the interpreter it asked for."""
+    write_repo(tmp_path, {"tools/mystery": "#!/usr/bin/perl\nuse strict;\n"})
+    report = build_report(load_config(tmp_path))
+    record = report.file("tools/mystery")
+    assert record is not None
+    assert record.status is Status.UNCLAIMED
+    assert "interpreter 'perl'" in (record.reason or "")
+    assert report.unclaimed_extensions["(no extension)"] == 1
+
+
+def test_an_extensionless_file_without_a_first_line_is_unclaimed_as_before(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The reason for a file like LICENSE is byte-identical to what it was before the
+    first-line probe existed."""
+    write_repo(tmp_path, {"LICENSE": "a fictional licence\n"})
+    report = build_report(load_config(tmp_path))
+    record = report.file("LICENSE")
+    assert record is not None
+    assert record.status is Status.UNCLAIMED
+    assert record.reason == "no adapter claims '(no extension)'"
+
+
+def test_an_extension_still_decides_regardless_of_the_first_line(
+    tmp_path: Path, with_test_adapters: None
+) -> None:
+    """The probe only runs when there is no extension at all.
+
+    A ``.note`` file whose first line asks for flowrun still belongs to note: two
+    rules deciding one file is how they come to disagree.
+    """
+    write_repo(
+        tmp_path,
+        {
+            "tools/run.note": "#!/usr/bin/env flowrun\na note\n",
+            "tools/run": "#!/usr/bin/env flowrun\nsummary: ran\n",
+        },
+    )
+    report = build_report(load_config(tmp_path))
+
+    assert report.file("tools/run.note").adapter == "note"
+    assert report.file("tools/run").adapter == "flow"

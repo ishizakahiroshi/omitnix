@@ -4,7 +4,7 @@ A rewrite of omitnix in another language is accepted by one test: given the same
 repository, it must do what the Python version does. This directory is that test, kept
 independent of any language.
 
-There are 72 cases. Each is a small repository (or a directory of repositories), the
+There are 75 cases. Each is a small repository (or a directory of repositories), the
 arguments to run with, and what the Python version produced: the exit status, standard
 output, standard error and every document it wrote. Everything in here is invented. The
 code under `cases/*/input/` comes from `tests/fixtures/` (an invented service with orders,
@@ -15,7 +15,7 @@ A case that needs a real repository to make its point does not belong here.
 
 ```sh
 python rewrite/tools/run_golden.py --cmd "<your command>"
-python rewrite/tools/run_golden.py --cmd "python -m omitnix"      # the reference: 72/72
+python rewrite/tools/run_golden.py --cmd "python -m omitnix"      # the reference: 75/75
 python rewrite/tools/run_golden.py --cmd ./target/release/omitnix --cases c01_php,g02_gate_refuses
 python rewrite/tools/run_golden.py --list
 ```
@@ -74,14 +74,16 @@ of the command itself, so that a `--check` case has a document to check), `artif
 `c01`..`c13` one adapter at a time and everything together. `c14`..`c22` configuration
 (valid and invalid) and the include and exclude patterns. `c23`..`c26` discovery: the
 tracked set against a walk, no git at all. `c27`..`c41` partial runs, `--print` and
-`--check`. `c42`..`c50` usage errors. `g01`..`g11` the new-file gate. `w01`..`w11`
-workspace mode.
+`--check`. `c42`..`c50` usage errors. `c51`..`c53` extension-less scripts routed by the
+interpreter their first line names (claimed, unclaimed, and an extension winning over
+a `#!` line). `g01`..`g11` the new-file gate. `w01`..`w11` workspace mode.
 
 ## `data/`
 
 Written by `make_cases.py` out of the Python version, so that a rewrite does not type them
 by hand and cannot drift from them: `default_exclude.txt`, `workspace_default_exclude.txt`,
-`adapters.json` (name, extensions and capabilities of each adapter), `reason_codes.json`.
+`adapters.json` (name, extensions, capabilities and declared interpreter names of each
+adapter), `reason_codes.json`.
 
 ## What the cases do not cover
 

@@ -99,6 +99,13 @@ class Adapter:
     name: ClassVar[str] = ""
     #: Lower-case extensions including the dot, e.g. ``(".php", ".inc")``.
     extensions: ClassVar[tuple[str, ...]] = ()
+    #: Lower-case interpreter names this adapter answers for when a file has no
+    #: extension at all but asks for one on its first line: ``#!/usr/bin/env php``
+    #: routes to the adapter declaring ``"php"``. Bare names only (``"python"``,
+    #: never ``"/usr/bin/python"`` or ``"python3.11"`` -- the core strips the path
+    #: and any trailing version before looking a name up). Declaring a name another
+    #: adapter also declares is a contract error, like claiming the same extension.
+    interpreters: ClassVar[tuple[str, ...]] = ()
     #: The subset of capabilities this adapter can produce.
     capabilities: ClassVar[frozenset[Capability]] = frozenset()
 

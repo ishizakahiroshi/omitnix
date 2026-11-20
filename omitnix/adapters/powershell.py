@@ -22,6 +22,8 @@ from ._minimal import MinimalAdapter
 class PowerShellAdapter(MinimalAdapter):
     name = "powershell"
     extensions = (".ps1",)
+    #: The two spellings a shebang line uses for the same runtime.
+    interpreters = ("pwsh", "powershell")
     line_comment = ("#",)
     block_comment = (("<#", "#>"),)
 

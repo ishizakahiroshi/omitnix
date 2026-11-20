@@ -48,6 +48,9 @@ def _configured(names: list[str], configured: tuple[str, ...]) -> list[str]:
 class FlowAdapter(Adapter):
     name = "flow"
     extensions = (".flow",)
+    #: Lets the routing tests claim an extension-less file by its first line without
+    #: needing a real language for it.
+    interpreters = ("flowrun",)
     capabilities = frozenset(
         {
             Capability.SUMMARY,

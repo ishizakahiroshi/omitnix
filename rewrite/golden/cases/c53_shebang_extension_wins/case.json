@@ -1,0 +1,14 @@
+{
+  "description": "A #! line never overrides an extension: a .php starting #!/bin/sh is PHP, a .py starting #!/usr/bin/env php is Python.",
+  "mode": "repo",
+  "args": [
+    "--root",
+    "{ROOT}"
+  ],
+  "artifacts": [
+    {
+      "actual": "{ROOT}/.omitnix/index.json",
+      "expected": "index.json"
+    }
+  ]
+}

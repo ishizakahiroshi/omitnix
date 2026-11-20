@@ -86,7 +86,7 @@ discovered == analyzed + unresolved + unknown + unclaimed
 Anything the analyzer could not follow (dynamically built SQL, indirect calls beyond one hop) is recorded as `unresolved` with a reason — never as a blank cell. A file that was not analyzed at all is one of the last two, and the difference between them is the difference between a defect and an ordinary Tuesday:
 
 - **`unknown`** — an adapter claims this extension and could not produce a record: unreadable bytes, not UTF-8, a grammar that refused valid source, a crash in the adapter. Something went wrong, so every one of these is **named, by path, with its reason**.
-- **`unclaimed`** — no adapter claims the extension, so nothing tried. Prose, configuration, images, archives, and any language whose adapter is not written yet. Nothing went wrong, so these are **counted by extension** rather than listed:
+- **`unclaimed`** — no adapter claims the extension (or, for a file with no extension, the interpreter its first line names), so nothing tried. Prose, configuration, images, archives, and any language whose adapter is not written yet. Nothing went wrong, so these are **counted by extension** rather than listed:
 
 ```
 omitnix: 20 discovered file(s) are claimed by no adapter, so nothing tried to read them.
@@ -143,7 +143,7 @@ Every per-file field — summary, authentication, authorization, tables read, ta
 | `not_configured` | the adapter declares this capability, and the repository never said what to look for, so nothing was searched for. Applies to `authentication` and `authorization`, whose subjects are the function names in `.omitnix.yaml`. | `{"state": "not_configured"}` — no `value` key, same as `out_of_scope` |
 | `none_observed` | the adapter declares this capability and looked, and found nothing at this commit. Never "unused". | `{"state": "none_observed", "value": []}` |
 | `value` | an ordinary result, including an empty list the adapter is confident is complete. | `{"state": "value", "value": [...]}` |
-| *(not a field state)* | the file itself was not analyzed. `fields` is `{}` and `reason` says why. `status` is `"unknown"` (an adapter claimed it and could not read it — counted under `coverage.unknown`, named on stderr, and the only one `fail_on_unknown` acts on) or `"unclaimed"` (no adapter claims the extension — counted under `coverage.unclaimed` and reported by extension). | top-level `"status"` on the file record, plus `"reason"` |
+| *(not a field state)* | the file itself was not analyzed. `fields` is `{}` and `reason` says why. `status` is `"unknown"` (an adapter claimed it and could not read it — counted under `coverage.unknown`, named on stderr, and the only one `fail_on_unknown` acts on) or `"unclaimed"` (no adapter claims the extension or the shebang interpreter — counted under `coverage.unclaimed` and reported by extension). | top-level `"status"` on the file record, plus `"reason"` |
 
 `not_configured` is the newest of them and exists because the tool got this wrong about itself. Pointed at a repository with no `.omitnix.yaml` on 2026-09-11, it reported `authorization: none_observed` for all 618 of its files — which reads as "618 files were checked and not one holds an authorization call". Nothing had been checked: `authorization_functions` was empty, so the search was for nothing. An empty list searched for nothing is not a finding, and it now says so. The gate has always made the same distinction, and skips a check the repository never defined rather than refusing the file.
 
@@ -535,16 +535,22 @@ an authorization call and found to have none.
 | reverse-lookup | `html` | summary, and the addresses the screen requests |
 | minimal | `css`, `shell`, `powershell`, `vue` | the file exists, and its header comment |
 
-| adapter | extensions | install |
-|---|---|---|
-| `php` | `.php` `.phtml` | `omitnix[php]` |
-| `python` | `.py` `.pyi` | `omitnix[python]` |
-| `go` | `.go` | `omitnix[go]` |
-| `rust` | `.rs` | `omitnix[rust]` |
-| `tsjs` | `.ts` `.tsx` `.js` `.mjs` `.cjs` | `omitnix[tsjs]` |
-| `sql` | `.sql` | `omitnix[sql]` |
-| `html` | `.html` `.htm` | `omitnix[html]` |
-| `css` `shell` `powershell` `vue` | `.css` `.sh` `.ps1` `.vue` | nothing to install |
+| adapter | extensions | interpreters | install |
+|---|---|---|---|
+| `php` | `.php` `.phtml` | `php` | `omitnix[php]` |
+| `python` | `.py` `.pyi` | `python` | `omitnix[python]` |
+| `go` | `.go` | — | `omitnix[go]` |
+| `rust` | `.rs` | — | `omitnix[rust]` |
+| `tsjs` | `.ts` `.tsx` `.js` `.mjs` `.cjs` | `node` `nodejs` | `omitnix[tsjs]` |
+| `sql` | `.sql` | — | `omitnix[sql]` |
+| `html` | `.html` `.htm` | — | `omitnix[html]` |
+| `css` `shell` `powershell` `vue` | `.css` `.sh` `.ps1` `.vue` | `sh` `bash` `dash` `ksh` `zsh` · `pwsh` `powershell` | nothing to install |
+
+The interpreter column is what claims a file that has no extension. For a file named
+`tools/deploy`, routing reads the first line instead: `#!/bin/bash` goes to the `shell`
+adapter, `#!/usr/bin/php` to `php`, and an interpreter no adapter declares — or no shebang
+at all — stays `unclaimed`. The extension always wins where there is one, so the check
+runs only on files whose names carry nothing to route by.
 
 The install column is also what a run tells you when the dependency is absent. A file whose
 adapter cannot load its grammar is `unknown` with a reason naming **the extra**, not the

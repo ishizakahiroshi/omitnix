@@ -4,7 +4,8 @@
     "extensions": [
       ".css"
     ],
-    "capabilities": []
+    "capabilities": [],
+    "interpreters": []
   },
   {
     "name": "go",
@@ -17,7 +18,8 @@
       "reads",
       "summary",
       "writes"
-    ]
+    ],
+    "interpreters": []
   },
   {
     "name": "html",
@@ -28,7 +30,8 @@
     "capabilities": [
       "screen_to_api",
       "summary"
-    ]
+    ],
+    "interpreters": []
   },
   {
     "name": "php",
@@ -42,6 +45,9 @@
       "reads",
       "summary",
       "writes"
+    ],
+    "interpreters": [
+      "php"
     ]
   },
   {
@@ -51,6 +57,10 @@
     ],
     "capabilities": [
       "summary"
+    ],
+    "interpreters": [
+      "pwsh",
+      "powershell"
     ]
   },
   {
@@ -65,6 +75,9 @@
       "reads",
       "summary",
       "writes"
+    ],
+    "interpreters": [
+      "python"
     ]
   },
   {
@@ -78,7 +91,8 @@
       "reads",
       "summary",
       "writes"
-    ]
+    ],
+    "interpreters": []
   },
   {
     "name": "shell",
@@ -87,6 +101,13 @@
     ],
     "capabilities": [
       "summary"
+    ],
+    "interpreters": [
+      "sh",
+      "bash",
+      "dash",
+      "ksh",
+      "zsh"
     ]
   },
   {
@@ -97,7 +118,8 @@
     "capabilities": [
       "reads",
       "writes"
-    ]
+    ],
+    "interpreters": []
   },
   {
     "name": "tsjs",
@@ -115,6 +137,10 @@
       "screen_to_api",
       "summary",
       "writes"
+    ],
+    "interpreters": [
+      "node",
+      "nodejs"
     ]
   },
   {
@@ -124,6 +150,7 @@
     ],
     "capabilities": [
       "summary"
-    ]
+    ],
+    "interpreters": []
   }
 ]
